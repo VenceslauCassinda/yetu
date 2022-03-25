@@ -4,7 +4,7 @@ abstract class ProvedorFuncionarioI {
   Future<List<Funcionario>> pegarLista();
   Future<List<Funcionario>> todos();
   Future<List<Funcionario>> pegarListaEliminados();
-  Future<void> adicionarFuncionario(Funcionario dado);
+  Future<int> adicionarFuncionario(Funcionario dado);
   Future<bool> existeFuncionarioComNomeUsuario(String nomeUsuario);
   Future<void> removerFuncionario(Funcionario dado);
   Future<void> actualizarFuncionario(Funcionario dado);

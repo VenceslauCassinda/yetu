@@ -46,8 +46,8 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
     return res;
   }
 
-  Future<void> adicionar(TabelaFuncionarioCompanion usuarioData) async {
-    await (into(tabelaFuncionario)).insert(usuarioData);
+  Future<int> adicionar(TabelaFuncionarioCompanion usuarioData) async {
+    return await (into(tabelaFuncionario)).insert(usuarioData);
   }
 
   Future<TabelaFuncionarioData?> existeFuncionario(String nomeUsuario) async {

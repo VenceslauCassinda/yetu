@@ -20,11 +20,11 @@ class ProveedorFuncionario implements ProvedorFuncionarioI {
   }
 
   @override
-  Future<void> adicionarFuncionario(Funcionario dado) async {
+  Future<int> adicionarFuncionario(Funcionario dado) async {
     if ((await existeFuncionarioComNomeUsuario(dado.nomeCompelto!)) == true) {
       throw ErroFuncionarioJaExiste("FUNCIONARIO JA EXISTENTE!");
     }
-    await _dao.adicionar(_serializadorFuncionario.toCompanion(dado));
+    return await _dao.adicionar(_serializadorFuncionario.toCompanion(dado));
   }
 
   @override

@@ -14,9 +14,9 @@ class ManipularUsuario implements ManipularUsuarioI {
   }
 
   @override
-  Future<void> registarUsuario(Usuario usuario) async {
+  Future<int> registarUsuario(Usuario usuario) async {
     usuario.estado = Estado.ATIVADO;
-    await _provedorUsuario.adicionarUsuario(usuario);
+    return await _provedorUsuario.adicionarUsuario(usuario);
   }
 
   @override

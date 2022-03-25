@@ -4,7 +4,7 @@ class TabelaSaida extends Table{
   IntColumn get id => integer().autoIncrement()();
   IntColumn get estado => integer()();
   IntColumn get idProduto => integer()();
-  IntColumn get idFuncionario => integer()();
+  IntColumn get idVenda => integer()();
   IntColumn get quantidade => integer()();
   DateTimeColumn get data => dateTime()();
 }

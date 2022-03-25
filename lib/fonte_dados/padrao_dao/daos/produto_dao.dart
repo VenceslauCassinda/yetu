@@ -1,12 +1,36 @@
 part of '../base_dados.dart';
 
-@DriftAccessor(tables: [TabelaProduto])
+@DriftAccessor(tables: [TabelaProduto, TabelaStock, TabelaPreco])
 class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
   ProdutoDao(BancoDados bancoDados) : super(bancoDados);
 
-  Future<List<TabelaProdutoData>> todos() async {
-    var res = (await (select(tabelaProduto)).get());
-    return res;
+  Future<List<Produto>> todos() async {
+    var res = await ((select(tabelaProduto)).join([
+      leftOuterJoin(
+          tabelaStock, tabelaProduto.id.equalsExp(tabelaStock.idProduto))
+    ])).get();
+    var lista = res.map((linha) {
+      var stock = linha.readTable(tabelaStock);
+      var produto = linha.readTable(tabelaProduto);
+      return Produto(
+        id: produto.id,
+        estado: produto.estado,
+        nome: produto.nome,
+        precoCompra: produto.precoCompra,
+        quantidade: stock.quantidade,
+        recebivel: produto.recebivel,
+      );
+    }).toList();
+
+    for (var i = 0; i < lista.length; i++) {
+      var cada = lista[i];
+      var res = await (select(tabelaPreco)
+            ..where((tbl) => tbl.id.equals(cada.id)))
+          .get();
+      var listaPreco = res.map((e) => e.preco).toList();
+      lista[i].listaPreco = listaPreco;
+    }
+    return lista;
   }
 
   Future<TabelaProdutoData?> existeProdutoDeNome(String nomeProduto) async {
@@ -15,20 +39,23 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
         .getSingleOrNull());
     return res;
   }
-  
-  Future<TabelaProdutoData?> existeProdutoDiferenteDeNome(int id, String nomeProduto) async {
+
+  Future<TabelaProdutoData?> existeProdutoDiferenteDeNome(
+      int id, String nomeProduto) async {
     var res = (await (select(tabelaProduto)
-          ..where((tbl) => (tbl.id.equals(id)).not() & tbl.nome.equals(nomeProduto)) )
+          ..where((tbl) =>
+              (tbl.id.equals(id)).not() & tbl.nome.equals(nomeProduto)))
         .getSingleOrNull());
     return res;
   }
 
-  Future<void> adicionarProduto(TabelaProdutoCompanion tabela) async {
-    await into(tabelaProduto).insert(TabelaProdutoCompanion.insert(
+  Future<int> adicionarProduto(TabelaProdutoCompanion tabela) async {
+    var res = await into(tabelaProduto).insert(TabelaProdutoCompanion.insert(
         estado: tabela.estado.value,
         nome: tabela.nome.value,
         precoCompra: tabela.precoCompra.value,
         recebivel: tabela.recebivel.value));
+    return res;
   }
 
   Future<void> actualizarProduto(TabelaProdutoCompanion tabela) async {

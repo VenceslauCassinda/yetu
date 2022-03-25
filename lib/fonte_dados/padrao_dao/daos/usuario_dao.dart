@@ -41,8 +41,8 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
         .get();
   }
 
-  Future<void> adicionar(TabelaUsuarioCompanion usuarioData) async {
-    await (into(tabelaUsuario)).insert(usuarioData);
+  Future<int> adicionar(TabelaUsuarioCompanion usuarioData) async {
+    return await (into(tabelaUsuario)).insert(usuarioData);
   }
 
   Future<TabelaUsuarioData?> existeUsuario(

@@ -6,7 +6,7 @@ abstract class ProvedorUsuarioI {
   Future<List<TabelaUsuarioData>> todos();
   Future<List<Usuario>> pegarLista();
   Future<List<Usuario>> pegarListaEliminados();
-  Future<void> adicionarUsuario(Usuario usuario);
+  Future<int> adicionarUsuario(Usuario usuario);
   Future<Usuario?> fazerLogin(String nomeUsuario, String palavraPasse);
   Future<void> terminarSessao(Usuario usuario);
   Future<bool> existeUsuarioComNomeUsuario(String nomeUsuario);

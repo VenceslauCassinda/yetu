@@ -1188,12 +1188,16 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
   final int idFuncionario;
   final DateTime data;
   final double total;
+  final String nomeCliente;
+  final String telefoneCliente;
   TabelaVendaData(
       {required this.id,
       required this.estado,
       required this.idFuncionario,
       required this.data,
-      required this.total});
+      required this.total,
+      required this.nomeCliente,
+      required this.telefoneCliente});
   factory TabelaVendaData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -1208,6 +1212,10 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
       total: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}total'])!,
+      nomeCliente: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}nome_cliente'])!,
+      telefoneCliente: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}telefone_cliente'])!,
     );
   }
   @override
@@ -1218,6 +1226,8 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
     map['id_funcionario'] = Variable<int>(idFuncionario);
     map['data'] = Variable<DateTime>(data);
     map['total'] = Variable<double>(total);
+    map['nome_cliente'] = Variable<String>(nomeCliente);
+    map['telefone_cliente'] = Variable<String>(telefoneCliente);
     return map;
   }
 
@@ -1228,6 +1238,8 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
       idFuncionario: Value(idFuncionario),
       data: Value(data),
       total: Value(total),
+      nomeCliente: Value(nomeCliente),
+      telefoneCliente: Value(telefoneCliente),
     );
   }
 
@@ -1240,6 +1252,8 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
       idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
       data: serializer.fromJson<DateTime>(json['data']),
       total: serializer.fromJson<double>(json['total']),
+      nomeCliente: serializer.fromJson<String>(json['nomeCliente']),
+      telefoneCliente: serializer.fromJson<String>(json['telefoneCliente']),
     );
   }
   @override
@@ -1251,6 +1265,8 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
       'idFuncionario': serializer.toJson<int>(idFuncionario),
       'data': serializer.toJson<DateTime>(data),
       'total': serializer.toJson<double>(total),
+      'nomeCliente': serializer.toJson<String>(nomeCliente),
+      'telefoneCliente': serializer.toJson<String>(telefoneCliente),
     };
   }
 
@@ -1259,13 +1275,17 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
           int? estado,
           int? idFuncionario,
           DateTime? data,
-          double? total}) =>
+          double? total,
+          String? nomeCliente,
+          String? telefoneCliente}) =>
       TabelaVendaData(
         id: id ?? this.id,
         estado: estado ?? this.estado,
         idFuncionario: idFuncionario ?? this.idFuncionario,
         data: data ?? this.data,
         total: total ?? this.total,
+        nomeCliente: nomeCliente ?? this.nomeCliente,
+        telefoneCliente: telefoneCliente ?? this.telefoneCliente,
       );
   @override
   String toString() {
@@ -1274,13 +1294,16 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
           ..write('estado: $estado, ')
           ..write('idFuncionario: $idFuncionario, ')
           ..write('data: $data, ')
-          ..write('total: $total')
+          ..write('total: $total, ')
+          ..write('nomeCliente: $nomeCliente, ')
+          ..write('telefoneCliente: $telefoneCliente')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, estado, idFuncionario, data, total);
+  int get hashCode => Object.hash(
+      id, estado, idFuncionario, data, total, nomeCliente, telefoneCliente);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1289,7 +1312,9 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
           other.estado == this.estado &&
           other.idFuncionario == this.idFuncionario &&
           other.data == this.data &&
-          other.total == this.total);
+          other.total == this.total &&
+          other.nomeCliente == this.nomeCliente &&
+          other.telefoneCliente == this.telefoneCliente);
 }
 
 class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
@@ -1298,12 +1323,16 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
   final Value<int> idFuncionario;
   final Value<DateTime> data;
   final Value<double> total;
+  final Value<String> nomeCliente;
+  final Value<String> telefoneCliente;
   const TabelaVendaCompanion({
     this.id = const Value.absent(),
     this.estado = const Value.absent(),
     this.idFuncionario = const Value.absent(),
     this.data = const Value.absent(),
     this.total = const Value.absent(),
+    this.nomeCliente = const Value.absent(),
+    this.telefoneCliente = const Value.absent(),
   });
   TabelaVendaCompanion.insert({
     this.id = const Value.absent(),
@@ -1311,16 +1340,22 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
     required int idFuncionario,
     required DateTime data,
     required double total,
+    required String nomeCliente,
+    required String telefoneCliente,
   })  : estado = Value(estado),
         idFuncionario = Value(idFuncionario),
         data = Value(data),
-        total = Value(total);
+        total = Value(total),
+        nomeCliente = Value(nomeCliente),
+        telefoneCliente = Value(telefoneCliente);
   static Insertable<TabelaVendaData> custom({
     Expression<int>? id,
     Expression<int>? estado,
     Expression<int>? idFuncionario,
     Expression<DateTime>? data,
     Expression<double>? total,
+    Expression<String>? nomeCliente,
+    Expression<String>? telefoneCliente,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1328,6 +1363,8 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
       if (idFuncionario != null) 'id_funcionario': idFuncionario,
       if (data != null) 'data': data,
       if (total != null) 'total': total,
+      if (nomeCliente != null) 'nome_cliente': nomeCliente,
+      if (telefoneCliente != null) 'telefone_cliente': telefoneCliente,
     });
   }
 
@@ -1336,13 +1373,17 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
       Value<int>? estado,
       Value<int>? idFuncionario,
       Value<DateTime>? data,
-      Value<double>? total}) {
+      Value<double>? total,
+      Value<String>? nomeCliente,
+      Value<String>? telefoneCliente}) {
     return TabelaVendaCompanion(
       id: id ?? this.id,
       estado: estado ?? this.estado,
       idFuncionario: idFuncionario ?? this.idFuncionario,
       data: data ?? this.data,
       total: total ?? this.total,
+      nomeCliente: nomeCliente ?? this.nomeCliente,
+      telefoneCliente: telefoneCliente ?? this.telefoneCliente,
     );
   }
 
@@ -1364,6 +1405,12 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
     if (total.present) {
       map['total'] = Variable<double>(total.value);
     }
+    if (nomeCliente.present) {
+      map['nome_cliente'] = Variable<String>(nomeCliente.value);
+    }
+    if (telefoneCliente.present) {
+      map['telefone_cliente'] = Variable<String>(telefoneCliente.value);
+    }
     return map;
   }
 
@@ -1374,7 +1421,9 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
           ..write('estado: $estado, ')
           ..write('idFuncionario: $idFuncionario, ')
           ..write('data: $data, ')
-          ..write('total: $total')
+          ..write('total: $total, ')
+          ..write('nomeCliente: $nomeCliente, ')
+          ..write('telefoneCliente: $telefoneCliente')
           ..write(')'))
         .toString();
   }
@@ -1414,9 +1463,21 @@ class $TabelaVendaTable extends TabelaVenda
   late final GeneratedColumn<double?> total = GeneratedColumn<double?>(
       'total', aliasedName, false,
       type: const RealType(), requiredDuringInsert: true);
+  final VerificationMeta _nomeClienteMeta =
+      const VerificationMeta('nomeCliente');
+  @override
+  late final GeneratedColumn<String?> nomeCliente = GeneratedColumn<String?>(
+      'nome_cliente', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _telefoneClienteMeta =
+      const VerificationMeta('telefoneCliente');
+  @override
+  late final GeneratedColumn<String?> telefoneCliente =
+      GeneratedColumn<String?>('telefone_cliente', aliasedName, false,
+          type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, estado, idFuncionario, data, total];
+      [id, estado, idFuncionario, data, total, nomeCliente, telefoneCliente];
   @override
   String get aliasedName => _alias ?? 'tabela_venda';
   @override
@@ -1455,6 +1516,22 @@ class $TabelaVendaTable extends TabelaVenda
     } else if (isInserting) {
       context.missing(_totalMeta);
     }
+    if (data.containsKey('nome_cliente')) {
+      context.handle(
+          _nomeClienteMeta,
+          nomeCliente.isAcceptableOrUnknown(
+              data['nome_cliente']!, _nomeClienteMeta));
+    } else if (isInserting) {
+      context.missing(_nomeClienteMeta);
+    }
+    if (data.containsKey('telefone_cliente')) {
+      context.handle(
+          _telefoneClienteMeta,
+          telefoneCliente.isAcceptableOrUnknown(
+              data['telefone_cliente']!, _telefoneClienteMeta));
+    } else if (isInserting) {
+      context.missing(_telefoneClienteMeta);
+    }
     return context;
   }
 
@@ -1481,8 +1558,6 @@ class TabelaItemVendaData extends DataClass
   final int quantidade;
   final double total;
   final double desconto;
-  final String nomeCliente;
-  final String telefoneCliente;
   TabelaItemVendaData(
       {required this.id,
       required this.estado,
@@ -1490,9 +1565,7 @@ class TabelaItemVendaData extends DataClass
       required this.idVenda,
       required this.quantidade,
       required this.total,
-      required this.desconto,
-      required this.nomeCliente,
-      required this.telefoneCliente});
+      required this.desconto});
   factory TabelaItemVendaData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -1511,10 +1584,6 @@ class TabelaItemVendaData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}total'])!,
       desconto: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}desconto'])!,
-      nomeCliente: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}nome_cliente'])!,
-      telefoneCliente: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}telefone_cliente'])!,
     );
   }
   @override
@@ -1527,8 +1596,6 @@ class TabelaItemVendaData extends DataClass
     map['quantidade'] = Variable<int>(quantidade);
     map['total'] = Variable<double>(total);
     map['desconto'] = Variable<double>(desconto);
-    map['nome_cliente'] = Variable<String>(nomeCliente);
-    map['telefone_cliente'] = Variable<String>(telefoneCliente);
     return map;
   }
 
@@ -1541,8 +1608,6 @@ class TabelaItemVendaData extends DataClass
       quantidade: Value(quantidade),
       total: Value(total),
       desconto: Value(desconto),
-      nomeCliente: Value(nomeCliente),
-      telefoneCliente: Value(telefoneCliente),
     );
   }
 
@@ -1557,8 +1622,6 @@ class TabelaItemVendaData extends DataClass
       quantidade: serializer.fromJson<int>(json['quantidade']),
       total: serializer.fromJson<double>(json['total']),
       desconto: serializer.fromJson<double>(json['desconto']),
-      nomeCliente: serializer.fromJson<String>(json['nomeCliente']),
-      telefoneCliente: serializer.fromJson<String>(json['telefoneCliente']),
     );
   }
   @override
@@ -1572,8 +1635,6 @@ class TabelaItemVendaData extends DataClass
       'quantidade': serializer.toJson<int>(quantidade),
       'total': serializer.toJson<double>(total),
       'desconto': serializer.toJson<double>(desconto),
-      'nomeCliente': serializer.toJson<String>(nomeCliente),
-      'telefoneCliente': serializer.toJson<String>(telefoneCliente),
     };
   }
 
@@ -1584,9 +1645,7 @@ class TabelaItemVendaData extends DataClass
           int? idVenda,
           int? quantidade,
           double? total,
-          double? desconto,
-          String? nomeCliente,
-          String? telefoneCliente}) =>
+          double? desconto}) =>
       TabelaItemVendaData(
         id: id ?? this.id,
         estado: estado ?? this.estado,
@@ -1595,8 +1654,6 @@ class TabelaItemVendaData extends DataClass
         quantidade: quantidade ?? this.quantidade,
         total: total ?? this.total,
         desconto: desconto ?? this.desconto,
-        nomeCliente: nomeCliente ?? this.nomeCliente,
-        telefoneCliente: telefoneCliente ?? this.telefoneCliente,
       );
   @override
   String toString() {
@@ -1607,16 +1664,14 @@ class TabelaItemVendaData extends DataClass
           ..write('idVenda: $idVenda, ')
           ..write('quantidade: $quantidade, ')
           ..write('total: $total, ')
-          ..write('desconto: $desconto, ')
-          ..write('nomeCliente: $nomeCliente, ')
-          ..write('telefoneCliente: $telefoneCliente')
+          ..write('desconto: $desconto')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, estado, idProduto, idVenda, quantidade,
-      total, desconto, nomeCliente, telefoneCliente);
+  int get hashCode =>
+      Object.hash(id, estado, idProduto, idVenda, quantidade, total, desconto);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1627,9 +1682,7 @@ class TabelaItemVendaData extends DataClass
           other.idVenda == this.idVenda &&
           other.quantidade == this.quantidade &&
           other.total == this.total &&
-          other.desconto == this.desconto &&
-          other.nomeCliente == this.nomeCliente &&
-          other.telefoneCliente == this.telefoneCliente);
+          other.desconto == this.desconto);
 }
 
 class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
@@ -1640,8 +1693,6 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
   final Value<int> quantidade;
   final Value<double> total;
   final Value<double> desconto;
-  final Value<String> nomeCliente;
-  final Value<String> telefoneCliente;
   const TabelaItemVendaCompanion({
     this.id = const Value.absent(),
     this.estado = const Value.absent(),
@@ -1650,8 +1701,6 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
     this.quantidade = const Value.absent(),
     this.total = const Value.absent(),
     this.desconto = const Value.absent(),
-    this.nomeCliente = const Value.absent(),
-    this.telefoneCliente = const Value.absent(),
   });
   TabelaItemVendaCompanion.insert({
     this.id = const Value.absent(),
@@ -1661,16 +1710,12 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
     required int quantidade,
     required double total,
     required double desconto,
-    required String nomeCliente,
-    required String telefoneCliente,
   })  : estado = Value(estado),
         idProduto = Value(idProduto),
         idVenda = Value(idVenda),
         quantidade = Value(quantidade),
         total = Value(total),
-        desconto = Value(desconto),
-        nomeCliente = Value(nomeCliente),
-        telefoneCliente = Value(telefoneCliente);
+        desconto = Value(desconto);
   static Insertable<TabelaItemVendaData> custom({
     Expression<int>? id,
     Expression<int>? estado,
@@ -1679,8 +1724,6 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
     Expression<int>? quantidade,
     Expression<double>? total,
     Expression<double>? desconto,
-    Expression<String>? nomeCliente,
-    Expression<String>? telefoneCliente,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1690,8 +1733,6 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
       if (quantidade != null) 'quantidade': quantidade,
       if (total != null) 'total': total,
       if (desconto != null) 'desconto': desconto,
-      if (nomeCliente != null) 'nome_cliente': nomeCliente,
-      if (telefoneCliente != null) 'telefone_cliente': telefoneCliente,
     });
   }
 
@@ -1702,9 +1743,7 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
       Value<int>? idVenda,
       Value<int>? quantidade,
       Value<double>? total,
-      Value<double>? desconto,
-      Value<String>? nomeCliente,
-      Value<String>? telefoneCliente}) {
+      Value<double>? desconto}) {
     return TabelaItemVendaCompanion(
       id: id ?? this.id,
       estado: estado ?? this.estado,
@@ -1713,8 +1752,6 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
       quantidade: quantidade ?? this.quantidade,
       total: total ?? this.total,
       desconto: desconto ?? this.desconto,
-      nomeCliente: nomeCliente ?? this.nomeCliente,
-      telefoneCliente: telefoneCliente ?? this.telefoneCliente,
     );
   }
 
@@ -1742,12 +1779,6 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
     if (desconto.present) {
       map['desconto'] = Variable<double>(desconto.value);
     }
-    if (nomeCliente.present) {
-      map['nome_cliente'] = Variable<String>(nomeCliente.value);
-    }
-    if (telefoneCliente.present) {
-      map['telefone_cliente'] = Variable<String>(telefoneCliente.value);
-    }
     return map;
   }
 
@@ -1760,9 +1791,7 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
           ..write('idVenda: $idVenda, ')
           ..write('quantidade: $quantidade, ')
           ..write('total: $total, ')
-          ..write('desconto: $desconto, ')
-          ..write('nomeCliente: $nomeCliente, ')
-          ..write('telefoneCliente: $telefoneCliente')
+          ..write('desconto: $desconto')
           ..write(')'))
         .toString();
   }
@@ -1811,30 +1840,9 @@ class $TabelaItemVendaTable extends TabelaItemVenda
   late final GeneratedColumn<double?> desconto = GeneratedColumn<double?>(
       'desconto', aliasedName, false,
       type: const RealType(), requiredDuringInsert: true);
-  final VerificationMeta _nomeClienteMeta =
-      const VerificationMeta('nomeCliente');
   @override
-  late final GeneratedColumn<String?> nomeCliente = GeneratedColumn<String?>(
-      'nome_cliente', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
-  final VerificationMeta _telefoneClienteMeta =
-      const VerificationMeta('telefoneCliente');
-  @override
-  late final GeneratedColumn<String?> telefoneCliente =
-      GeneratedColumn<String?>('telefone_cliente', aliasedName, false,
-          type: const StringType(), requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        estado,
-        idProduto,
-        idVenda,
-        quantidade,
-        total,
-        desconto,
-        nomeCliente,
-        telefoneCliente
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, estado, idProduto, idVenda, quantidade, total, desconto];
   @override
   String get aliasedName => _alias ?? 'tabela_item_venda';
   @override
@@ -1885,22 +1893,6 @@ class $TabelaItemVendaTable extends TabelaItemVenda
           desconto.isAcceptableOrUnknown(data['desconto']!, _descontoMeta));
     } else if (isInserting) {
       context.missing(_descontoMeta);
-    }
-    if (data.containsKey('nome_cliente')) {
-      context.handle(
-          _nomeClienteMeta,
-          nomeCliente.isAcceptableOrUnknown(
-              data['nome_cliente']!, _nomeClienteMeta));
-    } else if (isInserting) {
-      context.missing(_nomeClienteMeta);
-    }
-    if (data.containsKey('telefone_cliente')) {
-      context.handle(
-          _telefoneClienteMeta,
-          telefoneCliente.isAcceptableOrUnknown(
-              data['telefone_cliente']!, _telefoneClienteMeta));
-    } else if (isInserting) {
-      context.missing(_telefoneClienteMeta);
     }
     return context;
   }
@@ -2251,14 +2243,14 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
   final int id;
   final int estado;
   final int idProduto;
-  final int idFuncionario;
+  final int idVenda;
   final int quantidade;
   final DateTime data;
   TabelaSaidaData(
       {required this.id,
       required this.estado,
       required this.idProduto,
-      required this.idFuncionario,
+      required this.idVenda,
       required this.quantidade,
       required this.data});
   factory TabelaSaidaData.fromData(Map<String, dynamic> data,
@@ -2271,8 +2263,8 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
       idProduto: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id_produto'])!,
-      idFuncionario: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id_funcionario'])!,
+      idVenda: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_venda'])!,
       quantidade: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
       data: const DateTimeType()
@@ -2285,7 +2277,7 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
     map['id'] = Variable<int>(id);
     map['estado'] = Variable<int>(estado);
     map['id_produto'] = Variable<int>(idProduto);
-    map['id_funcionario'] = Variable<int>(idFuncionario);
+    map['id_venda'] = Variable<int>(idVenda);
     map['quantidade'] = Variable<int>(quantidade);
     map['data'] = Variable<DateTime>(data);
     return map;
@@ -2296,7 +2288,7 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
       id: Value(id),
       estado: Value(estado),
       idProduto: Value(idProduto),
-      idFuncionario: Value(idFuncionario),
+      idVenda: Value(idVenda),
       quantidade: Value(quantidade),
       data: Value(data),
     );
@@ -2309,7 +2301,7 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
       id: serializer.fromJson<int>(json['id']),
       estado: serializer.fromJson<int>(json['estado']),
       idProduto: serializer.fromJson<int>(json['idProduto']),
-      idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
+      idVenda: serializer.fromJson<int>(json['idVenda']),
       quantidade: serializer.fromJson<int>(json['quantidade']),
       data: serializer.fromJson<DateTime>(json['data']),
     );
@@ -2321,7 +2313,7 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
       'id': serializer.toJson<int>(id),
       'estado': serializer.toJson<int>(estado),
       'idProduto': serializer.toJson<int>(idProduto),
-      'idFuncionario': serializer.toJson<int>(idFuncionario),
+      'idVenda': serializer.toJson<int>(idVenda),
       'quantidade': serializer.toJson<int>(quantidade),
       'data': serializer.toJson<DateTime>(data),
     };
@@ -2331,14 +2323,14 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
           {int? id,
           int? estado,
           int? idProduto,
-          int? idFuncionario,
+          int? idVenda,
           int? quantidade,
           DateTime? data}) =>
       TabelaSaidaData(
         id: id ?? this.id,
         estado: estado ?? this.estado,
         idProduto: idProduto ?? this.idProduto,
-        idFuncionario: idFuncionario ?? this.idFuncionario,
+        idVenda: idVenda ?? this.idVenda,
         quantidade: quantidade ?? this.quantidade,
         data: data ?? this.data,
       );
@@ -2348,7 +2340,7 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
           ..write('id: $id, ')
           ..write('estado: $estado, ')
           ..write('idProduto: $idProduto, ')
-          ..write('idFuncionario: $idFuncionario, ')
+          ..write('idVenda: $idVenda, ')
           ..write('quantidade: $quantidade, ')
           ..write('data: $data')
           ..write(')'))
@@ -2357,7 +2349,7 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
 
   @override
   int get hashCode =>
-      Object.hash(id, estado, idProduto, idFuncionario, quantidade, data);
+      Object.hash(id, estado, idProduto, idVenda, quantidade, data);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2365,7 +2357,7 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
           other.id == this.id &&
           other.estado == this.estado &&
           other.idProduto == this.idProduto &&
-          other.idFuncionario == this.idFuncionario &&
+          other.idVenda == this.idVenda &&
           other.quantidade == this.quantidade &&
           other.data == this.data);
 }
@@ -2374,14 +2366,14 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
   final Value<int> id;
   final Value<int> estado;
   final Value<int> idProduto;
-  final Value<int> idFuncionario;
+  final Value<int> idVenda;
   final Value<int> quantidade;
   final Value<DateTime> data;
   const TabelaSaidaCompanion({
     this.id = const Value.absent(),
     this.estado = const Value.absent(),
     this.idProduto = const Value.absent(),
-    this.idFuncionario = const Value.absent(),
+    this.idVenda = const Value.absent(),
     this.quantidade = const Value.absent(),
     this.data = const Value.absent(),
   });
@@ -2389,19 +2381,19 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
     this.id = const Value.absent(),
     required int estado,
     required int idProduto,
-    required int idFuncionario,
+    required int idVenda,
     required int quantidade,
     required DateTime data,
   })  : estado = Value(estado),
         idProduto = Value(idProduto),
-        idFuncionario = Value(idFuncionario),
+        idVenda = Value(idVenda),
         quantidade = Value(quantidade),
         data = Value(data);
   static Insertable<TabelaSaidaData> custom({
     Expression<int>? id,
     Expression<int>? estado,
     Expression<int>? idProduto,
-    Expression<int>? idFuncionario,
+    Expression<int>? idVenda,
     Expression<int>? quantidade,
     Expression<DateTime>? data,
   }) {
@@ -2409,7 +2401,7 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
       if (id != null) 'id': id,
       if (estado != null) 'estado': estado,
       if (idProduto != null) 'id_produto': idProduto,
-      if (idFuncionario != null) 'id_funcionario': idFuncionario,
+      if (idVenda != null) 'id_venda': idVenda,
       if (quantidade != null) 'quantidade': quantidade,
       if (data != null) 'data': data,
     });
@@ -2419,14 +2411,14 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
       {Value<int>? id,
       Value<int>? estado,
       Value<int>? idProduto,
-      Value<int>? idFuncionario,
+      Value<int>? idVenda,
       Value<int>? quantidade,
       Value<DateTime>? data}) {
     return TabelaSaidaCompanion(
       id: id ?? this.id,
       estado: estado ?? this.estado,
       idProduto: idProduto ?? this.idProduto,
-      idFuncionario: idFuncionario ?? this.idFuncionario,
+      idVenda: idVenda ?? this.idVenda,
       quantidade: quantidade ?? this.quantidade,
       data: data ?? this.data,
     );
@@ -2444,8 +2436,8 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
     if (idProduto.present) {
       map['id_produto'] = Variable<int>(idProduto.value);
     }
-    if (idFuncionario.present) {
-      map['id_funcionario'] = Variable<int>(idFuncionario.value);
+    if (idVenda.present) {
+      map['id_venda'] = Variable<int>(idVenda.value);
     }
     if (quantidade.present) {
       map['quantidade'] = Variable<int>(quantidade.value);
@@ -2462,7 +2454,7 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
           ..write('id: $id, ')
           ..write('estado: $estado, ')
           ..write('idProduto: $idProduto, ')
-          ..write('idFuncionario: $idFuncionario, ')
+          ..write('idVenda: $idVenda, ')
           ..write('quantidade: $quantidade, ')
           ..write('data: $data')
           ..write(')'))
@@ -2493,11 +2485,10 @@ class $TabelaSaidaTable extends TabelaSaida
   late final GeneratedColumn<int?> idProduto = GeneratedColumn<int?>(
       'id_produto', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _idFuncionarioMeta =
-      const VerificationMeta('idFuncionario');
+  final VerificationMeta _idVendaMeta = const VerificationMeta('idVenda');
   @override
-  late final GeneratedColumn<int?> idFuncionario = GeneratedColumn<int?>(
-      'id_funcionario', aliasedName, false,
+  late final GeneratedColumn<int?> idVenda = GeneratedColumn<int?>(
+      'id_venda', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _quantidadeMeta = const VerificationMeta('quantidade');
   @override
@@ -2511,7 +2502,7 @@ class $TabelaSaidaTable extends TabelaSaida
       type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, estado, idProduto, idFuncionario, quantidade, data];
+      [id, estado, idProduto, idVenda, quantidade, data];
   @override
   String get aliasedName => _alias ?? 'tabela_saida';
   @override
@@ -2536,13 +2527,11 @@ class $TabelaSaidaTable extends TabelaSaida
     } else if (isInserting) {
       context.missing(_idProdutoMeta);
     }
-    if (data.containsKey('id_funcionario')) {
-      context.handle(
-          _idFuncionarioMeta,
-          idFuncionario.isAcceptableOrUnknown(
-              data['id_funcionario']!, _idFuncionarioMeta));
+    if (data.containsKey('id_venda')) {
+      context.handle(_idVendaMeta,
+          idVenda.isAcceptableOrUnknown(data['id_venda']!, _idVendaMeta));
     } else if (isInserting) {
-      context.missing(_idFuncionarioMeta);
+      context.missing(_idVendaMeta);
     }
     if (data.containsKey('quantidade')) {
       context.handle(
@@ -2575,6 +2564,585 @@ class $TabelaSaidaTable extends TabelaSaida
   }
 }
 
+class TabelaStockData extends DataClass implements Insertable<TabelaStockData> {
+  final int id;
+  final int estado;
+  final int idProduto;
+  final int quantidade;
+  TabelaStockData(
+      {required this.id,
+      required this.estado,
+      required this.idProduto,
+      required this.quantidade});
+  factory TabelaStockData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return TabelaStockData(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      estado: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
+      idProduto: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_produto'])!,
+      quantidade: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['estado'] = Variable<int>(estado);
+    map['id_produto'] = Variable<int>(idProduto);
+    map['quantidade'] = Variable<int>(quantidade);
+    return map;
+  }
+
+  TabelaStockCompanion toCompanion(bool nullToAbsent) {
+    return TabelaStockCompanion(
+      id: Value(id),
+      estado: Value(estado),
+      idProduto: Value(idProduto),
+      quantidade: Value(quantidade),
+    );
+  }
+
+  factory TabelaStockData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TabelaStockData(
+      id: serializer.fromJson<int>(json['id']),
+      estado: serializer.fromJson<int>(json['estado']),
+      idProduto: serializer.fromJson<int>(json['idProduto']),
+      quantidade: serializer.fromJson<int>(json['quantidade']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'estado': serializer.toJson<int>(estado),
+      'idProduto': serializer.toJson<int>(idProduto),
+      'quantidade': serializer.toJson<int>(quantidade),
+    };
+  }
+
+  TabelaStockData copyWith(
+          {int? id, int? estado, int? idProduto, int? quantidade}) =>
+      TabelaStockData(
+        id: id ?? this.id,
+        estado: estado ?? this.estado,
+        idProduto: idProduto ?? this.idProduto,
+        quantidade: quantidade ?? this.quantidade,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TabelaStockData(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idProduto: $idProduto, ')
+          ..write('quantidade: $quantidade')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, estado, idProduto, quantidade);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TabelaStockData &&
+          other.id == this.id &&
+          other.estado == this.estado &&
+          other.idProduto == this.idProduto &&
+          other.quantidade == this.quantidade);
+}
+
+class TabelaStockCompanion extends UpdateCompanion<TabelaStockData> {
+  final Value<int> id;
+  final Value<int> estado;
+  final Value<int> idProduto;
+  final Value<int> quantidade;
+  const TabelaStockCompanion({
+    this.id = const Value.absent(),
+    this.estado = const Value.absent(),
+    this.idProduto = const Value.absent(),
+    this.quantidade = const Value.absent(),
+  });
+  TabelaStockCompanion.insert({
+    this.id = const Value.absent(),
+    required int estado,
+    required int idProduto,
+    required int quantidade,
+  })  : estado = Value(estado),
+        idProduto = Value(idProduto),
+        quantidade = Value(quantidade);
+  static Insertable<TabelaStockData> custom({
+    Expression<int>? id,
+    Expression<int>? estado,
+    Expression<int>? idProduto,
+    Expression<int>? quantidade,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (estado != null) 'estado': estado,
+      if (idProduto != null) 'id_produto': idProduto,
+      if (quantidade != null) 'quantidade': quantidade,
+    });
+  }
+
+  TabelaStockCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? estado,
+      Value<int>? idProduto,
+      Value<int>? quantidade}) {
+    return TabelaStockCompanion(
+      id: id ?? this.id,
+      estado: estado ?? this.estado,
+      idProduto: idProduto ?? this.idProduto,
+      quantidade: quantidade ?? this.quantidade,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (estado.present) {
+      map['estado'] = Variable<int>(estado.value);
+    }
+    if (idProduto.present) {
+      map['id_produto'] = Variable<int>(idProduto.value);
+    }
+    if (quantidade.present) {
+      map['quantidade'] = Variable<int>(quantidade.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TabelaStockCompanion(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idProduto: $idProduto, ')
+          ..write('quantidade: $quantidade')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TabelaStockTable extends TabelaStock
+    with TableInfo<$TabelaStockTable, TabelaStockData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TabelaStockTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _estadoMeta = const VerificationMeta('estado');
+  @override
+  late final GeneratedColumn<int?> estado = GeneratedColumn<int?>(
+      'estado', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _idProdutoMeta = const VerificationMeta('idProduto');
+  @override
+  late final GeneratedColumn<int?> idProduto = GeneratedColumn<int?>(
+      'id_produto', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _quantidadeMeta = const VerificationMeta('quantidade');
+  @override
+  late final GeneratedColumn<int?> quantidade = GeneratedColumn<int?>(
+      'quantidade', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, estado, idProduto, quantidade];
+  @override
+  String get aliasedName => _alias ?? 'tabela_stock';
+  @override
+  String get actualTableName => 'tabela_stock';
+  @override
+  VerificationContext validateIntegrity(Insertable<TabelaStockData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('estado')) {
+      context.handle(_estadoMeta,
+          estado.isAcceptableOrUnknown(data['estado']!, _estadoMeta));
+    } else if (isInserting) {
+      context.missing(_estadoMeta);
+    }
+    if (data.containsKey('id_produto')) {
+      context.handle(_idProdutoMeta,
+          idProduto.isAcceptableOrUnknown(data['id_produto']!, _idProdutoMeta));
+    } else if (isInserting) {
+      context.missing(_idProdutoMeta);
+    }
+    if (data.containsKey('quantidade')) {
+      context.handle(
+          _quantidadeMeta,
+          quantidade.isAcceptableOrUnknown(
+              data['quantidade']!, _quantidadeMeta));
+    } else if (isInserting) {
+      context.missing(_quantidadeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TabelaStockData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return TabelaStockData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $TabelaStockTable createAlias(String alias) {
+    return $TabelaStockTable(attachedDatabase, alias);
+  }
+}
+
+class TabelaRececcaoData extends DataClass
+    implements Insertable<TabelaRececcaoData> {
+  final int id;
+  final int estado;
+  final int idFuncionario;
+  final int idProduto;
+  final int quantidade;
+  final DateTime data;
+  TabelaRececcaoData(
+      {required this.id,
+      required this.estado,
+      required this.idFuncionario,
+      required this.idProduto,
+      required this.quantidade,
+      required this.data});
+  factory TabelaRececcaoData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return TabelaRececcaoData(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      estado: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
+      idFuncionario: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_funcionario'])!,
+      idProduto: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_produto'])!,
+      quantidade: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
+      data: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['estado'] = Variable<int>(estado);
+    map['id_funcionario'] = Variable<int>(idFuncionario);
+    map['id_produto'] = Variable<int>(idProduto);
+    map['quantidade'] = Variable<int>(quantidade);
+    map['data'] = Variable<DateTime>(data);
+    return map;
+  }
+
+  TabelaRececcaoCompanion toCompanion(bool nullToAbsent) {
+    return TabelaRececcaoCompanion(
+      id: Value(id),
+      estado: Value(estado),
+      idFuncionario: Value(idFuncionario),
+      idProduto: Value(idProduto),
+      quantidade: Value(quantidade),
+      data: Value(data),
+    );
+  }
+
+  factory TabelaRececcaoData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TabelaRececcaoData(
+      id: serializer.fromJson<int>(json['id']),
+      estado: serializer.fromJson<int>(json['estado']),
+      idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
+      idProduto: serializer.fromJson<int>(json['idProduto']),
+      quantidade: serializer.fromJson<int>(json['quantidade']),
+      data: serializer.fromJson<DateTime>(json['data']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'estado': serializer.toJson<int>(estado),
+      'idFuncionario': serializer.toJson<int>(idFuncionario),
+      'idProduto': serializer.toJson<int>(idProduto),
+      'quantidade': serializer.toJson<int>(quantidade),
+      'data': serializer.toJson<DateTime>(data),
+    };
+  }
+
+  TabelaRececcaoData copyWith(
+          {int? id,
+          int? estado,
+          int? idFuncionario,
+          int? idProduto,
+          int? quantidade,
+          DateTime? data}) =>
+      TabelaRececcaoData(
+        id: id ?? this.id,
+        estado: estado ?? this.estado,
+        idFuncionario: idFuncionario ?? this.idFuncionario,
+        idProduto: idProduto ?? this.idProduto,
+        quantidade: quantidade ?? this.quantidade,
+        data: data ?? this.data,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TabelaRececcaoData(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idFuncionario: $idFuncionario, ')
+          ..write('idProduto: $idProduto, ')
+          ..write('quantidade: $quantidade, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, estado, idFuncionario, idProduto, quantidade, data);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TabelaRececcaoData &&
+          other.id == this.id &&
+          other.estado == this.estado &&
+          other.idFuncionario == this.idFuncionario &&
+          other.idProduto == this.idProduto &&
+          other.quantidade == this.quantidade &&
+          other.data == this.data);
+}
+
+class TabelaRececcaoCompanion extends UpdateCompanion<TabelaRececcaoData> {
+  final Value<int> id;
+  final Value<int> estado;
+  final Value<int> idFuncionario;
+  final Value<int> idProduto;
+  final Value<int> quantidade;
+  final Value<DateTime> data;
+  const TabelaRececcaoCompanion({
+    this.id = const Value.absent(),
+    this.estado = const Value.absent(),
+    this.idFuncionario = const Value.absent(),
+    this.idProduto = const Value.absent(),
+    this.quantidade = const Value.absent(),
+    this.data = const Value.absent(),
+  });
+  TabelaRececcaoCompanion.insert({
+    this.id = const Value.absent(),
+    required int estado,
+    required int idFuncionario,
+    required int idProduto,
+    required int quantidade,
+    required DateTime data,
+  })  : estado = Value(estado),
+        idFuncionario = Value(idFuncionario),
+        idProduto = Value(idProduto),
+        quantidade = Value(quantidade),
+        data = Value(data);
+  static Insertable<TabelaRececcaoData> custom({
+    Expression<int>? id,
+    Expression<int>? estado,
+    Expression<int>? idFuncionario,
+    Expression<int>? idProduto,
+    Expression<int>? quantidade,
+    Expression<DateTime>? data,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (estado != null) 'estado': estado,
+      if (idFuncionario != null) 'id_funcionario': idFuncionario,
+      if (idProduto != null) 'id_produto': idProduto,
+      if (quantidade != null) 'quantidade': quantidade,
+      if (data != null) 'data': data,
+    });
+  }
+
+  TabelaRececcaoCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? estado,
+      Value<int>? idFuncionario,
+      Value<int>? idProduto,
+      Value<int>? quantidade,
+      Value<DateTime>? data}) {
+    return TabelaRececcaoCompanion(
+      id: id ?? this.id,
+      estado: estado ?? this.estado,
+      idFuncionario: idFuncionario ?? this.idFuncionario,
+      idProduto: idProduto ?? this.idProduto,
+      quantidade: quantidade ?? this.quantidade,
+      data: data ?? this.data,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (estado.present) {
+      map['estado'] = Variable<int>(estado.value);
+    }
+    if (idFuncionario.present) {
+      map['id_funcionario'] = Variable<int>(idFuncionario.value);
+    }
+    if (idProduto.present) {
+      map['id_produto'] = Variable<int>(idProduto.value);
+    }
+    if (quantidade.present) {
+      map['quantidade'] = Variable<int>(quantidade.value);
+    }
+    if (data.present) {
+      map['data'] = Variable<DateTime>(data.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TabelaRececcaoCompanion(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idFuncionario: $idFuncionario, ')
+          ..write('idProduto: $idProduto, ')
+          ..write('quantidade: $quantidade, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TabelaRececcaoTable extends TabelaRececcao
+    with TableInfo<$TabelaRececcaoTable, TabelaRececcaoData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TabelaRececcaoTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _estadoMeta = const VerificationMeta('estado');
+  @override
+  late final GeneratedColumn<int?> estado = GeneratedColumn<int?>(
+      'estado', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _idFuncionarioMeta =
+      const VerificationMeta('idFuncionario');
+  @override
+  late final GeneratedColumn<int?> idFuncionario = GeneratedColumn<int?>(
+      'id_funcionario', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _idProdutoMeta = const VerificationMeta('idProduto');
+  @override
+  late final GeneratedColumn<int?> idProduto = GeneratedColumn<int?>(
+      'id_produto', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _quantidadeMeta = const VerificationMeta('quantidade');
+  @override
+  late final GeneratedColumn<int?> quantidade = GeneratedColumn<int?>(
+      'quantidade', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _dataMeta = const VerificationMeta('data');
+  @override
+  late final GeneratedColumn<DateTime?> data = GeneratedColumn<DateTime?>(
+      'data', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, estado, idFuncionario, idProduto, quantidade, data];
+  @override
+  String get aliasedName => _alias ?? 'tabela_receccao';
+  @override
+  String get actualTableName => 'tabela_receccao';
+  @override
+  VerificationContext validateIntegrity(Insertable<TabelaRececcaoData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('estado')) {
+      context.handle(_estadoMeta,
+          estado.isAcceptableOrUnknown(data['estado']!, _estadoMeta));
+    } else if (isInserting) {
+      context.missing(_estadoMeta);
+    }
+    if (data.containsKey('id_funcionario')) {
+      context.handle(
+          _idFuncionarioMeta,
+          idFuncionario.isAcceptableOrUnknown(
+              data['id_funcionario']!, _idFuncionarioMeta));
+    } else if (isInserting) {
+      context.missing(_idFuncionarioMeta);
+    }
+    if (data.containsKey('id_produto')) {
+      context.handle(_idProdutoMeta,
+          idProduto.isAcceptableOrUnknown(data['id_produto']!, _idProdutoMeta));
+    } else if (isInserting) {
+      context.missing(_idProdutoMeta);
+    }
+    if (data.containsKey('quantidade')) {
+      context.handle(
+          _quantidadeMeta,
+          quantidade.isAcceptableOrUnknown(
+              data['quantidade']!, _quantidadeMeta));
+    } else if (isInserting) {
+      context.missing(_quantidadeMeta);
+    }
+    if (data.containsKey('data')) {
+      context.handle(
+          _dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
+    } else if (isInserting) {
+      context.missing(_dataMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TabelaRececcaoData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return TabelaRececcaoData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $TabelaRececcaoTable createAlias(String alias) {
+    return $TabelaRececcaoTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TabelaUsuarioTable tabelaUsuario = $TabelaUsuarioTable(this);
@@ -2587,6 +3155,8 @@ abstract class _$BancoDados extends GeneratedDatabase {
       $TabelaItemVendaTable(this);
   late final $TabelaEntradaTable tabelaEntrada = $TabelaEntradaTable(this);
   late final $TabelaSaidaTable tabelaSaida = $TabelaSaidaTable(this);
+  late final $TabelaStockTable tabelaStock = $TabelaStockTable(this);
+  late final $TabelaRececcaoTable tabelaRececcao = $TabelaRececcaoTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -2598,7 +3168,9 @@ abstract class _$BancoDados extends GeneratedDatabase {
         tabelaVenda,
         tabelaItemVenda,
         tabelaEntrada,
-        tabelaSaida
+        tabelaSaida,
+        tabelaStock,
+        tabelaRececcao
       ];
 }
 
@@ -2609,8 +3181,27 @@ abstract class _$BancoDados extends GeneratedDatabase {
 mixin _$UsuarioDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaUsuarioTable get tabelaUsuario => attachedDatabase.tabelaUsuario;
 }
+mixin _$StockDaoMixin on DatabaseAccessor<BancoDados> {
+  $TabelaStockTable get tabelaStock => attachedDatabase.tabelaStock;
+}
+mixin _$RececcaoDaoMixin on DatabaseAccessor<BancoDados> {
+  $TabelaRececcaoTable get tabelaRececcao => attachedDatabase.tabelaRececcao;
+  $TabelaProdutoTable get tabelaProduto => attachedDatabase.tabelaProduto;
+  $TabelaFuncionarioTable get tabelaFuncionario =>
+      attachedDatabase.tabelaFuncionario;
+}
+mixin _$EntradaDaoMixin on DatabaseAccessor<BancoDados> {
+  $TabelaEntradaTable get tabelaEntrada => attachedDatabase.tabelaEntrada;
+  $TabelaProdutoTable get tabelaProduto => attachedDatabase.tabelaProduto;
+}
+mixin _$SaidaDaoMixin on DatabaseAccessor<BancoDados> {
+  $TabelaSaidaTable get tabelaSaida => attachedDatabase.tabelaSaida;
+  $TabelaProdutoTable get tabelaProduto => attachedDatabase.tabelaProduto;
+}
 mixin _$ProdutoDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaProdutoTable get tabelaProduto => attachedDatabase.tabelaProduto;
+  $TabelaStockTable get tabelaStock => attachedDatabase.tabelaStock;
+  $TabelaPrecoTable get tabelaPreco => attachedDatabase.tabelaPreco;
 }
 mixin _$FuncionarioDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaFuncionarioTable get tabelaFuncionario =>

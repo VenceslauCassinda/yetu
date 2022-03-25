@@ -15,8 +15,8 @@ class ProvedorProduto implements ProvedorProdutoI {
   }
 
   @override
-  Future<void> adicionarProduto(Produto dado) async {
-    await _dao.adicionarProduto(dado.toCompanion(true));
+  Future<int> adicionarProduto(Produto dado) async {
+    return await _dao.adicionarProduto(dado.toCompanion(true));
   }
 
   @override

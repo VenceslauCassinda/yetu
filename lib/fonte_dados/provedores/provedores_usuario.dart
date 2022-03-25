@@ -20,11 +20,11 @@ class ProvedorUsuario implements ProvedorUsuarioI {
   }
 
   @override
-  Future<void> adicionarUsuario(Usuario usuario) async {
+  Future<int> adicionarUsuario(Usuario usuario) async {
     if (await existeUsuarioComNomeUsuario(usuario.nomeUsuario!)) {
       throw ErroUsuarioJaExiste("NOME DE USUARIO JA EXISTENTE!");
     }
-    await _usuarioDao.adicionar(_serializadorUsuario.toCompanion(usuario));
+    return await _usuarioDao.adicionar(_serializadorUsuario.toCompanion(usuario));
   }
 
   @override
