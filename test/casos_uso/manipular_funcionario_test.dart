@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:yetu_gestor/contratos/manipular_funcionario_i.dart';
+import 'package:yetu_gestor/contratos/casos_uso/manipular_funcionario_i.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_fincionario.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_usuario.dart';
 import 'package:yetu_gestor/dominio/entidades/estado.dart';
@@ -25,8 +25,15 @@ void main() {
       await manipularFuncionarioI.adicionarFuncionario(salvar);
       var lista = (await manipularFuncionarioI.pegarLista());
       if (lista.isNotEmpty) {
-        var usuario = lista.last;
-        expect(salvar.nomeCompelto, usuario.nomeCompelto);
+        var funcionario = lista.last;
+        expect(salvar.nomeCompelto, funcionario.nomeCompelto);
+        var funcionarios = await manipularFuncionarioI.pegarLista();
+        funcionario = funcionarios.firstWhere(
+            (element) => element.nomeCompelto == salvar.nomeCompelto);
+        var usuarios = await manipularUsuario.pegarLista();
+        var usuario = usuarios.firstWhereOrNull(
+            (element) => element.nomeUsuario == funcionario.nomeUsuario);
+        expect(usuario != null, true);
       }
     } catch (e) {
       var teste = (e is ErroFuncionarioJaExiste) || (e is ErroUsuarioJaExiste);
@@ -61,12 +68,12 @@ void main() {
       }
     }
   });
-  
+
   test("ACTIVAR FUNCIONARIO", () async {
     var lista = (await manipularFuncionarioI.pegarLista());
     if (lista.isNotEmpty) {
-      var usuario =
-          lista.firstWhereOrNull((element) => element.estado == Estado.DESACTIVADO);
+      var usuario = lista
+          .firstWhereOrNull((element) => element.estado == Estado.DESACTIVADO);
       if (usuario != null) {
         await manipularFuncionarioI.activarFuncionario(usuario);
         usuario = (await manipularFuncionarioI.pegarLista()).firstWhere(
@@ -75,12 +82,12 @@ void main() {
       }
     }
   });
-  
+
   test("RECUPERAR FUNCIONARIO", () async {
     var lista = (await manipularFuncionarioI.pegarListaEliminados());
     if (lista.isNotEmpty) {
-      var usuario =
-          lista.firstWhereOrNull((element) => element.estado == Estado.ELIMINADO);
+      var usuario = lista
+          .firstWhereOrNull((element) => element.estado == Estado.ELIMINADO);
       if (usuario != null) {
         await manipularFuncionarioI.recuperarFuncionario(usuario);
         usuario = (await manipularFuncionarioI.pegarLista()).firstWhere(

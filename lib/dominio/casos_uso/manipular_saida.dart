@@ -1,7 +1,8 @@
-import 'package:yetu_gestor/contratos/manipular_saida_i.dart';
-import 'package:yetu_gestor/contratos/manipular_stock_i.dart';
-import 'package:yetu_gestor/contratos/provedor_saida_i.dart';
 import 'package:yetu_gestor/dominio/entidades/saida.dart';
+
+import '../../contratos/casos_uso/manipular_saida_i.dart';
+import '../../contratos/casos_uso/manipular_stock_i.dart';
+import '../../contratos/provedores/provedor_saida_i.dart';
 
 class ManipularSaida implements ManipularSaidaI {
   final ProvedorSaidaI _provedorSaidaI;
@@ -17,7 +18,7 @@ class ManipularSaida implements ManipularSaidaI {
   Future<int> registarSaida(Saida saida) async {
     var res = await _provedorSaidaI.registarSaida(saida);
     await _manipularStockI.diminuirQuantidadeStock(
-        saida.produto!.quantidade!, saida.quantidade!);
+        saida.idProduto!, saida.quantidade!);
     return res;
   }
 }

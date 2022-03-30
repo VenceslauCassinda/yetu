@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:yetu_gestor/contratos/manipular_funcionario_i.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_fincionario.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_usuario.dart';
 import 'package:yetu_gestor/dominio/entidades/estado.dart';
@@ -7,6 +6,7 @@ import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_funcionario.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedores_usuario.dart';
 
+import '../../../../contratos/casos_uso/manipular_funcionario_i.dart';
 import '../../../aplicacao_c.dart';
 import 'painel_gerente.dart';
 

@@ -53,7 +53,6 @@ class Receccao {
 
   TabelaRececcaoCompanion toCompanion(bool nullToAbsent) {
     return TabelaRececcaoCompanion(
-      id: Value(id!),
       estado: Value(estado!),
       idFuncionario: Value(idFuncionario!),
       idProduto: Value(idProduto!),

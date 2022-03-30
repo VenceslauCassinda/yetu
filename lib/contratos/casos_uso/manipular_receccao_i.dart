@@ -1,7 +1,8 @@
 import 'package:yetu_gestor/dominio/entidades/receccao.dart';
 
-import '../dominio/entidades/funcionario.dart';
-import '../dominio/entidades/produto.dart';
+import '../../dominio/entidades/funcionario.dart';
+import '../../dominio/entidades/produto.dart';
+
 
 abstract class ManipularRececcaoI {
   Future<void> receberProduto(

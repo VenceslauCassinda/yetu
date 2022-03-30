@@ -50,3 +50,10 @@ class ErroProdutoExistente extends Erro {
   ErroProdutoExistente(this.sms, {this.naoMostrarErro})
       : super(sms, naoMostrarErro: naoMostrarErro);
 }
+
+class ErroProdutoComPrecoExistente extends Erro {
+  String sms;
+  bool? naoMostrarErro;
+  ErroProdutoComPrecoExistente(this.sms, {this.naoMostrarErro})
+      : super(sms, naoMostrarErro: naoMostrarErro);
+}

@@ -4,8 +4,10 @@ class TabelaVenda extends Table{
   IntColumn get id => integer().autoIncrement()();
   IntColumn get estado => integer()();
   IntColumn get idFuncionario => integer()();
+  IntColumn get idCliente => integer()();
+  IntColumn get idPagamento => integer()();
   DateTimeColumn get data => dateTime()();
+  DateTimeColumn get dataLevantamentoCompra => dateTime().nullable()();
   RealColumn get total => real()();
-  TextColumn get nomeCliente => text()();
-  TextColumn get telefoneCliente => text()();
+  RealColumn get parcela => real()();
 }

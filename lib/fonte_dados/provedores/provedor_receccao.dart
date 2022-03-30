@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
-import 'package:yetu_gestor/contratos/provedor_receccao_i.dart';
-import 'package:yetu_gestor/dominio/entidades/entrada.dart';
-import 'package:yetu_gestor/dominio/entidades/produto.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
+import '../../contratos/provedores/provedor_receccao_i.dart';
 import '../../dominio/entidades/receccao.dart';
 
 class ProvedorRececcao implements ProvedorRececcaoI {
@@ -33,5 +31,19 @@ class ProvedorRececcao implements ProvedorRececcaoI {
   @override
   Future<int> adicionarrRececcao(Receccao receccao) async {
     return await _dao.adicionarRececcao(receccao);
+  }
+
+  @override
+  Future<Receccao?> pegarRececcaoDeId(int id) async {
+    var res = await _dao.pegarRececcaoDeId(id);
+    if (res != null) {
+      return Receccao(
+          estado: res.estado,
+          idFuncionario: res.idFuncionario,
+          idProduto: res.idProduto,
+          quantidade: res.quantidade,
+          data: res.data);
+    }
+    return null;
   }
 }

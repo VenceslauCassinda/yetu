@@ -1,6 +1,6 @@
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 
-import '../dominio/entidades/usuario.dart';
+import '../../dominio/entidades/usuario.dart';
 
 abstract class ProvedorUsuarioI {
   Future<List<TabelaUsuarioData>> todos();

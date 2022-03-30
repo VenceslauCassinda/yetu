@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:yetu_gestor/dominio/entidades/cliente.dart';
 import 'package:yetu_gestor/dominio/entidades/entrada.dart';
+import 'package:yetu_gestor/dominio/entidades/forma_pagamento.dart';
 import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/tabelas/tabela_item_venda.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/tabelas/tabela_produto.dart';
@@ -10,12 +12,19 @@ import 'package:yetu_gestor/fonte_dados/padrao_dao/tabelas/tabela_usuario.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/tabelas/tabela_venda.dart';
 
 import '../../dominio/entidades/estado.dart';
+import '../../dominio/entidades/item_venda.dart';
+import '../../dominio/entidades/pagamento.dart';
+import '../../dominio/entidades/preco.dart';
 import '../../dominio/entidades/produto.dart';
 import '../../dominio/entidades/receccao.dart';
 import '../../dominio/entidades/saida.dart';
+import '../../dominio/entidades/venda.dart';
 import '../serializadores/serializador_funcionario.dart';
+import 'tabelas/tabela_cliente.dart';
 import 'tabelas/tabela_entrada.dart';
+import 'tabelas/tabela_forma_pagamento.dart';
 import 'tabelas/tabela_funcionario.dart';
+import 'tabelas/tabela_pagamento.dart';
 import 'tabelas/tabela_preco.dart';
 import 'tabelas/tabela_receccao.dart';
 import 'tabelas/tabela_saida.dart';
@@ -25,9 +34,15 @@ part 'daos/usuario_dao.dart';
 part 'daos/stock_dao.dart';
 part 'daos/receccao_dao.dart';
 part 'daos/entrada_dao.dart';
+part 'daos/cliente_dao.dart';
+part 'daos/preco_dao.dart';
 part 'daos/saida_dao.dart';
 part 'daos/produto_dao.dart';
 part 'daos/funcionario_dao.dart';
+part 'daos/item_venda_dao.dart';
+part 'daos/forma_pagamento_dao.dart';
+part 'daos/pagamento_dao.dart';
+part 'daos/venda_dao.dart';
 
 LazyDatabase defaultConnection() {
   return LazyDatabase(() async {
@@ -39,7 +54,7 @@ LazyDatabase defaultConnection() {
   });
 }
 
-@DriftDatabase(tables: [TabelaUsuario, TabelaFuncionario, TabelaProduto, TabelaPreco, TabelaVenda, TabelaItemVenda, TabelaEntrada, TabelaSaida, TabelaStock, TabelaRececcao])
+@DriftDatabase(tables: [TabelaUsuario, TabelaFuncionario, TabelaProduto, TabelaPreco, TabelaVenda, TabelaItemVenda, TabelaEntrada, TabelaSaida, TabelaStock, TabelaRececcao, TabelaCliente, TabelaItemVenda, TabelaFormaPagamento, TabelaPagamento])
 class BancoDados extends _$BancoDados {
   BancoDados() : super(defaultConnection());
   @override

@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
-import 'package:yetu_gestor/contratos/provedor_saida_i.dart';
 import 'package:yetu_gestor/dominio/entidades/saida.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
+
+import '../../contratos/provedores/provedor_saida_i.dart';
 
 class ProvedorSaida implements ProvedorSaidaI {
   late SaidaDao _dao;

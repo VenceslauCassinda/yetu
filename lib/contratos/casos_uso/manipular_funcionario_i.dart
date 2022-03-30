@@ -1,6 +1,6 @@
 import 'package:yetu_gestor/dominio/entidades/usuario.dart';
 
-import '../dominio/entidades/funcionario.dart';
+import '../../dominio/entidades/funcionario.dart';
 
 abstract class ManipularFuncionarioI {
   Future<List<Funcionario>> pegarLista();

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:yetu_gestor/contratos/provedor_produto_i.dart';
 import 'package:yetu_gestor/dominio/entidades/produto.dart';
 
+import '../../contratos/provedores/provedor_produto_i.dart';
 import '../padrao_dao/base_dados.dart';
 
 class ProvedorProduto implements ProvedorProdutoI {
@@ -29,7 +29,9 @@ class ProvedorProduto implements ProvedorProdutoI {
   Future<List<Produto>> pegarLista() async {
     return (await _dao.todos())
         .map((e) => Produto(
+          listaPreco :e.listaPreco,
               id: e.id,
+              quantidade: e.quantidade,
               nome: e.nome,
               estado: e.estado,
               precoCompra: e.precoCompra,

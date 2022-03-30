@@ -21,7 +21,8 @@ class Funcionario extends Usuario {
   @override
   bool? logado;
 
-  Funcionario({this.nomeCompelto,
+  Funcionario(
+      {this.nomeCompelto,
       this.id,
       this.estado,
       this.logado,
@@ -38,4 +39,29 @@ class Funcionario extends Usuario {
             nivelAcesso: nivelAcesso,
             nomeUsuario: nomeCompelto,
             palavraPasse: palavraPasse);
+
+  @override
+  String toString() {
+    return (StringBuffer('TabelaFuncionarioCompanion(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idUsuario: $idUsuario, ')
+          ..write(
+            'logado: $logado',
+          )
+          ..write(
+            'nivelAcesso: $nivelAcesso',
+          )
+          ..write(
+            'palavraPasse: $palavraPasse',
+          )
+          ..write(
+            'imagemPerfil: $imagemPerfil',
+          )
+          ..write(
+            'nomeCompleto: $nomeCompelto',
+          )
+          ..write(')'))
+        .toString();
+  }
 }

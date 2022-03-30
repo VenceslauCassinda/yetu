@@ -3,9 +3,10 @@ part of '../base_dados.dart';
 @DriftAccessor(tables: [TabelaStock])
 class StockDao extends DatabaseAccessor<BancoDados> with _$StockDaoMixin {
   StockDao(BancoDados attachedDatabase) : super(attachedDatabase);
-  Future<void> inicializarStockProduto(int idProduto) async {
-    await into(tabelaStock).insert(TabelaStockCompanion.insert(
+  Future<int> inicializarStockProduto(int idProduto) async {
+    var res = await into(tabelaStock).insert(TabelaStockCompanion.insert(
         estado: Estado.ATIVADO, idProduto: idProduto, quantidade: 0));
+    return res;
   }
 
   Future<void> alterarQuantidadeStock(int idProduto, int quantidade) async {

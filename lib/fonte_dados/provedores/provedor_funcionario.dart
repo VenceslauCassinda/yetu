@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:yetu_gestor/contratos/provedor_funcionario_i.dart';
 import 'package:yetu_gestor/dominio/entidades/estado.dart';
 import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 import 'package:yetu_gestor/fonte_dados/serializadores/serializador_funcionario.dart';
 
+import '../../contratos/provedores/provedor_funcionario_i.dart';
 import '../erros.dart';
 
 class ProveedorFuncionario implements ProvedorFuncionarioI {

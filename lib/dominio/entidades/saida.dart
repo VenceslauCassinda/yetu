@@ -14,7 +14,7 @@ class Saida {
   Saida(
       {this.id,
       this.produto,
-      required this.estado,
+      this.estado,
       required this.idProduto,
       required this.idVenda,
       required this.quantidade,

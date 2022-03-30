@@ -25,7 +25,7 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
     for (var i = 0; i < lista.length; i++) {
       var cada = lista[i];
       var res = await (select(tabelaPreco)
-            ..where((tbl) => tbl.id.equals(cada.id)))
+            ..where((tbl) => tbl.idProduto.equals(cada.id)))
           .get();
       var listaPreco = res.map((e) => e.preco).toList();
       lista[i].listaPreco = listaPreco;

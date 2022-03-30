@@ -1,4 +1,5 @@
-import '../dominio/entidades/funcionario.dart';
+
+import '../../dominio/entidades/funcionario.dart';
 
 abstract class ProvedorFuncionarioI {
   Future<List<Funcionario>> pegarLista();

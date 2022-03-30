@@ -1,7 +1,8 @@
-import 'package:yetu_gestor/contratos/manipular_entrada_i.dart';
-import 'package:yetu_gestor/contratos/manipular_stock_i.dart';
-import 'package:yetu_gestor/contratos/provedor_entrada_i.dart';
 import 'package:yetu_gestor/dominio/entidades/entrada.dart';
+
+import '../../contratos/casos_uso/manipular_entrada_i.dart';
+import '../../contratos/casos_uso/manipular_stock_i.dart';
+import '../../contratos/provedores/provedor_entrada_i.dart';
 
 class ManipularEntrada implements ManipularEntradaI {
   final ProvedorEntradaI _provedorEntradaI;
@@ -12,8 +13,9 @@ class ManipularEntrada implements ManipularEntradaI {
   @override
   Future<int> registarEntrada(Entrada entrada) async {
     var res = await _provedorEntradaI.registarEntrada(entrada);
-    await _manipularStockI.aumentarQuantidadeStock(
-        entrada.produto!.quantidade!, entrada.quantidade!);
+    var id = await _manipularStockI.aumentarQuantidadeStock(
+        entrada.produto!.id!, entrada.quantidade!);
+    // print((await _manipularStockI.pegarStockDeId(id))?.toString());
     return res;
   }
 

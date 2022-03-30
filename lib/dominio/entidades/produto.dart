@@ -14,6 +14,7 @@ class Produto {
   Produto(
       {this.id,
       this.estado,
+      this.listaPreco,
       this.nome,
       this.precoCompra,
       this.recebivel,
@@ -105,7 +106,7 @@ class Produto {
           ..write('estado: $estado, ')
           ..write('nome: $nome, ')
           ..write('precoCompra: $precoCompra, ')
-          ..write('recebivel: $recebivel')
+          ..write('recebivel: $recebivel, ')
           ..write('precos: $listaPreco')
           ..write(')'))
         .toString();

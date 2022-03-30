@@ -1,10 +1,11 @@
 import 'dart:math';
 
-import 'package:yetu_gestor/contratos/manipular_funcionario_i.dart';
-import 'package:yetu_gestor/contratos/manipular_usuario_i.dart';
-import 'package:yetu_gestor/contratos/provedor_funcionario_i.dart';
 import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
 import 'package:yetu_gestor/dominio/entidades/usuario.dart';
+
+import '../../contratos/casos_uso/manipular_funcionario_i.dart';
+import '../../contratos/casos_uso/manipular_usuario_i.dart';
+import '../../contratos/provedores/provedor_funcionario_i.dart';
 
 class ManipularFuncionario implements ManipularFuncionarioI {
   final ManipularUsuarioI _manipularUsuarioI;
@@ -68,7 +69,7 @@ class ManipularFuncionario implements ManipularFuncionarioI {
   }
 
   @override
-  Future<List<Funcionario>> todos()async {
+  Future<List<Funcionario>> todos() async {
     return (await _provedorFuncionarioI.todos());
   }
 }

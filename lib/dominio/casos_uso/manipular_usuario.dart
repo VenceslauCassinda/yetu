@@ -1,8 +1,8 @@
-import 'package:yetu_gestor/contratos/manipular_usuario_i.dart';
-import 'package:yetu_gestor/contratos/provedor_usuario_i.dart';
 import 'package:yetu_gestor/dominio/entidades/estado.dart';
 import 'package:yetu_gestor/fonte_dados/serializadores/serializador_usuario.dart';
 
+import '../../contratos/casos_uso/manipular_usuario_i.dart';
+import '../../contratos/provedores/provedor_usuario_i.dart';
 import '../entidades/usuario.dart';
 
 class ManipularUsuario implements ManipularUsuarioI {

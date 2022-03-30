@@ -50,4 +50,8 @@ class RececcaoDao extends DatabaseAccessor<BancoDados> with _$RececcaoDaoMixin {
     await (delete(tabelaRececcao)..where((tbl) => tbl.id.equals(receccao.id)))
         .go();
   }
+
+  Future<TabelaRececcaoData?> pegarRececcaoDeId(int id) async {
+    return await (select(tabelaRececcao)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  }
 }
