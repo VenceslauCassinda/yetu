@@ -69,7 +69,6 @@ class Venda {
 
   TabelaVendaCompanion toCompanion(bool nullToAbsent) {
     return TabelaVendaCompanion(
-      id: Value(id!),
       estado: Value(estado!),
       idFuncionario: Value(idFuncionario!),
       idCliente: Value(idCliente!),

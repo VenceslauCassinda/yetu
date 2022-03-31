@@ -29,4 +29,19 @@ class ProvedorVenda implements ProvedorVendaI {
   Future<int> removerVendaDeId(int id) async {
     return await _dao.removerVendaDeId(id);
   }
+
+  @override
+  Future<Venda?> pegarVendaDeId(int id) async {
+    var res = await _dao.pegarVendaDeId(id);
+    if (res != null) {
+      return Venda(
+          estado: res.estado,
+          idFuncionario: res.idFuncionario,
+          idCliente: res.idCliente,
+          data: res.data,
+          total: res.total,
+          parcela: res.parcela);
+    }
+    return null;
+  }
 }

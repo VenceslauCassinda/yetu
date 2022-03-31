@@ -19,4 +19,9 @@ class StockDao extends DatabaseAccessor<BancoDados> with _$StockDaoMixin {
     var res = (select(tabelaStock)..where((tbl) => tbl.id.equals(id)));
     return (await res.getSingleOrNull());
   }
+  
+  Future<TabelaStockData> pegarStockDoProdutoDeId(int id) async {
+    var res = (select(tabelaStock)..where((tbl) => tbl.idProduto.equals(id)));
+    return (await res.getSingle());
+  }
 }

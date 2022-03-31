@@ -65,4 +65,8 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
   Future<void> removerProduto(int id) async {
     await (delete(tabelaProduto)..where((tbl) => tbl.id.equals(id))).go();
   }
+  
+  Future<TabelaProdutoData?> pagarProdutoDeId(int id) async {
+    return await (select(tabelaProduto)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  }
 }

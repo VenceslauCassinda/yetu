@@ -1187,7 +1187,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
   final int estado;
   final int idFuncionario;
   final int idCliente;
-  final int idPagamento;
   final DateTime data;
   final DateTime? dataLevantamentoCompra;
   final double total;
@@ -1197,7 +1196,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
       required this.estado,
       required this.idFuncionario,
       required this.idCliente,
-      required this.idPagamento,
       required this.data,
       this.dataLevantamentoCompra,
       required this.total,
@@ -1214,8 +1212,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}id_funcionario'])!,
       idCliente: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id_cliente'])!,
-      idPagamento: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id_pagamento'])!,
       data: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
       dataLevantamentoCompra: const DateTimeType().mapFromDatabaseResponse(
@@ -1233,7 +1229,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
     map['estado'] = Variable<int>(estado);
     map['id_funcionario'] = Variable<int>(idFuncionario);
     map['id_cliente'] = Variable<int>(idCliente);
-    map['id_pagamento'] = Variable<int>(idPagamento);
     map['data'] = Variable<DateTime>(data);
     if (!nullToAbsent || dataLevantamentoCompra != null) {
       map['data_levantamento_compra'] =
@@ -1250,7 +1245,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
       estado: Value(estado),
       idFuncionario: Value(idFuncionario),
       idCliente: Value(idCliente),
-      idPagamento: Value(idPagamento),
       data: Value(data),
       dataLevantamentoCompra: dataLevantamentoCompra == null && nullToAbsent
           ? const Value.absent()
@@ -1268,7 +1262,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
       estado: serializer.fromJson<int>(json['estado']),
       idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
       idCliente: serializer.fromJson<int>(json['idCliente']),
-      idPagamento: serializer.fromJson<int>(json['idPagamento']),
       data: serializer.fromJson<DateTime>(json['data']),
       dataLevantamentoCompra:
           serializer.fromJson<DateTime?>(json['dataLevantamentoCompra']),
@@ -1284,7 +1277,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
       'estado': serializer.toJson<int>(estado),
       'idFuncionario': serializer.toJson<int>(idFuncionario),
       'idCliente': serializer.toJson<int>(idCliente),
-      'idPagamento': serializer.toJson<int>(idPagamento),
       'data': serializer.toJson<DateTime>(data),
       'dataLevantamentoCompra':
           serializer.toJson<DateTime?>(dataLevantamentoCompra),
@@ -1298,7 +1290,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
           int? estado,
           int? idFuncionario,
           int? idCliente,
-          int? idPagamento,
           DateTime? data,
           DateTime? dataLevantamentoCompra,
           double? total,
@@ -1308,7 +1299,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
         estado: estado ?? this.estado,
         idFuncionario: idFuncionario ?? this.idFuncionario,
         idCliente: idCliente ?? this.idCliente,
-        idPagamento: idPagamento ?? this.idPagamento,
         data: data ?? this.data,
         dataLevantamentoCompra:
             dataLevantamentoCompra ?? this.dataLevantamentoCompra,
@@ -1322,7 +1312,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
           ..write('estado: $estado, ')
           ..write('idFuncionario: $idFuncionario, ')
           ..write('idCliente: $idCliente, ')
-          ..write('idPagamento: $idPagamento, ')
           ..write('data: $data, ')
           ..write('dataLevantamentoCompra: $dataLevantamentoCompra, ')
           ..write('total: $total, ')
@@ -1332,8 +1321,8 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, estado, idFuncionario, idCliente,
-      idPagamento, data, dataLevantamentoCompra, total, parcela);
+  int get hashCode => Object.hash(id, estado, idFuncionario, idCliente, data,
+      dataLevantamentoCompra, total, parcela);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1342,7 +1331,6 @@ class TabelaVendaData extends DataClass implements Insertable<TabelaVendaData> {
           other.estado == this.estado &&
           other.idFuncionario == this.idFuncionario &&
           other.idCliente == this.idCliente &&
-          other.idPagamento == this.idPagamento &&
           other.data == this.data &&
           other.dataLevantamentoCompra == this.dataLevantamentoCompra &&
           other.total == this.total &&
@@ -1354,7 +1342,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
   final Value<int> estado;
   final Value<int> idFuncionario;
   final Value<int> idCliente;
-  final Value<int> idPagamento;
   final Value<DateTime> data;
   final Value<DateTime?> dataLevantamentoCompra;
   final Value<double> total;
@@ -1364,7 +1351,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
     this.estado = const Value.absent(),
     this.idFuncionario = const Value.absent(),
     this.idCliente = const Value.absent(),
-    this.idPagamento = const Value.absent(),
     this.data = const Value.absent(),
     this.dataLevantamentoCompra = const Value.absent(),
     this.total = const Value.absent(),
@@ -1375,7 +1361,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
     required int estado,
     required int idFuncionario,
     required int idCliente,
-    required int idPagamento,
     required DateTime data,
     this.dataLevantamentoCompra = const Value.absent(),
     required double total,
@@ -1383,7 +1368,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
   })  : estado = Value(estado),
         idFuncionario = Value(idFuncionario),
         idCliente = Value(idCliente),
-        idPagamento = Value(idPagamento),
         data = Value(data),
         total = Value(total),
         parcela = Value(parcela);
@@ -1392,7 +1376,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
     Expression<int>? estado,
     Expression<int>? idFuncionario,
     Expression<int>? idCliente,
-    Expression<int>? idPagamento,
     Expression<DateTime>? data,
     Expression<DateTime?>? dataLevantamentoCompra,
     Expression<double>? total,
@@ -1403,7 +1386,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
       if (estado != null) 'estado': estado,
       if (idFuncionario != null) 'id_funcionario': idFuncionario,
       if (idCliente != null) 'id_cliente': idCliente,
-      if (idPagamento != null) 'id_pagamento': idPagamento,
       if (data != null) 'data': data,
       if (dataLevantamentoCompra != null)
         'data_levantamento_compra': dataLevantamentoCompra,
@@ -1417,7 +1399,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
       Value<int>? estado,
       Value<int>? idFuncionario,
       Value<int>? idCliente,
-      Value<int>? idPagamento,
       Value<DateTime>? data,
       Value<DateTime?>? dataLevantamentoCompra,
       Value<double>? total,
@@ -1427,7 +1408,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
       estado: estado ?? this.estado,
       idFuncionario: idFuncionario ?? this.idFuncionario,
       idCliente: idCliente ?? this.idCliente,
-      idPagamento: idPagamento ?? this.idPagamento,
       data: data ?? this.data,
       dataLevantamentoCompra:
           dataLevantamentoCompra ?? this.dataLevantamentoCompra,
@@ -1450,9 +1430,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
     }
     if (idCliente.present) {
       map['id_cliente'] = Variable<int>(idCliente.value);
-    }
-    if (idPagamento.present) {
-      map['id_pagamento'] = Variable<int>(idPagamento.value);
     }
     if (data.present) {
       map['data'] = Variable<DateTime>(data.value);
@@ -1477,7 +1454,6 @@ class TabelaVendaCompanion extends UpdateCompanion<TabelaVendaData> {
           ..write('estado: $estado, ')
           ..write('idFuncionario: $idFuncionario, ')
           ..write('idCliente: $idCliente, ')
-          ..write('idPagamento: $idPagamento, ')
           ..write('data: $data, ')
           ..write('dataLevantamentoCompra: $dataLevantamentoCompra, ')
           ..write('total: $total, ')
@@ -1516,12 +1492,6 @@ class $TabelaVendaTable extends TabelaVenda
   late final GeneratedColumn<int?> idCliente = GeneratedColumn<int?>(
       'id_cliente', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _idPagamentoMeta =
-      const VerificationMeta('idPagamento');
-  @override
-  late final GeneratedColumn<int?> idPagamento = GeneratedColumn<int?>(
-      'id_pagamento', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _dataMeta = const VerificationMeta('data');
   @override
   late final GeneratedColumn<DateTime?> data = GeneratedColumn<DateTime?>(
@@ -1549,7 +1519,6 @@ class $TabelaVendaTable extends TabelaVenda
         estado,
         idFuncionario,
         idCliente,
-        idPagamento,
         data,
         dataLevantamentoCompra,
         total,
@@ -1586,14 +1555,6 @@ class $TabelaVendaTable extends TabelaVenda
           idCliente.isAcceptableOrUnknown(data['id_cliente']!, _idClienteMeta));
     } else if (isInserting) {
       context.missing(_idClienteMeta);
-    }
-    if (data.containsKey('id_pagamento')) {
-      context.handle(
-          _idPagamentoMeta,
-          idPagamento.isAcceptableOrUnknown(
-              data['id_pagamento']!, _idPagamentoMeta));
-    } else if (isInserting) {
-      context.missing(_idPagamentoMeta);
     }
     if (data.containsKey('data')) {
       context.handle(
@@ -1644,7 +1605,7 @@ class TabelaItemVendaData extends DataClass
   final int idVenda;
   final int quantidade;
   final double total;
-  final double desconto;
+  final int desconto;
   TabelaItemVendaData(
       {required this.id,
       required this.estado,
@@ -1669,7 +1630,7 @@ class TabelaItemVendaData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
       total: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}total'])!,
-      desconto: const RealType()
+      desconto: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}desconto'])!,
     );
   }
@@ -1682,7 +1643,7 @@ class TabelaItemVendaData extends DataClass
     map['id_venda'] = Variable<int>(idVenda);
     map['quantidade'] = Variable<int>(quantidade);
     map['total'] = Variable<double>(total);
-    map['desconto'] = Variable<double>(desconto);
+    map['desconto'] = Variable<int>(desconto);
     return map;
   }
 
@@ -1708,7 +1669,7 @@ class TabelaItemVendaData extends DataClass
       idVenda: serializer.fromJson<int>(json['idVenda']),
       quantidade: serializer.fromJson<int>(json['quantidade']),
       total: serializer.fromJson<double>(json['total']),
-      desconto: serializer.fromJson<double>(json['desconto']),
+      desconto: serializer.fromJson<int>(json['desconto']),
     );
   }
   @override
@@ -1721,7 +1682,7 @@ class TabelaItemVendaData extends DataClass
       'idVenda': serializer.toJson<int>(idVenda),
       'quantidade': serializer.toJson<int>(quantidade),
       'total': serializer.toJson<double>(total),
-      'desconto': serializer.toJson<double>(desconto),
+      'desconto': serializer.toJson<int>(desconto),
     };
   }
 
@@ -1732,7 +1693,7 @@ class TabelaItemVendaData extends DataClass
           int? idVenda,
           int? quantidade,
           double? total,
-          double? desconto}) =>
+          int? desconto}) =>
       TabelaItemVendaData(
         id: id ?? this.id,
         estado: estado ?? this.estado,
@@ -1779,7 +1740,7 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
   final Value<int> idVenda;
   final Value<int> quantidade;
   final Value<double> total;
-  final Value<double> desconto;
+  final Value<int> desconto;
   const TabelaItemVendaCompanion({
     this.id = const Value.absent(),
     this.estado = const Value.absent(),
@@ -1796,7 +1757,7 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
     required int idVenda,
     required int quantidade,
     required double total,
-    required double desconto,
+    required int desconto,
   })  : estado = Value(estado),
         idProduto = Value(idProduto),
         idVenda = Value(idVenda),
@@ -1810,7 +1771,7 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
     Expression<int>? idVenda,
     Expression<int>? quantidade,
     Expression<double>? total,
-    Expression<double>? desconto,
+    Expression<int>? desconto,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1830,7 +1791,7 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
       Value<int>? idVenda,
       Value<int>? quantidade,
       Value<double>? total,
-      Value<double>? desconto}) {
+      Value<int>? desconto}) {
     return TabelaItemVendaCompanion(
       id: id ?? this.id,
       estado: estado ?? this.estado,
@@ -1864,7 +1825,7 @@ class TabelaItemVendaCompanion extends UpdateCompanion<TabelaItemVendaData> {
       map['total'] = Variable<double>(total.value);
     }
     if (desconto.present) {
-      map['desconto'] = Variable<double>(desconto.value);
+      map['desconto'] = Variable<int>(desconto.value);
     }
     return map;
   }
@@ -1924,9 +1885,9 @@ class $TabelaItemVendaTable extends TabelaItemVenda
       type: const RealType(), requiredDuringInsert: true);
   final VerificationMeta _descontoMeta = const VerificationMeta('desconto');
   @override
-  late final GeneratedColumn<double?> desconto = GeneratedColumn<double?>(
+  late final GeneratedColumn<int?> desconto = GeneratedColumn<int?>(
       'desconto', aliasedName, false,
-      type: const RealType(), requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
       [id, estado, idProduto, idVenda, quantidade, total, desconto];
@@ -3737,14 +3698,12 @@ class TabelaPagamentoData extends DataClass
   final int idFormaPagamento;
   final int estado;
   final int idVenda;
-  final int tipo;
   final double valor;
   TabelaPagamentoData(
       {required this.id,
       required this.idFormaPagamento,
       required this.estado,
       required this.idVenda,
-      required this.tipo,
       required this.valor});
   factory TabelaPagamentoData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
@@ -3758,8 +3717,6 @@ class TabelaPagamentoData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
       idVenda: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id_venda'])!,
-      tipo: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}tipo'])!,
       valor: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}valor'])!,
     );
@@ -3771,7 +3728,6 @@ class TabelaPagamentoData extends DataClass
     map['id_forma_pagamento'] = Variable<int>(idFormaPagamento);
     map['estado'] = Variable<int>(estado);
     map['id_venda'] = Variable<int>(idVenda);
-    map['tipo'] = Variable<int>(tipo);
     map['valor'] = Variable<double>(valor);
     return map;
   }
@@ -3782,7 +3738,6 @@ class TabelaPagamentoData extends DataClass
       idFormaPagamento: Value(idFormaPagamento),
       estado: Value(estado),
       idVenda: Value(idVenda),
-      tipo: Value(tipo),
       valor: Value(valor),
     );
   }
@@ -3795,7 +3750,6 @@ class TabelaPagamentoData extends DataClass
       idFormaPagamento: serializer.fromJson<int>(json['idFormaPagamento']),
       estado: serializer.fromJson<int>(json['estado']),
       idVenda: serializer.fromJson<int>(json['idVenda']),
-      tipo: serializer.fromJson<int>(json['tipo']),
       valor: serializer.fromJson<double>(json['valor']),
     );
   }
@@ -3807,7 +3761,6 @@ class TabelaPagamentoData extends DataClass
       'idFormaPagamento': serializer.toJson<int>(idFormaPagamento),
       'estado': serializer.toJson<int>(estado),
       'idVenda': serializer.toJson<int>(idVenda),
-      'tipo': serializer.toJson<int>(tipo),
       'valor': serializer.toJson<double>(valor),
     };
   }
@@ -3817,14 +3770,12 @@ class TabelaPagamentoData extends DataClass
           int? idFormaPagamento,
           int? estado,
           int? idVenda,
-          int? tipo,
           double? valor}) =>
       TabelaPagamentoData(
         id: id ?? this.id,
         idFormaPagamento: idFormaPagamento ?? this.idFormaPagamento,
         estado: estado ?? this.estado,
         idVenda: idVenda ?? this.idVenda,
-        tipo: tipo ?? this.tipo,
         valor: valor ?? this.valor,
       );
   @override
@@ -3834,15 +3785,13 @@ class TabelaPagamentoData extends DataClass
           ..write('idFormaPagamento: $idFormaPagamento, ')
           ..write('estado: $estado, ')
           ..write('idVenda: $idVenda, ')
-          ..write('tipo: $tipo, ')
           ..write('valor: $valor')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, idFormaPagamento, estado, idVenda, tipo, valor);
+  int get hashCode => Object.hash(id, idFormaPagamento, estado, idVenda, valor);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3851,7 +3800,6 @@ class TabelaPagamentoData extends DataClass
           other.idFormaPagamento == this.idFormaPagamento &&
           other.estado == this.estado &&
           other.idVenda == this.idVenda &&
-          other.tipo == this.tipo &&
           other.valor == this.valor);
 }
 
@@ -3860,14 +3808,12 @@ class TabelaPagamentoCompanion extends UpdateCompanion<TabelaPagamentoData> {
   final Value<int> idFormaPagamento;
   final Value<int> estado;
   final Value<int> idVenda;
-  final Value<int> tipo;
   final Value<double> valor;
   const TabelaPagamentoCompanion({
     this.id = const Value.absent(),
     this.idFormaPagamento = const Value.absent(),
     this.estado = const Value.absent(),
     this.idVenda = const Value.absent(),
-    this.tipo = const Value.absent(),
     this.valor = const Value.absent(),
   });
   TabelaPagamentoCompanion.insert({
@@ -3875,19 +3821,16 @@ class TabelaPagamentoCompanion extends UpdateCompanion<TabelaPagamentoData> {
     required int idFormaPagamento,
     required int estado,
     required int idVenda,
-    required int tipo,
     required double valor,
   })  : idFormaPagamento = Value(idFormaPagamento),
         estado = Value(estado),
         idVenda = Value(idVenda),
-        tipo = Value(tipo),
         valor = Value(valor);
   static Insertable<TabelaPagamentoData> custom({
     Expression<int>? id,
     Expression<int>? idFormaPagamento,
     Expression<int>? estado,
     Expression<int>? idVenda,
-    Expression<int>? tipo,
     Expression<double>? valor,
   }) {
     return RawValuesInsertable({
@@ -3895,7 +3838,6 @@ class TabelaPagamentoCompanion extends UpdateCompanion<TabelaPagamentoData> {
       if (idFormaPagamento != null) 'id_forma_pagamento': idFormaPagamento,
       if (estado != null) 'estado': estado,
       if (idVenda != null) 'id_venda': idVenda,
-      if (tipo != null) 'tipo': tipo,
       if (valor != null) 'valor': valor,
     });
   }
@@ -3905,14 +3847,12 @@ class TabelaPagamentoCompanion extends UpdateCompanion<TabelaPagamentoData> {
       Value<int>? idFormaPagamento,
       Value<int>? estado,
       Value<int>? idVenda,
-      Value<int>? tipo,
       Value<double>? valor}) {
     return TabelaPagamentoCompanion(
       id: id ?? this.id,
       idFormaPagamento: idFormaPagamento ?? this.idFormaPagamento,
       estado: estado ?? this.estado,
       idVenda: idVenda ?? this.idVenda,
-      tipo: tipo ?? this.tipo,
       valor: valor ?? this.valor,
     );
   }
@@ -3932,9 +3872,6 @@ class TabelaPagamentoCompanion extends UpdateCompanion<TabelaPagamentoData> {
     if (idVenda.present) {
       map['id_venda'] = Variable<int>(idVenda.value);
     }
-    if (tipo.present) {
-      map['tipo'] = Variable<int>(tipo.value);
-    }
     if (valor.present) {
       map['valor'] = Variable<double>(valor.value);
     }
@@ -3948,7 +3885,6 @@ class TabelaPagamentoCompanion extends UpdateCompanion<TabelaPagamentoData> {
           ..write('idFormaPagamento: $idFormaPagamento, ')
           ..write('estado: $estado, ')
           ..write('idVenda: $idVenda, ')
-          ..write('tipo: $tipo, ')
           ..write('valor: $valor')
           ..write(')'))
         .toString();
@@ -3984,11 +3920,6 @@ class $TabelaPagamentoTable extends TabelaPagamento
   late final GeneratedColumn<int?> idVenda = GeneratedColumn<int?>(
       'id_venda', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _tipoMeta = const VerificationMeta('tipo');
-  @override
-  late final GeneratedColumn<int?> tipo = GeneratedColumn<int?>(
-      'tipo', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _valorMeta = const VerificationMeta('valor');
   @override
   late final GeneratedColumn<double?> valor = GeneratedColumn<double?>(
@@ -3996,7 +3927,7 @@ class $TabelaPagamentoTable extends TabelaPagamento
       type: const RealType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, idFormaPagamento, estado, idVenda, tipo, valor];
+      [id, idFormaPagamento, estado, idVenda, valor];
   @override
   String get aliasedName => _alias ?? 'tabela_pagamento';
   @override
@@ -4030,12 +3961,6 @@ class $TabelaPagamentoTable extends TabelaPagamento
     } else if (isInserting) {
       context.missing(_idVendaMeta);
     }
-    if (data.containsKey('tipo')) {
-      context.handle(
-          _tipoMeta, tipo.isAcceptableOrUnknown(data['tipo']!, _tipoMeta));
-    } else if (isInserting) {
-      context.missing(_tipoMeta);
-    }
     if (data.containsKey('valor')) {
       context.handle(
           _valorMeta, valor.isAcceptableOrUnknown(data['valor']!, _valorMeta));
@@ -4059,6 +3984,261 @@ class $TabelaPagamentoTable extends TabelaPagamento
   }
 }
 
+class TabelaDinheiroSobraData extends DataClass
+    implements Insertable<TabelaDinheiroSobraData> {
+  final int id;
+  final int estado;
+  final int idFuncionario;
+  final double valor;
+  TabelaDinheiroSobraData(
+      {required this.id,
+      required this.estado,
+      required this.idFuncionario,
+      required this.valor});
+  factory TabelaDinheiroSobraData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return TabelaDinheiroSobraData(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      estado: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
+      idFuncionario: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_funcionario'])!,
+      valor: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}valor'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['estado'] = Variable<int>(estado);
+    map['id_funcionario'] = Variable<int>(idFuncionario);
+    map['valor'] = Variable<double>(valor);
+    return map;
+  }
+
+  TabelaDinheiroSobraCompanion toCompanion(bool nullToAbsent) {
+    return TabelaDinheiroSobraCompanion(
+      id: Value(id),
+      estado: Value(estado),
+      idFuncionario: Value(idFuncionario),
+      valor: Value(valor),
+    );
+  }
+
+  factory TabelaDinheiroSobraData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TabelaDinheiroSobraData(
+      id: serializer.fromJson<int>(json['id']),
+      estado: serializer.fromJson<int>(json['estado']),
+      idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
+      valor: serializer.fromJson<double>(json['valor']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'estado': serializer.toJson<int>(estado),
+      'idFuncionario': serializer.toJson<int>(idFuncionario),
+      'valor': serializer.toJson<double>(valor),
+    };
+  }
+
+  TabelaDinheiroSobraData copyWith(
+          {int? id, int? estado, int? idFuncionario, double? valor}) =>
+      TabelaDinheiroSobraData(
+        id: id ?? this.id,
+        estado: estado ?? this.estado,
+        idFuncionario: idFuncionario ?? this.idFuncionario,
+        valor: valor ?? this.valor,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TabelaDinheiroSobraData(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idFuncionario: $idFuncionario, ')
+          ..write('valor: $valor')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, estado, idFuncionario, valor);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TabelaDinheiroSobraData &&
+          other.id == this.id &&
+          other.estado == this.estado &&
+          other.idFuncionario == this.idFuncionario &&
+          other.valor == this.valor);
+}
+
+class TabelaDinheiroSobraCompanion
+    extends UpdateCompanion<TabelaDinheiroSobraData> {
+  final Value<int> id;
+  final Value<int> estado;
+  final Value<int> idFuncionario;
+  final Value<double> valor;
+  const TabelaDinheiroSobraCompanion({
+    this.id = const Value.absent(),
+    this.estado = const Value.absent(),
+    this.idFuncionario = const Value.absent(),
+    this.valor = const Value.absent(),
+  });
+  TabelaDinheiroSobraCompanion.insert({
+    this.id = const Value.absent(),
+    required int estado,
+    required int idFuncionario,
+    required double valor,
+  })  : estado = Value(estado),
+        idFuncionario = Value(idFuncionario),
+        valor = Value(valor);
+  static Insertable<TabelaDinheiroSobraData> custom({
+    Expression<int>? id,
+    Expression<int>? estado,
+    Expression<int>? idFuncionario,
+    Expression<double>? valor,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (estado != null) 'estado': estado,
+      if (idFuncionario != null) 'id_funcionario': idFuncionario,
+      if (valor != null) 'valor': valor,
+    });
+  }
+
+  TabelaDinheiroSobraCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? estado,
+      Value<int>? idFuncionario,
+      Value<double>? valor}) {
+    return TabelaDinheiroSobraCompanion(
+      id: id ?? this.id,
+      estado: estado ?? this.estado,
+      idFuncionario: idFuncionario ?? this.idFuncionario,
+      valor: valor ?? this.valor,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (estado.present) {
+      map['estado'] = Variable<int>(estado.value);
+    }
+    if (idFuncionario.present) {
+      map['id_funcionario'] = Variable<int>(idFuncionario.value);
+    }
+    if (valor.present) {
+      map['valor'] = Variable<double>(valor.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TabelaDinheiroSobraCompanion(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idFuncionario: $idFuncionario, ')
+          ..write('valor: $valor')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TabelaDinheiroSobraTable extends TabelaDinheiroSobra
+    with TableInfo<$TabelaDinheiroSobraTable, TabelaDinheiroSobraData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TabelaDinheiroSobraTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _estadoMeta = const VerificationMeta('estado');
+  @override
+  late final GeneratedColumn<int?> estado = GeneratedColumn<int?>(
+      'estado', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _idFuncionarioMeta =
+      const VerificationMeta('idFuncionario');
+  @override
+  late final GeneratedColumn<int?> idFuncionario = GeneratedColumn<int?>(
+      'id_funcionario', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _valorMeta = const VerificationMeta('valor');
+  @override
+  late final GeneratedColumn<double?> valor = GeneratedColumn<double?>(
+      'valor', aliasedName, false,
+      type: const RealType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, estado, idFuncionario, valor];
+  @override
+  String get aliasedName => _alias ?? 'tabela_dinheiro_sobra';
+  @override
+  String get actualTableName => 'tabela_dinheiro_sobra';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<TabelaDinheiroSobraData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('estado')) {
+      context.handle(_estadoMeta,
+          estado.isAcceptableOrUnknown(data['estado']!, _estadoMeta));
+    } else if (isInserting) {
+      context.missing(_estadoMeta);
+    }
+    if (data.containsKey('id_funcionario')) {
+      context.handle(
+          _idFuncionarioMeta,
+          idFuncionario.isAcceptableOrUnknown(
+              data['id_funcionario']!, _idFuncionarioMeta));
+    } else if (isInserting) {
+      context.missing(_idFuncionarioMeta);
+    }
+    if (data.containsKey('valor')) {
+      context.handle(
+          _valorMeta, valor.isAcceptableOrUnknown(data['valor']!, _valorMeta));
+    } else if (isInserting) {
+      context.missing(_valorMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TabelaDinheiroSobraData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    return TabelaDinheiroSobraData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $TabelaDinheiroSobraTable createAlias(String alias) {
+    return $TabelaDinheiroSobraTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TabelaUsuarioTable tabelaUsuario = $TabelaUsuarioTable(this);
@@ -4078,6 +4258,8 @@ abstract class _$BancoDados extends GeneratedDatabase {
       $TabelaFormaPagamentoTable(this);
   late final $TabelaPagamentoTable tabelaPagamento =
       $TabelaPagamentoTable(this);
+  late final $TabelaDinheiroSobraTable tabelaDinheiroSobra =
+      $TabelaDinheiroSobraTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -4094,7 +4276,8 @@ abstract class _$BancoDados extends GeneratedDatabase {
         tabelaRececcao,
         tabelaCliente,
         tabelaFormaPagamento,
-        tabelaPagamento
+        tabelaPagamento,
+        tabelaDinheiroSobra
       ];
 }
 
@@ -4148,6 +4331,12 @@ mixin _$FormaPagamentoDaoMixin on DatabaseAccessor<BancoDados> {
 }
 mixin _$PagamentoDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaPagamentoTable get tabelaPagamento => attachedDatabase.tabelaPagamento;
+}
+mixin _$DinheiroSobraDaoMixin on DatabaseAccessor<BancoDados> {
+  $TabelaDinheiroSobraTable get tabelaDinheiroSobra =>
+      attachedDatabase.tabelaDinheiroSobra;
+  $TabelaFuncionarioTable get tabelaFuncionario =>
+      attachedDatabase.tabelaFuncionario;
 }
 mixin _$VendaDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaVendaTable get tabelaVenda => attachedDatabase.tabelaVenda;

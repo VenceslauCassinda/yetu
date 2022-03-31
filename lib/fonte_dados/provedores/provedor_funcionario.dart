@@ -72,4 +72,9 @@ class ProveedorFuncionario implements ProvedorFuncionarioI {
         .map((e) => _serializadorFuncionario.fromTabela(e))
         .toList();
   }
+
+  @override
+  Future<int> pegarIdFuncionarioDeNome(String nomeCompleto) async {
+    return await _dao.pegarIdFuncioanrioDeNome(nomeCompleto);
+  }
 }

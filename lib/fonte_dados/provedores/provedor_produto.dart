@@ -29,7 +29,7 @@ class ProvedorProduto implements ProvedorProdutoI {
   Future<List<Produto>> pegarLista() async {
     return (await _dao.todos())
         .map((e) => Produto(
-          listaPreco :e.listaPreco,
+              listaPreco: e.listaPreco,
               id: e.id,
               quantidade: e.quantidade,
               nome: e.nome,
@@ -48,5 +48,20 @@ class ProvedorProduto implements ProvedorProdutoI {
   @override
   Future<bool> existeProdutoDiferenteDeNome(int id, String nomeProduto) async {
     return (await _dao.existeProdutoDiferenteDeNome(id, nomeProduto)) != null;
+  }
+
+  @override
+  Future<Produto?> pegarProdutoDeId(int id) async {
+    var res = await _dao.pagarProdutoDeId(id);
+    if (res != null) {
+      return Produto(
+        id: res.id,
+        nome: res.nome,
+        estado: res.estado,
+        precoCompra: res.precoCompra,
+        recebivel: res.recebivel,
+      );
+    }
+    return null;
   }
 }

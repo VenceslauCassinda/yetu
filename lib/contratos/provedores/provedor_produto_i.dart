@@ -6,5 +6,6 @@ abstract class ProvedorProdutoI {
   Future<bool> existeProdutoComNome(String nome);
   Future<void> removerProduto(Produto dado);
   Future<void> actualizarProduto(Produto dado);
+  Future<Produto?> pegarProdutoDeId(int id);
   Future<bool> existeProdutoDiferenteDeNome(int id, String nomeProduto);
 }

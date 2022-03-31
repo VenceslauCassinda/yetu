@@ -21,7 +21,7 @@ void main() {
   test("ADICIONAR FUNCIONARIO", () async {
     try {
       var salvar =
-          Funcionario(nomeCompelto: "As Moreira", palavraPasse: "11111111");
+          Funcionario(nomeCompelto: "Ven", palavraPasse: "11111111");
       await manipularFuncionarioI.adicionarFuncionario(salvar);
       var lista = (await manipularFuncionarioI.pegarLista());
       if (lista.isNotEmpty) {

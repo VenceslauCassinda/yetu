@@ -11,6 +11,7 @@ import 'package:yetu_gestor/fonte_dados/padrao_dao/tabelas/tabela_produto.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/tabelas/tabela_usuario.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/tabelas/tabela_venda.dart';
 
+import '../../dominio/entidades/dinheiro_sobra.dart';
 import '../../dominio/entidades/estado.dart';
 import '../../dominio/entidades/item_venda.dart';
 import '../../dominio/entidades/pagamento.dart';
@@ -21,6 +22,7 @@ import '../../dominio/entidades/saida.dart';
 import '../../dominio/entidades/venda.dart';
 import '../serializadores/serializador_funcionario.dart';
 import 'tabelas/tabela_cliente.dart';
+import 'tabelas/tabela_dinheiro_sobra.dart';
 import 'tabelas/tabela_entrada.dart';
 import 'tabelas/tabela_forma_pagamento.dart';
 import 'tabelas/tabela_funcionario.dart';
@@ -42,6 +44,7 @@ part 'daos/funcionario_dao.dart';
 part 'daos/item_venda_dao.dart';
 part 'daos/forma_pagamento_dao.dart';
 part 'daos/pagamento_dao.dart';
+part 'daos/dinheiro_sobra_dao.dart';
 part 'daos/venda_dao.dart';
 
 LazyDatabase defaultConnection() {
@@ -54,7 +57,7 @@ LazyDatabase defaultConnection() {
   });
 }
 
-@DriftDatabase(tables: [TabelaUsuario, TabelaFuncionario, TabelaProduto, TabelaPreco, TabelaVenda, TabelaItemVenda, TabelaEntrada, TabelaSaida, TabelaStock, TabelaRececcao, TabelaCliente, TabelaItemVenda, TabelaFormaPagamento, TabelaPagamento])
+@DriftDatabase(tables: [TabelaUsuario, TabelaFuncionario, TabelaProduto, TabelaPreco, TabelaVenda, TabelaItemVenda, TabelaEntrada, TabelaSaida, TabelaStock, TabelaRececcao, TabelaCliente, TabelaItemVenda, TabelaFormaPagamento, TabelaPagamento, TabelaDinheiroSobra])
 class BancoDados extends _$BancoDados {
   BancoDados() : super(defaultConnection());
   @override

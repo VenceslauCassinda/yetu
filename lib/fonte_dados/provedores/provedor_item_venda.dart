@@ -10,22 +10,48 @@ class ProvedorItemVenda implements ProvedorItemVendaI {
   }
   @override
   Future<bool> actualizaItemVenda(ItemVenda dado) async {
-    return false;
+    var res = await _dao.actualizarItemVenda(dado);
+    return res;
   }
 
   @override
-  Future<ItemVenda?> pegarItemVendaDeId(int id) async {}
+  Future<ItemVenda?> pegarItemVendaDeId(int id) async {
+    var res = await _dao.pegarItemVendaDeId(id);
+    if (res != null) {
+      return ItemVenda(
+          estado: res.estado,
+          idProduto: res.idProduto,
+          idVenda: res.idVenda,
+          quantidade: res.quantidade,
+          total: res.total,
+          desconto: res.desconto);
+    }
+    return null;
+  }
 
   @override
   Future<int> registarItemVenda(ItemVenda dado) async {
-    return -1;
+    var res = await _dao.adicionarItemVenda(dado);
+    return res;
   }
 
   @override
-  Future<void> removerItemVenda(ItemVenda dado) async {}
+  Future<int> removerItemVenda(ItemVenda dado) async {
+    return await _dao.removerItemVenda(dado.id!);
+  }
 
   @override
   Future<List<ItemVenda>> todos() async {
-    return [];
+    var lista = await _dao.todos();
+
+    return lista
+        .map((cada) => ItemVenda(
+            estado: cada.estado,
+            idProduto: cada.idProduto,
+            idVenda: cada.idVenda,
+            quantidade: cada.quantidade,
+            total: cada.total,
+            desconto: cada.desconto))
+        .toList();
   }
 }

@@ -44,7 +44,7 @@ void main() {
     if (lista.isEmpty) {
       return;
     }
-    var preco = 100.0;
+    var preco = 200.0;
     var produto = lista.first;
     await manipularProdutoI.adicionarPrecoProduto(produto, preco);
     lista = (await manipularProdutoI.pegarLista());

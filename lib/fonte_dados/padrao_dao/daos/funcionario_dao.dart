@@ -28,6 +28,12 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
 
     return consulta;
   }
+  
+  Future<int> pegarIdFuncioanrioDeNome(String nome) async {
+    var consulta = await (select(tabelaFuncionario)..where((tbl) => tbl.nomeCompleto.equals(nome))).getSingle();
+
+    return consulta.id;
+  }
 
   Future<List<Funcionario>> eliminados() async {
     var consulta = select(tabelaFuncionario).join([

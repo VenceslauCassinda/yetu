@@ -72,4 +72,9 @@ class ManipularFuncionario implements ManipularFuncionarioI {
   Future<List<Funcionario>> todos() async {
     return (await _provedorFuncionarioI.todos());
   }
+
+  @override
+  Future<int> pegarIdFuncionarioDeNome(String nomeCompleto) async {
+    return await _provedorFuncionarioI.pegarIdFuncionarioDeNome(nomeCompleto);
+  }
 }

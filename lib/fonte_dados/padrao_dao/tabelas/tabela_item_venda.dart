@@ -7,5 +7,5 @@ class TabelaItemVenda extends Table {
   IntColumn get idVenda => integer()();
   IntColumn get quantidade => integer()();
   RealColumn get total => real()();
-  RealColumn get desconto => real()();
+  IntColumn get desconto => integer()();
 }

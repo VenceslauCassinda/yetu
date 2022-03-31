@@ -57,3 +57,31 @@ class ErroProdutoComPrecoExistente extends Erro {
   ErroProdutoComPrecoExistente(this.sms, {this.naoMostrarErro})
       : super(sms, naoMostrarErro: naoMostrarErro);
 }
+
+class ErroPercentagemInvalida extends Erro {
+  String sms;
+  bool? naoMostrarErro;
+  ErroPercentagemInvalida(this.sms, {this.naoMostrarErro})
+      : super(sms, naoMostrarErro: naoMostrarErro);
+}
+
+class ErroVendaInvalida extends Erro {
+  String sms;
+  bool? naoMostrarErro;
+  ErroVendaInvalida(this.sms, {this.naoMostrarErro})
+      : super(sms, naoMostrarErro: naoMostrarErro);
+}
+
+class ErroStockInsuficiente extends Erro {
+  String sms;
+  bool? naoMostrarErro;
+  ErroStockInsuficiente(this.sms, {this.naoMostrarErro})
+      : super(sms, naoMostrarErro: naoMostrarErro);
+}
+
+class ErroPagamentoInvalido extends Erro {
+  String sms;
+  bool? naoMostrarErro;
+  ErroPagamentoInvalido(this.sms, {this.naoMostrarErro})
+      : super(sms, naoMostrarErro: naoMostrarErro);
+}

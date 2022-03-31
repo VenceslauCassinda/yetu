@@ -5,6 +5,10 @@ class PagamentoDao extends DatabaseAccessor<BancoDados>
     with _$PagamentoDaoMixin {
   PagamentoDao(BancoDados attachedDatabase) : super(attachedDatabase);
 
+  Future<List<TabelaPagamentoData>> todos() async {
+    return await select(tabelaPagamento).get();
+  }
+
   Future<int> adicionarPagamento(Pagamento dado) async {
     var res = await (into(tabelaPagamento).insert(dado.toCompanion(true)));
     return res;

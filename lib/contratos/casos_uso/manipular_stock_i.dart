@@ -6,4 +6,5 @@ abstract class ManipularStockI {
   Future<void> aumentarQuantidadeStock(int idProduto, int quantidade);
   Future<void> diminuirQuantidadeStock(int idProduto, int quantidade);
   Future<Stock?> pegarStockDeId(int id);
+  Future<Stock> pegarStockDoProdutoDeId(int id);
 }

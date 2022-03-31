@@ -38,7 +38,6 @@ class Cliente{
 
   TabelaClienteCompanion toCompanion(bool nullToAbsent) {
     return TabelaClienteCompanion(
-      id: Value(id!),
       estado: Value(estado!),
       nome: Value(nome!),
       numero: Value(numero!),

@@ -30,7 +30,7 @@ class ManipularProduto implements ManipularProdutoI {
     }
     var res = await _provedorProdutoI.adicionarProduto(dado);
     var id = await _manipularStockI.inicializarStockProduto(res);
-    
+
     return res;
   }
 
@@ -75,5 +75,10 @@ class ManipularProduto implements ManipularProdutoI {
   Future<void> removerPrecoProduto(Produto dado, double preco) async {
     await _manipularPrecoI.removerPrecoProduto(
         Preco(estado: Estado.ELIMINADO, idProduto: dado.id, preco: preco));
+  }
+
+  @override
+  Future<Produto?> pegarProdutoDeId(int id) async {
+    return await _provedorProdutoI.pegarProdutoDeId(id);
   }
 }

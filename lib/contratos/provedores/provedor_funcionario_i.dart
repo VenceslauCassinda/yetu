@@ -1,8 +1,8 @@
-
 import '../../dominio/entidades/funcionario.dart';
 
 abstract class ProvedorFuncionarioI {
   Future<List<Funcionario>> pegarLista();
+  Future<int>pegarIdFuncionarioDeNome(String nomeCompleto);
   Future<List<Funcionario>> todos();
   Future<List<Funcionario>> pegarListaEliminados();
   Future<int> adicionarFuncionario(Funcionario dado);

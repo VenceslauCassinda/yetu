@@ -33,4 +33,9 @@ class ManipularStock implements ManipularStockI {
       await _provedorStockI.alterarQuantidadeStock(idProduto, novaQuantidade);
     }
   }
+
+  @override
+  Future<Stock> pegarStockDoProdutoDeId(int id) async {
+    return await _provedorStockI.pegarStockDoProdutoDeId(id);
+  }
 }

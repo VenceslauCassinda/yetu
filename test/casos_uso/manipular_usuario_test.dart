@@ -16,10 +16,10 @@ void main() {
   ManipularUsuario manipularUsuario = ManipularUsuario(ProvedorUsuario());
   test("REGISTAR USUARIO", () async {
     Usuario usuario = Usuario(
-        nomeUsuario: "admin",
+        nomeUsuario: "ven",
         imagemPerfil: "imagemPerfil",
         palavraPasse: "11111111",
-        nivelAcesso: NivelAcesso.ADMINISTRADOR);
+        nivelAcesso: NivelAcesso.FUNCIONARIO);
     try {
       await manipularUsuario.registarUsuario(usuario);
       var lista = (await manipularUsuario.pegarLista());

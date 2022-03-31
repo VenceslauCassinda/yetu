@@ -1,34 +1,30 @@
 import 'package:drift/drift.dart';
-import 'package:yetu_gestor/dominio/entidades/forma_pagamento.dart';
 
 import '../../fonte_dados/padrao_dao/base_dados.dart';
+import 'funcionario.dart';
 
-class Pagamento {
-  FormaPagamento? formaPagamento;
+class DinheiroSobra {
+  Funcionario? funcionario;
+  
   int? id;
-  int? idFormaPagamento;
   int? estado;
-  int? idVenda;
+  int? idFuncionario;
   double? valor;
-
-  Pagamento(
+  DinheiroSobra(
       {this.id,
-      this.formaPagamento,
-      required this.idFormaPagamento,
       required this.estado,
-      this.idVenda,
+      this.funcionario,
+      required this.idFuncionario,
       required this.valor});
-  factory Pagamento.fromData(Map<String, dynamic> data, {String? prefix}) {
+  factory DinheiroSobra.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return Pagamento(
+    return DinheiroSobra(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      idFormaPagamento: const IntType().mapFromDatabaseResponse(
-          data['${effectivePrefix}id_forma_pagamento'])!,
       estado: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
-      idVenda: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id_venda'])!,
+      idFuncionario: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_funcionario'])!,
       valor: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}valor'])!,
     );
@@ -37,30 +33,27 @@ class Pagamento {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id!);
-    map['id_forma_pagamento'] = Variable<int>(idFormaPagamento!);
     map['estado'] = Variable<int>(estado!);
-    map['id_venda'] = Variable<int>(idVenda!);
+    map['id_funcionario'] = Variable<int>(idFuncionario!);
     map['valor'] = Variable<double>(valor!);
     return map;
   }
 
-  TabelaPagamentoCompanion toCompanion(bool nullToAbsent) {
-    return TabelaPagamentoCompanion(
-      idFormaPagamento: Value(idFormaPagamento!),
+  TabelaDinheiroSobraCompanion toCompanion(bool nullToAbsent) {
+    return TabelaDinheiroSobraCompanion(
       estado: Value(estado!),
-      idVenda: Value(idVenda!),
+      idFuncionario: Value(idFuncionario!),
       valor: Value(valor!),
     );
   }
 
-  factory Pagamento.fromJson(Map<String, dynamic> json,
+  factory DinheiroSobra.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Pagamento(
+    return DinheiroSobra(
       id: serializer.fromJson<int>(json['id']),
-      idFormaPagamento: serializer.fromJson<int>(json['idFormaPagamento']),
       estado: serializer.fromJson<int>(json['estado']),
-      idVenda: serializer.fromJson<int>(json['idVenda']),
+      idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
       valor: serializer.fromJson<double>(json['valor']),
     );
   }
@@ -69,35 +62,39 @@ class Pagamento {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id!),
-      'idFormaPagamento': serializer.toJson<int>(idFormaPagamento!),
       'estado': serializer.toJson<int>(estado!),
-      'idVenda': serializer.toJson<int>(idVenda!),
+      'idFuncionario': serializer.toJson<int>(idFuncionario!),
       'valor': serializer.toJson<double>(valor!),
     };
   }
 
-  Pagamento copyWith(
-          {int? id,
-          int? idFormaPagamento,
-          int? estado,
-          int? idVenda,
-          double? valor}) =>
-      Pagamento(
+  DinheiroSobra copyWith(
+          {int? id, int? estado, int? idFuncionario, double? valor}) =>
+      DinheiroSobra(
         id: id ?? this.id,
-        idFormaPagamento: idFormaPagamento ?? this.idFormaPagamento,
         estado: estado ?? this.estado,
-        idVenda: idVenda ?? this.idVenda,
+        idFuncionario: idFuncionario ?? this.idFuncionario,
         valor: valor ?? this.valor,
       );
   @override
   String toString() {
-    return (StringBuffer('Pagamento(')
+    return (StringBuffer('DinheiroSobra(')
           ..write('id: $id, ')
-          ..write('idFormaPagamento: $idFormaPagamento, ')
           ..write('estado: $estado, ')
-          ..write('idVenda: $idVenda, ')
+          ..write('idFuncionario: $idFuncionario, ')
           ..write('valor: $valor')
           ..write(')'))
         .toString();
   }
+
+  @override
+  int get hashCode => Object.hash(id, estado, idFuncionario, valor);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DinheiroSobra &&
+          other.id == this.id &&
+          other.estado == this.estado &&
+          other.idFuncionario == this.idFuncionario &&
+          other.valor == this.valor);
 }

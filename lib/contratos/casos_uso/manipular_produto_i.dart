@@ -5,6 +5,7 @@ abstract class ManipularProdutoI {
   Future<int> adicionarProduto(Produto dado);
   Future<int> adicionarPrecoProduto(Produto dado, double preco);
   Future<void> removerProduto(Produto dado);
+  Future<Produto?> pegarProdutoDeId(int id);
   Future<void> removerPrecoProduto(Produto dado, double preco);
   Future<bool> existeProdutoComNome(String nome);
   Future<bool> existeProdutoComPreco(Produto dado, double preco);

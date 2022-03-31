@@ -31,4 +31,14 @@ class ProvedorStock implements ProvedorStockI {
     }
     return null;
   }
+
+  @override
+  Future<Stock> pegarStockDoProdutoDeId(int id) async {
+    var res = await _dao.pegarStockDoProdutoDeId(id);
+    return Stock(
+        id: res.id,
+        estado: res.estado,
+        idProduto: res.idProduto,
+        quantidade: res.quantidade);
+  }
 }

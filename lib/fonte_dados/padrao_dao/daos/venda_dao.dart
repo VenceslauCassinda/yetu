@@ -20,6 +20,12 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         await (delete(tabelaVenda)..where((tbl) => tbl.id.equals(id))).go();
     return res;
   }
+  
+  Future<TabelaVendaData?> pegarVendaDeId(int id) async {
+    var res =
+        await (select(tabelaVenda)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    return res;
+  }
 
   Future<bool> actualizarVenda(Venda dado) async {
     var res = await update(tabelaVenda).replace(dado.toCompanion(true));
@@ -73,7 +79,6 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
             idFormaPagamento: forma.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
-            tipo: pagamento.tipo,
             valor: pagamento.valor);
         cadaVenda.pagamentos.add(cadaPagamento);
       }

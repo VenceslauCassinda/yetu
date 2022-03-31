@@ -5,5 +5,5 @@ abstract class ProvedorItemVendaI {
   Future<ItemVenda?> pegarItemVendaDeId(int id);
   Future<bool> actualizaItemVenda(ItemVenda dado);
   Future<int> registarItemVenda(ItemVenda dado);
-  Future<void> removerItemVenda(ItemVenda dado);
+  Future<int> removerItemVenda(ItemVenda dado);
 }

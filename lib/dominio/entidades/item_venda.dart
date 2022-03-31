@@ -11,14 +11,15 @@ class ItemVenda {
   int? idVenda;
   int? quantidade;
   double? total;
-  double? desconto;
+  int? desconto;
   ItemVenda(
       {this.id,
       required this.estado,
       required this.idProduto,
-      required this.idVenda,
+      this.idVenda,
       required this.quantidade,
-      required this.total,
+      this.total,
+      this.produto,
       required this.desconto});
   factory ItemVenda.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -35,7 +36,7 @@ class ItemVenda {
           .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
       total: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}total'])!,
-      desconto: const RealType()
+      desconto: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}desconto'])!,
     );
   }
@@ -48,7 +49,7 @@ class ItemVenda {
     map['id_venda'] = Variable<int>(idVenda!);
     map['quantidade'] = Variable<int>(quantidade!);
     map['total'] = Variable<double>(total!);
-    map['desconto'] = Variable<double>(desconto!);
+    map['desconto'] = Variable<int>(desconto!);
     return map;
   }
 
@@ -74,7 +75,7 @@ class ItemVenda {
       idVenda: serializer.fromJson<int>(json['idVenda']),
       quantidade: serializer.fromJson<int>(json['quantidade']),
       total: serializer.fromJson<double>(json['total']),
-      desconto: serializer.fromJson<double>(json['desconto']),
+      desconto: serializer.fromJson<int>(json['desconto']),
     );
   }
   @override
@@ -87,7 +88,7 @@ class ItemVenda {
       'idVenda': serializer.toJson<int>(idVenda!),
       'quantidade': serializer.toJson<int>(quantidade!),
       'total': serializer.toJson<double>(total!),
-      'desconto': serializer.toJson<double>(desconto!),
+      'desconto': serializer.toJson<int>(desconto!),
     };
   }
 
@@ -98,7 +99,7 @@ class ItemVenda {
           int? idVenda,
           int? quantidade,
           double? total,
-          double? desconto}) =>
+          int? desconto}) =>
       ItemVenda(
         id: id ?? this.id,
         estado: estado ?? this.estado,
