@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
@@ -14,13 +15,17 @@ import 'package:yetu_gestor/fonte_dados/padrao_dao/tabelas/tabela_venda.dart';
 import '../../dominio/entidades/dinheiro_sobra.dart';
 import '../../dominio/entidades/estado.dart';
 import '../../dominio/entidades/item_venda.dart';
+import '../../dominio/entidades/nivel_acesso.dart';
 import '../../dominio/entidades/pagamento.dart';
 import '../../dominio/entidades/preco.dart';
 import '../../dominio/entidades/produto.dart';
 import '../../dominio/entidades/receccao.dart';
 import '../../dominio/entidades/saida.dart';
+import '../../dominio/entidades/stock.dart';
+import '../../dominio/entidades/usuario.dart';
 import '../../dominio/entidades/venda.dart';
 import '../serializadores/serializador_funcionario.dart';
+import '../serializadores/serializador_usuario.dart';
 import 'tabelas/tabela_cliente.dart';
 import 'tabelas/tabela_dinheiro_sobra.dart';
 import 'tabelas/tabela_entrada.dart';
@@ -69,8 +74,9 @@ class BancoDados extends _$BancoDados {
       onCreate: (Migrator m) async {
         await m.createAll();
       },
+      onUpgrade: (m, a,n)async{
+        // m.addColumn(tabelaEntrada, tabelaEntrada.motivo);
+      }
     );
   }
 }
-
-// late UsuarioDao usuarioDao = UsuarioDao(this);

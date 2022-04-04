@@ -9,12 +9,15 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
       leftOuterJoin(
           tabelaUsuario, tabelaFuncionario.id.equalsExp(tabelaUsuario.id))
     ])
-      ..where(tabelaFuncionario.estado.isBiggerOrEqualValue(0));
+      ..where(tabelaFuncionario.estado
+              .isBiggerOrEqualValue(Estado.DESACTIVADO) &
+          tabelaUsuario.nivelAcesso.isSmallerThanValue(NivelAcesso.GERENTE));
 
     var res = (await consulta.get()).map((linhas) {
       var tabela1 = linhas.readTable(tabelaFuncionario);
       var tabela2 = linhas.readTable(tabelaUsuario);
-      var funcionario = SerializadorFuncionario().fromTabela(tabela1);
+      var funcionario =
+          SerializadorFuncionario().fromTabela(tabela1, usuario: tabela2);
       funcionario.idUsuario = tabela2.id;
       funcionario.nomeUsuario = tabela2.nomeUsuario;
       return funcionario;
@@ -28,9 +31,11 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
 
     return consulta;
   }
-  
+
   Future<int> pegarIdFuncioanrioDeNome(String nome) async {
-    var consulta = await (select(tabelaFuncionario)..where((tbl) => tbl.nomeCompleto.equals(nome))).getSingle();
+    var consulta = await (select(tabelaFuncionario)
+          ..where((tbl) => tbl.nomeCompleto.equals(nome)))
+        .getSingle();
 
     return consulta.id;
   }
@@ -61,6 +66,32 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
           ..where((tbl) => tbl.nomeCompleto.equals(nomeUsuario)))
         .getSingleOrNull();
     return teste;
+  }
+
+  Future<TabelaFuncionarioData> pegarFuncionarioDeNome(String nome) async {
+    var teste = await ((select(tabelaFuncionario))
+          ..where((tbl) => tbl.nomeCompleto.equals(nome)))
+        .getSingle();
+    return teste;
+  }
+
+  Future<TabelaFuncionarioData> pegarFuncionarioDeId(int id) async {
+    var teste = await ((select(tabelaFuncionario))
+          ..where((tbl) => tbl.id.equals(id)))
+        .getSingle();
+    return teste;
+  }
+
+  Future<Funcionario> pegarFuncionarioDoUsuarioDeId(int id) async {
+    var res = await (select(tabelaUsuario).join([
+      leftOuterJoin(
+          tabelaFuncionario, tabelaUsuario.id.equalsExp(tabelaFuncionario.id))
+    ])
+          ..where(tabelaUsuario.id.equals(id)))
+        .getSingle();
+    var funcioanrio = res.readTable(tabelaFuncionario);
+    var usuario = res.readTable(tabelaUsuario);
+    return SerializadorFuncionario().fromTabela(funcioanrio, usuario: usuario);
   }
 
   Future<void> remover(TabelaFuncionarioData usuarioData) async {

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:yetu_gestor/dominio/entidades/produto.dart';
 
 import '../../fonte_dados/padrao_dao/base_dados.dart';
+import 'produto.dart';
 
 class Saida {
   Produto? produto;
@@ -9,16 +9,24 @@ class Saida {
   int? estado;
   int? idProduto;
   int? idVenda;
+  int? idDivida;
   int? quantidade;
   DateTime? data;
+  String? motivo;
   Saida(
       {this.id,
       this.produto,
-      this.estado,
+      required this.estado,
       required this.idProduto,
-      required this.idVenda,
+      this.idVenda,
+      this.idDivida,
       required this.quantidade,
-      required this.data});
+      required this.data,
+      this.motivo});
+  static String MOTIVO_VENDA = "Venda";
+  static String MOTIVO_DIVIDA = "Dívida";
+  static String MOTIVO_DESPERDICIO = "Desperdício";
+  static String MOTIVO_AJUSTE_STOCK = "Ajuste de Stock";
   factory Saida.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Saida(
@@ -29,11 +37,15 @@ class Saida {
       idProduto: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id_produto'])!,
       idVenda: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id_venda'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_venda']),
+      idDivida: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_divida']),
       quantidade: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
       data: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
+      motivo: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}motivo']),
     );
   }
   @override
@@ -42,9 +54,17 @@ class Saida {
     map['id'] = Variable<int>(id!);
     map['estado'] = Variable<int>(estado!);
     map['id_produto'] = Variable<int>(idProduto!);
-    map['id_venda'] = Variable<int>(idVenda!);
+    if (!nullToAbsent || idVenda != null) {
+      map['id_venda'] = Variable<int?>(idVenda);
+    }
+    if (!nullToAbsent || idDivida != null) {
+      map['id_divida'] = Variable<int?>(idDivida);
+    }
     map['quantidade'] = Variable<int>(quantidade!);
     map['data'] = Variable<DateTime>(data!);
+    if (!nullToAbsent || motivo != null) {
+      map['motivo'] = Variable<String?>(motivo);
+    }
     return map;
   }
 
@@ -53,9 +73,16 @@ class Saida {
       id: Value(id!),
       estado: Value(estado!),
       idProduto: Value(idProduto!),
-      idVenda: Value(idVenda!),
+      idVenda: idVenda == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idVenda),
+      idDivida: idDivida == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idDivida),
       quantidade: Value(quantidade!),
       data: Value(data!),
+      motivo:
+          motivo == null && nullToAbsent ? const Value.absent() : Value(motivo),
     );
   }
 
@@ -66,9 +93,11 @@ class Saida {
       id: serializer.fromJson<int>(json['id']),
       estado: serializer.fromJson<int>(json['estado']),
       idProduto: serializer.fromJson<int>(json['idProduto']),
-      idVenda: serializer.fromJson<int>(json['idVenda']),
+      idVenda: serializer.fromJson<int?>(json['idVenda']),
+      idDivida: serializer.fromJson<int?>(json['idDivida']),
       quantidade: serializer.fromJson<int>(json['quantidade']),
       data: serializer.fromJson<DateTime>(json['data']),
+      motivo: serializer.fromJson<String?>(json['motivo']),
     );
   }
   @override
@@ -78,9 +107,11 @@ class Saida {
       'id': serializer.toJson<int>(id!),
       'estado': serializer.toJson<int>(estado!),
       'idProduto': serializer.toJson<int>(idProduto!),
-      'idVenda': serializer.toJson<int>(idVenda!),
+      'idVenda': serializer.toJson<int?>(idVenda),
+      'idDivida': serializer.toJson<int?>(idDivida),
       'quantidade': serializer.toJson<int>(quantidade!),
       'data': serializer.toJson<DateTime>(data!),
+      'motivo': serializer.toJson<String?>(motivo),
     };
   }
 
@@ -89,15 +120,19 @@ class Saida {
           int? estado,
           int? idProduto,
           int? idVenda,
+          int? idDivida,
           int? quantidade,
-          DateTime? data}) =>
+          DateTime? data,
+          String? motivo}) =>
       Saida(
         id: id ?? this.id,
         estado: estado ?? this.estado,
         idProduto: idProduto ?? this.idProduto,
         idVenda: idVenda ?? this.idVenda,
+        idDivida: idDivida ?? this.idDivida,
         quantidade: quantidade ?? this.quantidade,
         data: data ?? this.data,
+        motivo: motivo ?? this.motivo,
       );
   @override
   String toString() {
@@ -106,23 +141,27 @@ class Saida {
           ..write('estado: $estado, ')
           ..write('idProduto: $idProduto, ')
           ..write('idVenda: $idVenda, ')
+          ..write('idDivida: $idDivida, ')
           ..write('quantidade: $quantidade, ')
-          ..write('data: $data')
+          ..write('data: $data, ')
+          ..write('motivo: $motivo')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, estado, idProduto, idVenda, quantidade, data);
+  int get hashCode => Object.hash(
+      id, estado, idProduto, idVenda, idDivida, quantidade, data, motivo);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is TabelaSaidaData &&
+      (other is Saida &&
           other.id == this.id &&
           other.estado == this.estado &&
           other.idProduto == this.idProduto &&
-          other.idVenda== this.idVenda &&
+          other.idVenda == this.idVenda &&
+          other.idDivida == this.idDivida &&
           other.quantidade == this.quantidade &&
-          other.data == this.data);
+          other.data == this.data &&
+          other.motivo == this.motivo);
 }

@@ -20,7 +20,12 @@ class ProvedorPreco implements ProvedorPrecoI {
   }
 
   @override
-  Future<bool> existeProdutoComPreco(double preco, int idProduto) async{
+  Future<bool> existeProdutoComPreco(double preco, int idProduto) async {
     return (await _dao.existeProdutoComPreco(idProduto, preco)) != null;
+  }
+
+  @override
+  Future<bool> atualizarPrecoProduto(Preco preco) async {
+    return await _dao.atualizarPrecoProduto(preco);
   }
 }

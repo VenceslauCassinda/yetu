@@ -2,23 +2,32 @@ import 'package:drift/drift.dart';
 import 'package:yetu_gestor/dominio/entidades/produto.dart';
 
 import '../../fonte_dados/padrao_dao/base_dados.dart';
+import 'receccao.dart';
 
 class Entrada {
   Produto? produto;
+  Receccao? receccao;
   int? id;
   int? estado;
   int? idProduto;
   int? idRececcao;
   int? quantidade;
   DateTime? data;
+  String? motivo;
   Entrada(
       {this.id,
       this.produto,
+      this.receccao,
       required this.estado,
       required this.idProduto,
       required this.idRececcao,
       required this.quantidade,
-      required this.data});
+      required this.data,
+      required this.motivo});
+
+  static String MOTIVO_ABASTECIMENTO = "Abastecimento";
+  static String MOTIVO_AJUSTE_STOCK = "Ajuste de Stock";
+
   factory Entrada.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Entrada(
@@ -34,6 +43,8 @@ class Entrada {
           .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
       data: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
+      motivo: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}motivo'])!,
     );
   }
   @override
@@ -45,17 +56,19 @@ class Entrada {
     map['id_receccao'] = Variable<int>(idRececcao!);
     map['quantidade'] = Variable<int>(quantidade!);
     map['data'] = Variable<DateTime>(data!);
+    map['motivo'] = Variable<String>(motivo!);
     return map;
   }
 
   TabelaEntradaCompanion toCompanion(bool nullToAbsent) {
     return TabelaEntradaCompanion(
-      id: Value(id!),
+      id: id == null ? const Value.absent() : Value(id!),
       estado: Value(estado!),
       idProduto: Value(idProduto!),
       idRececcao: Value(idRececcao!),
       quantidade: Value(quantidade!),
       data: Value(data!),
+      motivo: Value(motivo!),
     );
   }
 
@@ -69,6 +82,7 @@ class Entrada {
       idRececcao: serializer.fromJson<int>(json['idRececcao']),
       quantidade: serializer.fromJson<int>(json['quantidade']),
       data: serializer.fromJson<DateTime>(json['data']),
+      motivo: serializer.fromJson<String>(json['motivo']),
     );
   }
   @override
@@ -81,6 +95,7 @@ class Entrada {
       'idRececcao': serializer.toJson<int>(idRececcao!),
       'quantidade': serializer.toJson<int>(quantidade!),
       'data': serializer.toJson<DateTime>(data!),
+      'motivo': serializer.toJson<String>(motivo!),
     };
   }
 
@@ -90,7 +105,8 @@ class Entrada {
           int? idProduto,
           int? idRececcao,
           int? quantidade,
-          DateTime? data}) =>
+          DateTime? data,
+          String? motivo}) =>
       Entrada(
         id: id ?? this.id,
         estado: estado ?? this.estado,
@@ -98,6 +114,7 @@ class Entrada {
         idRececcao: idRececcao ?? this.idRececcao,
         quantidade: quantidade ?? this.quantidade,
         data: data ?? this.data,
+        motivo: motivo ?? this.motivo,
       );
   @override
   String toString() {
@@ -107,22 +124,24 @@ class Entrada {
           ..write('idProduto: $idProduto, ')
           ..write('idRececcao: $idRececcao, ')
           ..write('quantidade: $quantidade, ')
-          ..write('data: $data')
+          ..write('data: $data, ')
+          ..write('motivo: $motivo')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, estado, idProduto, idRececcao, quantidade, data);
+      Object.hash(id, estado, idProduto, idRececcao, quantidade, data, motivo);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is TabelaEntradaData &&
+      (other is Entrada &&
           other.id == this.id &&
           other.estado == this.estado &&
           other.idProduto == this.idProduto &&
           other.idRececcao == this.idRececcao &&
           other.quantidade == this.quantidade &&
-          other.data == this.data);
+          other.data == this.data &&
+          other.motivo == this.motivo);
 }

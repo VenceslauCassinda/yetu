@@ -8,7 +8,7 @@ import 'pagamento.dart';
 class Venda {
   Funcionario? funcionario;
   Cliente? cliente;
-  List<Pagamento> pagamentos =[];
+  List<Pagamento> pagamentos = [];
   int? id;
   int? estado;
   int? idFuncionario;
@@ -18,10 +18,9 @@ class Venda {
   double? total;
   double? parcela;
   Venda(
-      {
-        this.id,
-        this.funcionario,
-        this.cliente,
+      {this.id,
+      this.funcionario,
+      this.cliente,
       required this.estado,
       required this.idFuncionario,
       required this.idCliente,
@@ -143,14 +142,18 @@ class Venda {
           ..write('data: $data, ')
           ..write('dataLevantamentoCompra: $dataLevantamentoCompra, ')
           ..write('total: $total, ')
-          ..write('parcela: $parcela')
+          ..write(
+            'parcela: $parcela',
+          )
+          ..write('\nCLIENTE: {${cliente?.toString()}}')
+          ..write('\nPAGAMENTOS: {${pagamentos.map((e) => e.toString() +"\n").toList()}}\n')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, estado, idFuncionario, idCliente,
-      data, dataLevantamentoCompra, total, parcela);
+  int get hashCode => Object.hash(id, estado, idFuncionario, idCliente, data,
+      dataLevantamentoCompra, total, parcela);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

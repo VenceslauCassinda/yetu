@@ -6,4 +6,5 @@ abstract class ManipularSaidaI {
   Future<int> registarSaida(Saida saida);
   Future<void> registarListaSaidas(List<ItemVenda> lista, int idVenda, DateTime data);
   Future<List<Saida>> pegarLista();
+  Future<List<Saida>> pegarListaDoProduto(Produto produto);
 }

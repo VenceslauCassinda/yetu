@@ -1,4 +1,5 @@
 import 'package:yetu_gestor/dominio/entidades/entrada.dart';
+import 'package:yetu_gestor/dominio/entidades/produto.dart';
 
 import '../../contratos/casos_uso/manipular_entrada_i.dart';
 import '../../contratos/casos_uso/manipular_stock_i.dart';
@@ -22,5 +23,10 @@ class ManipularEntrada implements ManipularEntradaI {
   @override
   Future<List<Entrada>> pegarLista() async {
     return await _provedorEntradaI.pegarLista();
+  }
+
+  @override
+  Future<List<Entrada>> pegarListaDoProduto(Produto produto) async {
+    return await _provedorEntradaI.pegarListaDoProduto(produto.id!);
   }
 }

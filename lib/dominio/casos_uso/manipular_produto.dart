@@ -81,4 +81,28 @@ class ManipularProduto implements ManipularProdutoI {
   Future<Produto?> pegarProdutoDeId(int id) async {
     return await _provedorProdutoI.pegarProdutoDeId(id);
   }
+
+  @override
+  Future<bool> atualizarPrecoProduto(Produto dado, double preco) async {
+    dado.preco!.preco = preco;
+    return await _manipularPrecoI.atualizarPrecoProduto(dado.preco!);
+  }
+
+  @override
+  Future<void> recuperarProduto(Produto dado) async {
+    dado.estado = Estado.ATIVADO;
+    await _provedorProdutoI.actualizarProduto(dado);
+  }
+
+  @override
+  Future<void> activarProduto(Produto dado) async {
+    dado.estado = Estado.ATIVADO;
+    await _provedorProdutoI.actualizarProduto(dado);
+  }
+
+  @override
+  Future<void> desactivarrProduto(Produto dado)  async {
+    dado.estado = Estado.DESACTIVADO;
+    await _provedorProdutoI.actualizarProduto(dado);
+  }
 }

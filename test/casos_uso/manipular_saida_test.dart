@@ -6,6 +6,7 @@ import 'package:yetu_gestor/dominio/casos_uso/manipula_stock.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_preco.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_produto.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_saida.dart';
+import 'package:yetu_gestor/dominio/entidades/estado.dart';
 import 'package:yetu_gestor/dominio/entidades/saida.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_preco.dart';
@@ -28,14 +29,16 @@ void main() {
       return;
     }
     var produto = produtos.first;
-    var qtdAntiga = produto.quantidade!;
+    var qtdAntiga = produto.stock!.quantidade!;
     await manipularSaidaI.registarSaida(Saida(
         idVenda: 1,
-        quantidade: 10,
+        quantidade: 100,
+        motivo: Saida.MOTIVO_DESPERDICIO,
+        estado: Estado.ATIVADO,
         data: DateTime.now(),
         idProduto: produto.id));
     produtos = await manipularProdutoI.pegarLista();
     produto = produtos.first;
-    expect(qtdAntiga - 10, produto.quantidade);
+    expect(qtdAntiga - 100, produto.stock!.quantidade!);
   });
 }

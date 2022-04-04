@@ -20,10 +20,10 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         await (delete(tabelaVenda)..where((tbl) => tbl.id.equals(id))).go();
     return res;
   }
-  
+
   Future<TabelaVendaData?> pegarVendaDeId(int id) async {
-    var res =
-        await (select(tabelaVenda)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    var res = await (select(tabelaVenda)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
     return res;
   }
 
@@ -45,6 +45,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         await resVendasFuncionariosClientes1.get();
     for (var cadaLinha in resVendasFuncionariosClientes2) {
       var venda = cadaLinha.readTable(tabelaVenda);
+      var cliente = cadaLinha.readTable(tabelaCliente);
       var resVendasPagamentos = await ((select(tabelaVenda).join([
         leftOuterJoin(
             tabelaPagamento, tabelaPagamento.idVenda.equalsExp(tabelaVenda.id)),
@@ -52,7 +53,13 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
             ..where(tabelaPagamento.idVenda.equals(venda.id)))
           .get();
 
+      
+
+      var cadaCliente = Cliente(
+          estado: cliente.estado, nome: cliente.nome, numero: cliente.numero);
+
       var cadaVenda = Venda(
+          cliente: cadaCliente,
           estado: venda.estado,
           idFuncionario: venda.idFuncionario,
           idCliente: venda.idCliente,
@@ -60,26 +67,27 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
           total: venda.total,
           parcela: venda.parcela);
 
-      for (var linhaVendasPagamentos in resVendasPagamentos) {
-        var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
-        var resPagamentosEformas = await ((select(tabelaPagamento).join([
-          leftOuterJoin(
-              tabelaFormaPagamento,
-              tabelaFormaPagamento.id
-                  .equalsExp(tabelaPagamento.idFormaPagamento)),
-        ]))
-              ..where(tabelaPagamento.idVenda.equals(pagamento.id)))
-            .getSingle();
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
-        var cadaPagamento = Pagamento(
-            formaPagamento: FormaPagamento(
-                estado: forma.estado,
-                tipo: forma.tipo,
-                descricao: forma.descricao),
-            idFormaPagamento: forma.id,
-            estado: pagamento.estado,
-            idVenda: pagamento.idVenda,
-            valor: pagamento.valor);
+        for (var linhaVendasPagamentos in resVendasPagamentos) {
+          var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
+          var resPagamentosEformas = await ((select(tabelaPagamento).join([
+            leftOuterJoin(
+                tabelaFormaPagamento,
+                tabelaFormaPagamento.id
+                    .equalsExp(tabelaPagamento.idFormaPagamento)),
+          ]))
+                ..where(tabelaPagamento.idVenda.equals(pagamento.id)))
+              .getSingle();
+          // print("============> $resPagamentosEformas");
+          var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+          var cadaPagamento = Pagamento(
+              formaPagamento: FormaPagamento(
+                  estado: forma.estado,
+                  tipo: forma.tipo,
+                  descricao: forma.descricao),
+              idFormaPagamento: forma.id,
+              estado: pagamento.estado,
+              idVenda: pagamento.idVenda,
+              valor: pagamento.valor);
         cadaVenda.pagamentos.add(cadaPagamento);
       }
 

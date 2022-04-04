@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yetu_gestor/vista/janelas/paineis/gerente/componentes/tab_bar.dart';
 
-import '../../../../../recursos/constantes.dart';
-import '../layouts/funcionarios.dart';
-import '../layouts/pesquisa.dart';
-import '../painel_gerente.dart';
-import '../painel_gerente_c.dart';
+import '../../../../../../recursos/constantes.dart';
+import '../../../../../componentes/tab_bar.dart';
+import 'layouts/funcionarios.dart';
+import '../../../../../componentes/pesquisa.dart';
+import '../../painel_gerente.dart';
+import '../../painel_gerente_c.dart';
 
 class PainelDireito extends StatelessWidget {
   const PainelDireito({
@@ -21,7 +21,15 @@ class PainelDireito extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        LayoutPesquisa(c: _c),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
+          child: LayoutPesquisa(
+            accaoNaInsercaoNoCampoTexto: (dado) {},
+            accaoAoSair: () {
+              _c.terminarSessao();
+            },
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           child: Row(
@@ -33,7 +41,11 @@ class PainelDireito extends StatelessWidget {
               Spacer(),
               Expanded(
                   child: ModeloTabBar(
-                c: _c,
+                listaItens: ["Todos", "Activos", "Desactivos"],
+                indiceTabInicial: 0,
+                accao: (indice) {
+                  _c.navegar(indice);
+                },
               ))
             ],
           ),

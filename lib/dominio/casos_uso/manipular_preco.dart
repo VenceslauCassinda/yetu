@@ -20,4 +20,9 @@ class ManipularPreco implements ManipularPrecoI {
   Future<bool> existeProdutoComPreco(Produto dado, double preco) async {
     return await _provedorPrecoI.existeProdutoComPreco(preco, dado.id!);
   }
+
+  @override
+  Future<bool> atualizarPrecoProduto(Preco preco) async {
+    return await _provedorPrecoI.atualizarPrecoProduto(preco);
+  }
 }

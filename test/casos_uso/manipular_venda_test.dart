@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_funcionario_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_item_venda_i.dart';
+import 'package:yetu_gestor/contratos/casos_uso/manipular_pagamento_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_produto_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_venda_i.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipula_stock.dart';
@@ -18,6 +19,7 @@ import 'package:yetu_gestor/dominio/entidades/cliente.dart';
 import 'package:yetu_gestor/dominio/entidades/estado.dart';
 import 'package:yetu_gestor/dominio/entidades/item_venda.dart';
 import 'package:yetu_gestor/dominio/entidades/pagamento.dart';
+import 'package:yetu_gestor/fonte_dados/erros.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_cliente.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_funcionario.dart';
@@ -47,12 +49,22 @@ void main() {
   ManipularVendaI manipularVendaI = ManipularVenda(
       ProvedorVenda(),
       ManipularSaida(ProvedorSaida(), ManipularStock(ProvedorStock())),
-      ManipularPagamento(ProvedorPagamento()),manipularCliente,ManipularStock(ProvedorStock()) );
+      ManipularPagamento(ProvedorPagamento()),
+      manipularCliente,
+      ManipularStock(ProvedorStock()));
 
   ManipularItemVendaI manipularItemVendaI = ManipularItemVenda(
       ProvedorItemVenda(), manipularProdutoI, ManipularStock(ProvedorStock()));
 
+  ManipularPagamentoI manipularPagamentoI =
+      ManipularPagamento(ProvedorPagamento());
 
+  test("LISTAR VENDAS", () async {
+    var vendas = await ProvedorVenda().pegarLista();
+    for (var cada in vendas) {
+      print(cada.toString());
+    }
+  });
 
   test("VENDER", () async {
     var produtos = await manipularProdutoI.pegarLista();
@@ -77,19 +89,32 @@ void main() {
           quantidade: 10,
           desconto: 0)
     ];
+    var formasPagamento = await manipularPagamentoI.pegarListaFormasPagamento();
+    if (formasPagamento.isEmpty) {
+      print("NENHUMA FORMA DE PAGAMENTO ADICIONADA!");
+      return;
+    }
 
     var listaPagamentos = [
-      Pagamento(idFormaPagamento: 1, estado: Estado.ATIVADO, valor: 100)
+      Pagamento(
+          idFormaPagamento: formasPagamento.first.id,
+          estado: Estado.ATIVADO,
+          valor: 100)
     ];
 
     listaItens = await manipularItemVendaI.calcularTotalPorItem(listaItens);
 
-    await manipularVendaI.vender(
-        listaItens,
-        listaPagamentos,
-        manipularVendaI.calcularTotalVenda(listaItens),
-        funcionarios.first,
-        Cliente(estado: Estado.ATIVADO, nome: "nome", numero: "numero"),
-        DateTime(2022, 04, 01));
+    try {
+      await manipularVendaI.vender(
+          listaItens,
+          listaPagamentos,
+          manipularVendaI.calcularTotalVenda(listaItens),
+          funcionarios.first,
+          Cliente(estado: Estado.ATIVADO, nome: "Vences", numero: "926886839"),
+          DateTime(2022, 04, 01));
+    } catch (e) {
+      expect(e, isA<ErroStockInsuficiente>());
+      print((e as Erro).sms);
+    }
   });
 }

@@ -13,8 +13,8 @@ class ManipularRececcao implements ManipularRececcaoI {
   ManipularRececcao(this._provedorRececcaoI, this._manipularEntradaI) {}
 
   @override
-  Future<void> receberProduto(
-      Produto produto, int quantidade, Funcionario funcionario) async {
+  Future<void> receberProduto(Produto produto, int quantidade,
+      Funcionario funcionario, String motivo) async {
     var data = DateTime.now();
     var receccao = Receccao(
         estado: Estado.ATIVADO,
@@ -23,15 +23,15 @@ class ManipularRececcao implements ManipularRececcaoI {
         quantidade: quantidade,
         data: data);
     var id = await _provedorRececcaoI.adicionarrRececcao(receccao);
-    
+
     await _manipularEntradaI.registarEntrada(Entrada(
-      produto: produto,
+        produto: produto,
         estado: Estado.ATIVADO,
         idProduto: produto.id,
         idRececcao: id,
         quantidade: quantidade,
+        motivo: motivo,
         data: data));
-
   }
 
   @override

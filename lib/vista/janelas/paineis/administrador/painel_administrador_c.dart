@@ -11,6 +11,7 @@ import 'package:yetu_gestor/dominio/entidades/usuario.dart';
 import 'package:yetu_gestor/fonte_dados/erros.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_funcionario.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedores_usuario.dart';
+import 'package:yetu_gestor/recursos/constantes.dart';
 import 'package:yetu_gestor/vista/aplicacao_c.dart';
 
 import '../../../../contratos/casos_uso/manipular_funcionario_i.dart';
@@ -111,6 +112,7 @@ class PainelAdministradorC extends GetxController {
       Get.defaultDialog(
           title: "",
           content: LayoutConfirmacaoAccao(
+            corButaoSim: primaryColor,
             pergunta: "Deseja mesmo actualizar?",
             accaoAoCancelar: () {
               fecharDialogoCasoAberto();

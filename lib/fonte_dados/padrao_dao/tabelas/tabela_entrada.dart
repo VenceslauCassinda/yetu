@@ -7,4 +7,5 @@ class TabelaEntrada extends Table{
   IntColumn get idRececcao => integer()();
   IntColumn get quantidade => integer()();
   DateTimeColumn get data => dateTime()();
+  TextColumn get motivo => text().nullable()();
 }

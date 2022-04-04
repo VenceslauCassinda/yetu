@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:componentes_visuais/componentes/item_gaveta.dart';
+import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/recursos/constantes.dart';
 import 'package:yetu_gestor/vista/componentes/logo.dart';
-import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente_c.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/entradas/layouts/entradas_c.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/produtos/layouts/produtos_c.dart';
 
 class GavetaNavegacao extends StatelessWidget {
   final String linkImagem;
@@ -39,14 +41,63 @@ class GavetaNavegacao extends StatelessWidget {
                     icone: Icons.people,
                     titulo: "Funcionários",
                     metodoQuandoItemClicado: () async {
-                      c.irParaPainel(Painel.FUNCIONARIOS);
+                      c.irParaPainel(PainelActual.FUNCIONARIOS);
                     }),
                 ItemDaGaveta(
                     cor: branca,
-                    icone: Icons.people,
+                    icone: Icons.all_inbox_outlined,
                     titulo: "Produtos",
                     metodoQuandoItemClicado: () async {
-                      c.irParaPainel(Painel.PRODUTOS);
+                      c.irParaPainel(PainelActual.PRODUTOS);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.store,
+                    titulo: "Vendas",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.VENDAS);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.storefront,
+                    titulo: "Dívidas",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.VENDAS);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.arrow_circle_down,
+                    titulo: "Entradas",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.ENTRADAS_GERAL);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.arrow_circle_up,
+                    titulo: "Saídas",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.SAIDAS_GERAL);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.monetization_on_sharp,
+                    titulo: "Investimento",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.INVESTIMENTO);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.insert_comment,
+                    titulo: "Relatórios",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.RELATORIO);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.payments,
+                    titulo: "Pagamentos",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.PAGAMENTOS);
                     }),
               ],
             ),

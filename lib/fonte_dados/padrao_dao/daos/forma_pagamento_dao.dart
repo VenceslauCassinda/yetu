@@ -17,7 +17,21 @@ class FormaPagamentoDao extends DatabaseAccessor<BancoDados>
   }
 
   Future<bool> actualizarFormaPagamento(FormaPagamento dado) async {
-    var res = await (update(tabelaFormaPagamento)).replace(dado.toCompanion(true));
+    var res =
+        await (update(tabelaFormaPagamento)).replace(dado.toCompanion(true));
+    return res;
+  }
+
+  Future<List<TabelaFormaPagamentoData>> todos() async {
+    var res = await (select(tabelaFormaPagamento)).get();
+    return res;
+  }
+
+  Future<TabelaFormaPagamentoData?> existeFormaDeDescricao(
+      String descricao) async {
+    var res = await ((select(tabelaFormaPagamento)
+          ..where((tbl) => tbl.descricao.equals(descricao))))
+        .getSingleOrNull();
     return res;
   }
 }

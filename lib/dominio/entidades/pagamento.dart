@@ -96,7 +96,8 @@ class Pagamento {
           ..write('idFormaPagamento: $idFormaPagamento, ')
           ..write('estado: $estado, ')
           ..write('idVenda: $idVenda, ')
-          ..write('valor: $valor')
+          ..write('valor: $valor, ', )
+          ..write('FORMA PAGAMENTO: {${formaPagamento?.toString()}}, ')
           ..write(')'))
         .toString();
   }

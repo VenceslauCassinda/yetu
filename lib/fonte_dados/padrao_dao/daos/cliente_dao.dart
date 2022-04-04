@@ -13,6 +13,11 @@ class ClienteDao extends DatabaseAccessor<BancoDados> with _$ClienteDaoMixin {
     var res = await (select(tabelaCliente)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
     return res;
   }
+  
+  Future<TabelaClienteData?> existeClienteDeNomeEnumero(String nome, String numero) async{
+    var res = await (select(tabelaCliente)..where((tbl) => tbl.nome.equals(nome)&tbl.numero.equals(numero))).getSingleOrNull();
+    return res;
+  }
 
   Future<int> adicionarCliente(Cliente cliente) async {
     return await (into(tabelaCliente).insert(cliente.toCompanion(true)));

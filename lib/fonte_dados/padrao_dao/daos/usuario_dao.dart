@@ -8,7 +8,8 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
     //   print("=======> ${element.nomeUsuario}");
     //   print(element.estado);
     // });
-    return await ((select(tabelaUsuario))
+
+    await ((select(tabelaUsuario))
           ..where((tbl) {
             return tbl.estado.isBiggerOrEqualValue(0);
           })
@@ -17,6 +18,7 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
                 expression: tbl.nomeUsuario, mode: OrderingMode.asc)
           ]))
         .get();
+    return [];
   }
 
   Future<List<TabelaUsuarioData>> todosSemFiltro() async {
@@ -31,10 +33,9 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
   }
 
   Future<List<TabelaUsuarioData>> eliminados() async {
-    return await ((select(tabelaUsuario)..orderBy([
-            (tbl) => OrderingTerm(
-                expression: tbl.nomeUsuario, mode: OrderingMode.asc)
-          ]))
+    return await ((select(tabelaUsuario)
+          ..orderBy(
+              [(tbl) => OrderingTerm(expression: tbl.nomeUsuario, mode: OrderingMode.asc)]))
           ..where((tbl) {
             return tbl.estado.equals(-1) | tbl.estado.isNull();
           }))
@@ -60,7 +61,7 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
         .getSingle();
   }
 
-  Future<bool> usuarioLogado(String nomeUsuario, String palavraPasse) async {
+  Future<bool> usuarioLogado(String nomeUsuario) async {
     var resposta = await ((select(tabelaUsuario))
           ..where((tbl) => (tbl.logado.equals(true) &
               (tbl.nomeUsuario.equals(nomeUsuario)))))

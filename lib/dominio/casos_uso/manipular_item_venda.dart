@@ -62,7 +62,6 @@ class ManipularItemVenda implements ManipularItemVendaI {
       var totalDescontado =
           total - aplicarDescontoVenda(total, itens[i].desconto!);
       itens[i].total = totalDescontado;
-      print("===========> $total");
     }
     return itens;
   }

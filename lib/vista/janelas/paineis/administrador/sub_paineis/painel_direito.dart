@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yetu_gestor/vista/janelas/paineis/administrador/componentes/tab_bar.dart';
-
 import '../../../../../recursos/constantes.dart';
+import '../../../../componentes/tab_bar.dart';
 import '../layouts/detalhes.dart';
 import '../layouts/usuarios.dart';
 import '../painel_administrador.dart';
@@ -33,7 +32,11 @@ class PainelDireito extends StatelessWidget {
               Spacer(),
               Expanded(
                   child: ModeloTabBar(
-                c: _c,
+                listaItens: ["Todos", "Activos", "Desactivos", "Eliminados"],
+                indiceTabInicial: 0,
+                accao: (indice) {
+                  _c.navegar(indice);
+                },
               ))
             ],
           ),

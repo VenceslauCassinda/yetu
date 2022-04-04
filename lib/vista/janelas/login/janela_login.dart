@@ -42,6 +42,7 @@ class CorpoJanelaLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(context);
     return Row(
       children: [
         Expanded(

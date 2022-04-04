@@ -9,6 +9,8 @@ import 'package:yetu_gestor/dominio/casos_uso/manipular_preco.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_produto.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_receccao.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_usuario.dart';
+import 'package:yetu_gestor/dominio/entidades/entrada.dart';
+import 'package:yetu_gestor/dominio/entidades/saida.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_entrada.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_funcionario.dart';
@@ -50,13 +52,13 @@ var maniStock = ManipularStock(ProvedorStock());
     }
 
     var produto = produtos.first;
-    int qtd = produto.quantidade!;
+    int qtd = produto.stock!.quantidade!;
 
     var funcionario = funacionarios.first;
-    await manipularRececcaoI.receberProduto(produto, 10, funcionario);
+    await manipularRececcaoI.receberProduto(produto, 100, funcionario, Entrada.MOTIVO_ABASTECIMENTO);
 
     produtos = await manipularProdutoI.pegarLista();
     produto = produtos.first;
-    expect(produto.quantidade, qtd +10);
+    expect(produto.stock!.quantidade!, qtd +100);
   });
 }

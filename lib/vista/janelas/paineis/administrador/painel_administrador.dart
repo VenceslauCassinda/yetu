@@ -16,7 +16,7 @@ import '../../../../dominio/entidades/nivel_acesso.dart';
 import '../../../../dominio/entidades/sessao.dart';
 import '../../../../dominio/entidades/usuario.dart';
 import 'componentes/gaveta.dart';
-import 'componentes/painel_direito.dart';
+import 'sub_paineis/painel_direito.dart';
 
 class PainelAdministrador extends StatelessWidget {
   @override

@@ -15,7 +15,7 @@ class SerializadorFuncionario {
     };
   }
 
-  Usuario fromJson(Map json) {
+  Funcionario fromJson(Map json) {
     return Funcionario(
       nomeCompelto: json["nome_completo"],
       id: json["id"],
@@ -28,10 +28,16 @@ class SerializadorFuncionario {
     );
   }
 
-  Funcionario fromTabela(TabelaFuncionarioData tabela) {
+  Funcionario fromTabela(TabelaFuncionarioData tabela,
+      {TabelaUsuarioData? usuario}) {
     return Funcionario(
       id: tabela.id,
-      estado: tabela.estado,
+      idUsuario: usuario?.id,
+      imagemPerfil: usuario?.imagemPerfil,
+      logado: usuario?.logado,
+      nomeUsuario: usuario?.nomeUsuario,
+      estado: usuario?.estado,
+      nivelAcesso: usuario?.nivelAcesso,
       nomeCompelto: tabela.nomeCompleto,
     );
   }

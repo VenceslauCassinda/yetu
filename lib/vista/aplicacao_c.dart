@@ -5,7 +5,9 @@ import 'package:yetu_gestor/dominio/entidades/nivel_acesso.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedores_usuario.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/administrador/painel_administrador.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/funcionario/painel_funcionario.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/entradas/layouts/entradas_c.dart';
 import '../dominio/entidades/usuario.dart';
 import 'janelas/cadastro/janela_cadastro.dart';
 import 'janelas/cadastro/janela_cadastro_c.dart';
@@ -42,6 +44,11 @@ class AplicacaoC extends GetxController {
   }
 
   static void logar(Usuario usuario) {
+    if (usuario.nivelAcesso == null) {
+      voltar();
+      voltar();
+      return;
+    }
     definirUsuarioActual(usuario);
     if (usuario.nivelAcesso == NivelAcesso.ADMINISTRADOR) {
       irParaPainelAdministrador();
@@ -49,6 +56,10 @@ class AplicacaoC extends GetxController {
     }
     if (usuario.nivelAcesso == NivelAcesso.GERENTE) {
       irParaPainelGerente();
+      return;
+    }
+    if (usuario.nivelAcesso == NivelAcesso.FUNCIONARIO) {
+      irParaPainelFuncionario();
       return;
     }
   }
@@ -71,9 +82,14 @@ class AplicacaoC extends GetxController {
     Get.off(() => PainelGerente());
   }
 
+  static void irParaPainelFuncionario() {
+    Get.off(() => PainelFuncionario());
+  }
+
   static void irParaJanelaPainelUsuario(Usuario usuario) {}
 
   static void removerIntanciaDaMemoria(instanciaNaMemoria) {
+    instanciaNaMemoria.runtimeType;
     if (instanciaNaMemoria is JanelaLoginC) {
       Get.delete<JanelaLoginC>();
       return;

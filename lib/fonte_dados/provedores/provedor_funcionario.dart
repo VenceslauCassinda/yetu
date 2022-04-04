@@ -77,4 +77,21 @@ class ProveedorFuncionario implements ProvedorFuncionarioI {
   Future<int> pegarIdFuncionarioDeNome(String nomeCompleto) async {
     return await _dao.pegarIdFuncioanrioDeNome(nomeCompleto);
   }
+
+  @override
+  Future<Funcionario> pegarFuncionarioDeId(int id) async {
+    var res = await _dao.pegarFuncionarioDeId(id);
+    return SerializadorFuncionario().fromTabela(res);
+  }
+
+  @override
+  Future<Funcionario> pegarFuncionarioDeNome(String nomeCompleto) async {
+    var res = await _dao.pegarFuncionarioDeNome(nomeCompleto);
+    return SerializadorFuncionario().fromTabela(res);
+  }
+
+  @override
+  Future<Funcionario> pegarFuncionarioDoUsuarioDeId(int id) async {
+    return await _dao.pegarFuncionarioDoUsuarioDeId(id);
+  }
 }

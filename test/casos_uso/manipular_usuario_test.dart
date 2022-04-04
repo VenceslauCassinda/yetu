@@ -16,10 +16,10 @@ void main() {
   ManipularUsuario manipularUsuario = ManipularUsuario(ProvedorUsuario());
   test("REGISTAR USUARIO", () async {
     Usuario usuario = Usuario(
-        nomeUsuario: "ven",
+        nomeUsuario: "admin",
         imagemPerfil: "imagemPerfil",
         palavraPasse: "11111111",
-        nivelAcesso: NivelAcesso.FUNCIONARIO);
+        nivelAcesso: NivelAcesso.ADMINISTRADOR);
     try {
       await manipularUsuario.registarUsuario(usuario);
       var lista = (await manipularUsuario.pegarLista());
@@ -31,10 +31,11 @@ void main() {
   });
 
   test("FAZER LOGIN", () async {
-    var lista = (await manipularUsuario.pegarLista());
-    if (lista.isNotEmpty) {
-      var usuario = lista.last;
+    // var lista = (await manipularUsuario.pegarLista());
+    // if (lista.isNotEmpty) {
+      // var usuario = lista.last;
 
+      var usuario = Usuario.registo("Loja", "11111111");
 
       try {
         var usuarioLogado =await manipularUsuario.fazerLogin(usuario.nomeUsuario!, usuario.palavraPasse!);
@@ -44,20 +45,20 @@ void main() {
       } catch (e) {
         expect(true,e is ErroUsuarioJaLogado || e is ErroUsuarioNaoExiste);
       }
-    }
+    // }
   });
 
   test("TERMINAR SESSAO", () async {
-    var lista = (await manipularUsuario.pegarLista());
-    if (lista.isNotEmpty) {
+    // var lista = (await manipularUsuario.pegarLista());
+    // if (lista.isNotEmpty) {
       // var usuario = lista[lista.length - 1];
-      var usuario = Usuario.registo("admin", "11111111");
+      var usuario = Usuario.registo("mario", "11111111");
       try {
         await manipularUsuario.terminarSessao(usuario);
       } catch (e) {
         expect(e, isA<ErroUsuarioNaoLogado>());
       }
-    }
+    // }
   });
 
   test("ACTIVAR USUARIO", () async {

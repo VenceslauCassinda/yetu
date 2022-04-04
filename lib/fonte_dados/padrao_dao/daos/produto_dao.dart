@@ -13,11 +13,15 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
       var stock = linha.readTable(tabelaStock);
       var produto = linha.readTable(tabelaProduto);
       return Produto(
+        stock: Stock(
+            id: stock.id,
+            estado: stock.estado,
+            idProduto: stock.idProduto,
+            quantidade: stock.quantidade),
         id: produto.id,
         estado: produto.estado,
         nome: produto.nome,
         precoCompra: produto.precoCompra,
-        quantidade: stock.quantidade,
         recebivel: produto.recebivel,
       );
     }).toList();
@@ -27,6 +31,14 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
       var res = await (select(tabelaPreco)
             ..where((tbl) => tbl.idProduto.equals(cada.id)))
           .get();
+      var listinha = res
+          .map((e) => Preco(
+              estado: e.estado,
+              idProduto: e.idProduto,
+              preco: e.preco,
+              id: e.id))
+          .toList();
+      lista[i].preco = listinha.isEmpty ? null : listinha[0];
       var listaPreco = res.map((e) => e.preco).toList();
       lista[i].listaPreco = listaPreco;
     }
@@ -65,8 +77,9 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
   Future<void> removerProduto(int id) async {
     await (delete(tabelaProduto)..where((tbl) => tbl.id.equals(id))).go();
   }
-  
+
   Future<TabelaProdutoData?> pagarProdutoDeId(int id) async {
-    return await (select(tabelaProduto)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    return await (select(tabelaProduto)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
   }
 }

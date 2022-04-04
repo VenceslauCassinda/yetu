@@ -24,7 +24,7 @@ class ManipularVenda implements ManipularVendaI {
   final ManipularClienteI _manipularClienteI;
   final ManipularStockI _manipularStockI;
 
-  ManipularVenda(
+  7ManipularVenda(
       this._provedorVendaI,
       this._manipularSaidaI,
       this._manipularPagamentoI,

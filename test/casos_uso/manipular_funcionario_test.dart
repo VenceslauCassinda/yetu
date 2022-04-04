@@ -18,10 +18,16 @@ void main() {
   var manipularUsuario = ManipularUsuario(ProvedorUsuario());
   ManipularFuncionarioI manipularFuncionarioI =
       ManipularFuncionario(manipularUsuario, ProveedorFuncionario());
+
+  test("LISTAR FUNCIONARIOS", () async {
+    var lista = await manipularFuncionarioI.pegarLista();
+    for (var cada in lista) {
+      print(cada.toString());
+    }
+  });
   test("ADICIONAR FUNCIONARIO", () async {
     try {
-      var salvar =
-          Funcionario(nomeCompelto: "Ven", palavraPasse: "11111111");
+      var salvar = Funcionario(nomeCompelto: "Ven", palavraPasse: "11111111");
       await manipularFuncionarioI.adicionarFuncionario(salvar);
       var lista = (await manipularFuncionarioI.pegarLista());
       if (lista.isNotEmpty) {

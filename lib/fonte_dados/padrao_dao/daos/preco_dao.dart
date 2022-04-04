@@ -5,17 +5,20 @@ class PrecoDao extends DatabaseAccessor<BancoDados> with _$PrecoDaoMixin {
   PrecoDao(BancoDados attachedDatabase) : super(attachedDatabase);
 
   Future<int> adicionarPrecoDeProduto(Preco preco) async {
-    var res = await into(tabelaPreco).insert(TabelaPrecoCompanion.insert(
-        idProduto: preco.idProduto!,
-        preco: preco.preco!,
-        estado: preco.estado!));
+    var res = await into(tabelaPreco).insert(preco.toCompanion(true));
 
     return res;
   }
 
+  Future<bool> atualizarPrecoProduto(Preco preco) async {
+    var res = update(tabelaPreco);
+    return await res.replace(preco.toCompanion(true));
+  }
+
   Future<int> removerPrecoDoProduto(double preco, int idProduto) async {
     var res = await (delete(tabelaPreco)
-          ..where((tbl) => tbl.idProduto.equals(idProduto) & tbl.preco.equals(preco)))
+          ..where((tbl) =>
+              tbl.idProduto.equals(idProduto) & tbl.preco.equals(preco)))
         .go();
     return res;
   }

@@ -3,22 +3,15 @@
 import 'package:drift/drift.dart';
 import 'package:yetu_gestor/dominio/entidades/usuario.dart';
 
-class Funcionario extends Usuario {
+class Funcionario {
   String? nomeCompelto;
-  @override
   int? id;
   int? idUsuario;
-  @override
   String? nomeUsuario;
-  @override
   String? imagemPerfil;
-  @override
   String? palavraPasse;
-  @override
   int? nivelAcesso;
-  @override
   int? estado;
-  @override
   bool? logado;
 
   Funcionario(
@@ -31,14 +24,7 @@ class Funcionario extends Usuario {
       this.imagemPerfil,
       this.palavraPasse,
       this.nivelAcesso})
-      : super(
-            estado: estado,
-            id: id,
-            imagemPerfil: imagemPerfil,
-            logado: logado,
-            nivelAcesso: nivelAcesso,
-            nomeUsuario: nomeCompelto,
-            palavraPasse: palavraPasse);
+      ;
 
   @override
   String toString() {
@@ -47,19 +33,19 @@ class Funcionario extends Usuario {
           ..write('estado: $estado, ')
           ..write('idUsuario: $idUsuario, ')
           ..write(
-            'logado: $logado',
+            'logado: $logado, ',
           )
           ..write(
-            'nivelAcesso: $nivelAcesso',
+            'nivelAcesso: $nivelAcesso, ',
           )
           ..write(
-            'palavraPasse: $palavraPasse',
+            'palavraPasse: $palavraPasse, ',
           )
           ..write(
-            'imagemPerfil: $imagemPerfil',
+            'imagemPerfil: $imagemPerfil, ',
           )
           ..write(
-            'nomeCompleto: $nomeCompelto',
+            'nomeCompleto: $nomeCompelto, ',
           )
           ..write(')'))
         .toString();

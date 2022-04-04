@@ -25,6 +25,7 @@ class ManipularFuncionario implements ManipularFuncionarioI {
     } else {
       nomeUsuario = dado.nomeCompelto!;
     }
+    nomeUsuario = nomeUsuario.toLowerCase();
     if ((await _manipularUsuarioI.existeNomeUsuario(nomeUsuario))) {
       String acrescimoId =
           "${Random().nextInt(10)}${Random().nextInt(10)}${Random().nextInt(10)}${Random().nextInt(10)}";
@@ -76,5 +77,20 @@ class ManipularFuncionario implements ManipularFuncionarioI {
   @override
   Future<int> pegarIdFuncionarioDeNome(String nomeCompleto) async {
     return await _provedorFuncionarioI.pegarIdFuncionarioDeNome(nomeCompleto);
+  }
+
+  @override
+  Future<Funcionario> pegarFuncionarioDeId(int id) async {
+    return await _provedorFuncionarioI.pegarFuncionarioDeId(id);
+  }
+
+  @override
+  Future<Funcionario> pegarFuncionarioDeNome(String nomeCompleto) async {
+    return await _provedorFuncionarioI.pegarFuncionarioDeNome(nomeCompleto);
+  }
+
+  @override
+  Future<Funcionario> pegarFuncionarioDoUsuarioDeId(int id) async {
+    return await _provedorFuncionarioI.pegarFuncionarioDoUsuarioDeId(id);
   }
 }

@@ -85,3 +85,18 @@ class ErroPagamentoInvalido extends Erro {
   ErroPagamentoInvalido(this.sms, {this.naoMostrarErro})
       : super(sms, naoMostrarErro: naoMostrarErro);
 }
+
+
+class ErroFormaPagamentoExistente extends Erro {
+  String sms;
+  bool? naoMostrarErro;
+  ErroFormaPagamentoExistente(this.sms, {this.naoMostrarErro})
+      : super(sms, naoMostrarErro: naoMostrarErro);
+}
+
+class ErroQuantidadeInsuficiente extends Erro {
+  String sms;
+  bool? naoMostrarErro;
+  ErroQuantidadeInsuficiente(this.sms, {this.naoMostrarErro})
+      : super(sms, naoMostrarErro: naoMostrarErro);
+}

@@ -13,7 +13,6 @@ class Aplicacao extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(context);
     return ScreenUtilInit(
       designSize: Size(360, 690),
       minTextAdapt: true,

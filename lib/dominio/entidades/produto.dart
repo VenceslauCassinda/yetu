@@ -1,12 +1,15 @@
 import 'package:drift/drift.dart';
 import 'package:yetu_gestor/dominio/entidades/estado.dart';
+import 'package:yetu_gestor/dominio/entidades/stock.dart';
 
 import '../../fonte_dados/padrao_dao/base_dados.dart';
+import 'preco.dart';
 
 class Produto {
+  Preco? preco;
   List<double>? listaPreco = [];
+  Stock? stock;
   int? id;
-  int? quantidade;
   int? estado;
   String? nome;
   double? precoCompra;
@@ -14,18 +17,17 @@ class Produto {
   Produto(
       {this.id,
       this.estado,
+      this.preco,
+      this.stock,
       this.listaPreco,
       this.nome,
       this.precoCompra,
-      this.recebivel,
-      this.quantidade});
+      this.recebivel});
   factory Produto.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Produto(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      quantidade: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
       estado: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
       nome: const StringType()
@@ -40,7 +42,6 @@ class Produto {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id!);
-    map['quantidade'] = Variable<int>(quantidade!);
     map['estado'] = Variable<int>(estado!);
     map['nome'] = Variable<String>(nome!);
     map['preco_compra'] = Variable<double>(precoCompra!);
@@ -64,7 +65,6 @@ class Produto {
     return Produto(
       id: serializer.fromJson<int>(json['id']),
       estado: serializer.fromJson<int>(json['estado']),
-      quantidade: serializer.fromJson<int>(json['quantidade']),
       nome: serializer.fromJson<String>(json['nome']),
       precoCompra: serializer.fromJson<double>(json['precoCompra']),
       recebivel: serializer.fromJson<bool>(json['recebivel']),
@@ -75,7 +75,6 @@ class Produto {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id!),
-      'quantidade': serializer.toJson<int>(quantidade!),
       'estado': serializer.toJson<int>(estado!),
       'nome': serializer.toJson<String>(nome!),
       'precoCompra': serializer.toJson<double>(precoCompra!),
@@ -92,7 +91,6 @@ class Produto {
           bool? recebivel}) =>
       Produto(
         id: id ?? this.id,
-        quantidade: quantidade ?? this.quantidade,
         estado: estado ?? this.estado,
         nome: nome ?? this.nome,
         precoCompra: precoCompra ?? this.precoCompra,
@@ -102,7 +100,6 @@ class Produto {
   String toString() {
     return (StringBuffer('TabelaProdutoData(')
           ..write('id: $id, ')
-          ..write('quantidade: $quantidade, ')
           ..write('estado: $estado, ')
           ..write('nome: $nome, ')
           ..write('precoCompra: $precoCompra, ')

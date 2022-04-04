@@ -2,18 +2,21 @@ import 'package:drift/drift.dart';
 
 import '../../fonte_dados/padrao_dao/base_dados.dart';
 
-class Stock{
+class Stock {
   int? id;
   int? estado;
   int? idProduto;
   int? quantidade;
   Stock(
-      {required this.id,
+      {this.id,
       required this.estado,
       required this.idProduto,
       required this.quantidade});
-  factory Stock.fromData(Map<String, dynamic> data,
-      {String? prefix}) {
+
+  Stock.zerado() {
+    quantidade = 0;
+  }
+  factory Stock.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Stock(
       id: const IntType()
@@ -66,8 +69,7 @@ class Stock{
     };
   }
 
-  Stock copyWith(
-          {int? id, int? estado, int? idProduto, int? quantidade}) =>
+  Stock copyWith({int? id, int? estado, int? idProduto, int? quantidade}) =>
       Stock(
         id: id ?? this.id,
         estado: estado ?? this.estado,

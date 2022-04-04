@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:yetu_gestor/dominio/entidades/estado.dart';
 import 'package:yetu_gestor/dominio/entidades/produto.dart';
 
 import '../../contratos/provedores/provedor_produto_i.dart';
@@ -29,9 +30,10 @@ class ProvedorProduto implements ProvedorProdutoI {
   Future<List<Produto>> pegarLista() async {
     return (await _dao.todos())
         .map((e) => Produto(
+              preco: e.preco,
+              stock: e.stock,
               listaPreco: e.listaPreco,
               id: e.id,
-              quantidade: e.quantidade,
               nome: e.nome,
               estado: e.estado,
               precoCompra: e.precoCompra,
@@ -42,7 +44,8 @@ class ProvedorProduto implements ProvedorProdutoI {
 
   @override
   Future<void> removerProduto(Produto dado) async {
-    await _dao.removerProduto(dado.id!);
+    dado.estado = Estado.ELIMINADO;
+    await _dao.actualizarProduto(dado.toCompanion(true));
   }
 
   @override

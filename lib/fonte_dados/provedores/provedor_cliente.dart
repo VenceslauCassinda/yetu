@@ -34,7 +34,14 @@ class ProvedorCliente implements ProvedorClienteI {
   @override
   Future<List<Cliente>> todos() async {
     return (await _dao.pegarClientes())
-        .map((e) => Cliente(estado: e.estado, nome: e.nome, numero: e.numero))
+        .map((e) =>
+            Cliente(estado: e.estado, nome: e.nome, numero: e.numero, id: e.id))
         .toList();
+  }
+
+  @override
+  Future<int?> existeCliente(String nome, String numero) async {
+    var res = await _dao.existeClienteDeNomeEnumero(nome, numero);
+    return (res != null) ? res.id : -1;
   }
 }

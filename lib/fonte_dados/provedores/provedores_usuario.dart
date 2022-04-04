@@ -50,7 +50,7 @@ class ProvedorUsuario implements ProvedorUsuarioI {
     if (dado == null) {
       throw ErroUsuarioNaoExiste("CREDENCIAIS INVALIDAS");
     }
-    if ((await _usuarioDao.usuarioLogado(nomeUsuario, palavraPasse)) == true) {
+    if ((await _usuarioDao.usuarioLogado(nomeUsuario)) == true) {
       throw ErroUsuarioJaLogado("USUARIO JA LOGADO");
     }
     await _usuarioDao.logarUsuario(nomeUsuario, palavraPasse);
@@ -61,7 +61,7 @@ class ProvedorUsuario implements ProvedorUsuarioI {
   @override
   Future<void> terminarSessao(Usuario usuario) async {
     if ((await _usuarioDao.usuarioLogado(
-            usuario.nomeUsuario!, usuario.palavraPasse!)) ==
+            usuario.nomeUsuario!)) ==
         true) {
       await _usuarioDao.terminarSessao(
           usuario.nomeUsuario!, usuario.palavraPasse!);

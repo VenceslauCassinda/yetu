@@ -38,7 +38,6 @@ class FormaPagamento{
 
   TabelaFormaPagamentoCompanion toCompanion(bool nullToAbsent) {
     return TabelaFormaPagamentoCompanion(
-      id: Value(id!),
       estado: Value(estado!),
       tipo: Value(tipo!),
       descricao: Value(descricao!),

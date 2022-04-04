@@ -1967,13 +1967,15 @@ class TabelaEntradaData extends DataClass
   final int idRececcao;
   final int quantidade;
   final DateTime data;
+  final String? motivo;
   TabelaEntradaData(
       {required this.id,
       required this.estado,
       required this.idProduto,
       required this.idRececcao,
       required this.quantidade,
-      required this.data});
+      required this.data,
+      this.motivo});
   factory TabelaEntradaData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -1990,6 +1992,8 @@ class TabelaEntradaData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
       data: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
+      motivo: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}motivo']),
     );
   }
   @override
@@ -2001,6 +2005,9 @@ class TabelaEntradaData extends DataClass
     map['id_receccao'] = Variable<int>(idRececcao);
     map['quantidade'] = Variable<int>(quantidade);
     map['data'] = Variable<DateTime>(data);
+    if (!nullToAbsent || motivo != null) {
+      map['motivo'] = Variable<String?>(motivo);
+    }
     return map;
   }
 
@@ -2012,6 +2019,8 @@ class TabelaEntradaData extends DataClass
       idRececcao: Value(idRececcao),
       quantidade: Value(quantidade),
       data: Value(data),
+      motivo:
+          motivo == null && nullToAbsent ? const Value.absent() : Value(motivo),
     );
   }
 
@@ -2025,6 +2034,7 @@ class TabelaEntradaData extends DataClass
       idRececcao: serializer.fromJson<int>(json['idRececcao']),
       quantidade: serializer.fromJson<int>(json['quantidade']),
       data: serializer.fromJson<DateTime>(json['data']),
+      motivo: serializer.fromJson<String?>(json['motivo']),
     );
   }
   @override
@@ -2037,6 +2047,7 @@ class TabelaEntradaData extends DataClass
       'idRececcao': serializer.toJson<int>(idRececcao),
       'quantidade': serializer.toJson<int>(quantidade),
       'data': serializer.toJson<DateTime>(data),
+      'motivo': serializer.toJson<String?>(motivo),
     };
   }
 
@@ -2046,7 +2057,8 @@ class TabelaEntradaData extends DataClass
           int? idProduto,
           int? idRececcao,
           int? quantidade,
-          DateTime? data}) =>
+          DateTime? data,
+          String? motivo}) =>
       TabelaEntradaData(
         id: id ?? this.id,
         estado: estado ?? this.estado,
@@ -2054,6 +2066,7 @@ class TabelaEntradaData extends DataClass
         idRececcao: idRececcao ?? this.idRececcao,
         quantidade: quantidade ?? this.quantidade,
         data: data ?? this.data,
+        motivo: motivo ?? this.motivo,
       );
   @override
   String toString() {
@@ -2063,14 +2076,15 @@ class TabelaEntradaData extends DataClass
           ..write('idProduto: $idProduto, ')
           ..write('idRececcao: $idRececcao, ')
           ..write('quantidade: $quantidade, ')
-          ..write('data: $data')
+          ..write('data: $data, ')
+          ..write('motivo: $motivo')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, estado, idProduto, idRececcao, quantidade, data);
+      Object.hash(id, estado, idProduto, idRececcao, quantidade, data, motivo);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2080,7 +2094,8 @@ class TabelaEntradaData extends DataClass
           other.idProduto == this.idProduto &&
           other.idRececcao == this.idRececcao &&
           other.quantidade == this.quantidade &&
-          other.data == this.data);
+          other.data == this.data &&
+          other.motivo == this.motivo);
 }
 
 class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
@@ -2090,6 +2105,7 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
   final Value<int> idRececcao;
   final Value<int> quantidade;
   final Value<DateTime> data;
+  final Value<String?> motivo;
   const TabelaEntradaCompanion({
     this.id = const Value.absent(),
     this.estado = const Value.absent(),
@@ -2097,6 +2113,7 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
     this.idRececcao = const Value.absent(),
     this.quantidade = const Value.absent(),
     this.data = const Value.absent(),
+    this.motivo = const Value.absent(),
   });
   TabelaEntradaCompanion.insert({
     this.id = const Value.absent(),
@@ -2105,6 +2122,7 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
     required int idRececcao,
     required int quantidade,
     required DateTime data,
+    this.motivo = const Value.absent(),
   })  : estado = Value(estado),
         idProduto = Value(idProduto),
         idRececcao = Value(idRececcao),
@@ -2117,6 +2135,7 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
     Expression<int>? idRececcao,
     Expression<int>? quantidade,
     Expression<DateTime>? data,
+    Expression<String?>? motivo,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2125,6 +2144,7 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
       if (idRececcao != null) 'id_receccao': idRececcao,
       if (quantidade != null) 'quantidade': quantidade,
       if (data != null) 'data': data,
+      if (motivo != null) 'motivo': motivo,
     });
   }
 
@@ -2134,7 +2154,8 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
       Value<int>? idProduto,
       Value<int>? idRececcao,
       Value<int>? quantidade,
-      Value<DateTime>? data}) {
+      Value<DateTime>? data,
+      Value<String?>? motivo}) {
     return TabelaEntradaCompanion(
       id: id ?? this.id,
       estado: estado ?? this.estado,
@@ -2142,6 +2163,7 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
       idRececcao: idRececcao ?? this.idRececcao,
       quantidade: quantidade ?? this.quantidade,
       data: data ?? this.data,
+      motivo: motivo ?? this.motivo,
     );
   }
 
@@ -2166,6 +2188,9 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
     if (data.present) {
       map['data'] = Variable<DateTime>(data.value);
     }
+    if (motivo.present) {
+      map['motivo'] = Variable<String?>(motivo.value);
+    }
     return map;
   }
 
@@ -2177,7 +2202,8 @@ class TabelaEntradaCompanion extends UpdateCompanion<TabelaEntradaData> {
           ..write('idProduto: $idProduto, ')
           ..write('idRececcao: $idRececcao, ')
           ..write('quantidade: $quantidade, ')
-          ..write('data: $data')
+          ..write('data: $data, ')
+          ..write('motivo: $motivo')
           ..write(')'))
         .toString();
   }
@@ -2221,9 +2247,14 @@ class $TabelaEntradaTable extends TabelaEntrada
   late final GeneratedColumn<DateTime?> data = GeneratedColumn<DateTime?>(
       'data', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _motivoMeta = const VerificationMeta('motivo');
+  @override
+  late final GeneratedColumn<String?> motivo = GeneratedColumn<String?>(
+      'motivo', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, estado, idProduto, idRececcao, quantidade, data];
+      [id, estado, idProduto, idRececcao, quantidade, data, motivo];
   @override
   String get aliasedName => _alias ?? 'tabela_entrada';
   @override
@@ -2270,6 +2301,10 @@ class $TabelaEntradaTable extends TabelaEntrada
     } else if (isInserting) {
       context.missing(_dataMeta);
     }
+    if (data.containsKey('motivo')) {
+      context.handle(_motivoMeta,
+          motivo.isAcceptableOrUnknown(data['motivo']!, _motivoMeta));
+    }
     return context;
   }
 
@@ -2291,16 +2326,20 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
   final int id;
   final int estado;
   final int idProduto;
-  final int idVenda;
+  final int? idVenda;
+  final int? idDivida;
   final int quantidade;
   final DateTime data;
+  final String? motivo;
   TabelaSaidaData(
       {required this.id,
       required this.estado,
       required this.idProduto,
-      required this.idVenda,
+      this.idVenda,
+      this.idDivida,
       required this.quantidade,
-      required this.data});
+      required this.data,
+      this.motivo});
   factory TabelaSaidaData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -2312,11 +2351,15 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
       idProduto: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id_produto'])!,
       idVenda: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id_venda'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_venda']),
+      idDivida: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_divida']),
       quantidade: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}quantidade'])!,
       data: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
+      motivo: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}motivo']),
     );
   }
   @override
@@ -2325,9 +2368,17 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
     map['id'] = Variable<int>(id);
     map['estado'] = Variable<int>(estado);
     map['id_produto'] = Variable<int>(idProduto);
-    map['id_venda'] = Variable<int>(idVenda);
+    if (!nullToAbsent || idVenda != null) {
+      map['id_venda'] = Variable<int?>(idVenda);
+    }
+    if (!nullToAbsent || idDivida != null) {
+      map['id_divida'] = Variable<int?>(idDivida);
+    }
     map['quantidade'] = Variable<int>(quantidade);
     map['data'] = Variable<DateTime>(data);
+    if (!nullToAbsent || motivo != null) {
+      map['motivo'] = Variable<String?>(motivo);
+    }
     return map;
   }
 
@@ -2336,9 +2387,16 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
       id: Value(id),
       estado: Value(estado),
       idProduto: Value(idProduto),
-      idVenda: Value(idVenda),
+      idVenda: idVenda == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idVenda),
+      idDivida: idDivida == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idDivida),
       quantidade: Value(quantidade),
       data: Value(data),
+      motivo:
+          motivo == null && nullToAbsent ? const Value.absent() : Value(motivo),
     );
   }
 
@@ -2349,9 +2407,11 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
       id: serializer.fromJson<int>(json['id']),
       estado: serializer.fromJson<int>(json['estado']),
       idProduto: serializer.fromJson<int>(json['idProduto']),
-      idVenda: serializer.fromJson<int>(json['idVenda']),
+      idVenda: serializer.fromJson<int?>(json['idVenda']),
+      idDivida: serializer.fromJson<int?>(json['idDivida']),
       quantidade: serializer.fromJson<int>(json['quantidade']),
       data: serializer.fromJson<DateTime>(json['data']),
+      motivo: serializer.fromJson<String?>(json['motivo']),
     );
   }
   @override
@@ -2361,9 +2421,11 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
       'id': serializer.toJson<int>(id),
       'estado': serializer.toJson<int>(estado),
       'idProduto': serializer.toJson<int>(idProduto),
-      'idVenda': serializer.toJson<int>(idVenda),
+      'idVenda': serializer.toJson<int?>(idVenda),
+      'idDivida': serializer.toJson<int?>(idDivida),
       'quantidade': serializer.toJson<int>(quantidade),
       'data': serializer.toJson<DateTime>(data),
+      'motivo': serializer.toJson<String?>(motivo),
     };
   }
 
@@ -2372,15 +2434,19 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
           int? estado,
           int? idProduto,
           int? idVenda,
+          int? idDivida,
           int? quantidade,
-          DateTime? data}) =>
+          DateTime? data,
+          String? motivo}) =>
       TabelaSaidaData(
         id: id ?? this.id,
         estado: estado ?? this.estado,
         idProduto: idProduto ?? this.idProduto,
         idVenda: idVenda ?? this.idVenda,
+        idDivida: idDivida ?? this.idDivida,
         quantidade: quantidade ?? this.quantidade,
         data: data ?? this.data,
+        motivo: motivo ?? this.motivo,
       );
   @override
   String toString() {
@@ -2389,15 +2455,17 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
           ..write('estado: $estado, ')
           ..write('idProduto: $idProduto, ')
           ..write('idVenda: $idVenda, ')
+          ..write('idDivida: $idDivida, ')
           ..write('quantidade: $quantidade, ')
-          ..write('data: $data')
+          ..write('data: $data, ')
+          ..write('motivo: $motivo')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, estado, idProduto, idVenda, quantidade, data);
+  int get hashCode => Object.hash(
+      id, estado, idProduto, idVenda, idDivida, quantidade, data, motivo);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2406,52 +2474,63 @@ class TabelaSaidaData extends DataClass implements Insertable<TabelaSaidaData> {
           other.estado == this.estado &&
           other.idProduto == this.idProduto &&
           other.idVenda == this.idVenda &&
+          other.idDivida == this.idDivida &&
           other.quantidade == this.quantidade &&
-          other.data == this.data);
+          other.data == this.data &&
+          other.motivo == this.motivo);
 }
 
 class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
   final Value<int> id;
   final Value<int> estado;
   final Value<int> idProduto;
-  final Value<int> idVenda;
+  final Value<int?> idVenda;
+  final Value<int?> idDivida;
   final Value<int> quantidade;
   final Value<DateTime> data;
+  final Value<String?> motivo;
   const TabelaSaidaCompanion({
     this.id = const Value.absent(),
     this.estado = const Value.absent(),
     this.idProduto = const Value.absent(),
     this.idVenda = const Value.absent(),
+    this.idDivida = const Value.absent(),
     this.quantidade = const Value.absent(),
     this.data = const Value.absent(),
+    this.motivo = const Value.absent(),
   });
   TabelaSaidaCompanion.insert({
     this.id = const Value.absent(),
     required int estado,
     required int idProduto,
-    required int idVenda,
+    this.idVenda = const Value.absent(),
+    this.idDivida = const Value.absent(),
     required int quantidade,
     required DateTime data,
+    this.motivo = const Value.absent(),
   })  : estado = Value(estado),
         idProduto = Value(idProduto),
-        idVenda = Value(idVenda),
         quantidade = Value(quantidade),
         data = Value(data);
   static Insertable<TabelaSaidaData> custom({
     Expression<int>? id,
     Expression<int>? estado,
     Expression<int>? idProduto,
-    Expression<int>? idVenda,
+    Expression<int?>? idVenda,
+    Expression<int?>? idDivida,
     Expression<int>? quantidade,
     Expression<DateTime>? data,
+    Expression<String?>? motivo,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (estado != null) 'estado': estado,
       if (idProduto != null) 'id_produto': idProduto,
       if (idVenda != null) 'id_venda': idVenda,
+      if (idDivida != null) 'id_divida': idDivida,
       if (quantidade != null) 'quantidade': quantidade,
       if (data != null) 'data': data,
+      if (motivo != null) 'motivo': motivo,
     });
   }
 
@@ -2459,16 +2538,20 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
       {Value<int>? id,
       Value<int>? estado,
       Value<int>? idProduto,
-      Value<int>? idVenda,
+      Value<int?>? idVenda,
+      Value<int?>? idDivida,
       Value<int>? quantidade,
-      Value<DateTime>? data}) {
+      Value<DateTime>? data,
+      Value<String?>? motivo}) {
     return TabelaSaidaCompanion(
       id: id ?? this.id,
       estado: estado ?? this.estado,
       idProduto: idProduto ?? this.idProduto,
       idVenda: idVenda ?? this.idVenda,
+      idDivida: idDivida ?? this.idDivida,
       quantidade: quantidade ?? this.quantidade,
       data: data ?? this.data,
+      motivo: motivo ?? this.motivo,
     );
   }
 
@@ -2485,13 +2568,19 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
       map['id_produto'] = Variable<int>(idProduto.value);
     }
     if (idVenda.present) {
-      map['id_venda'] = Variable<int>(idVenda.value);
+      map['id_venda'] = Variable<int?>(idVenda.value);
+    }
+    if (idDivida.present) {
+      map['id_divida'] = Variable<int?>(idDivida.value);
     }
     if (quantidade.present) {
       map['quantidade'] = Variable<int>(quantidade.value);
     }
     if (data.present) {
       map['data'] = Variable<DateTime>(data.value);
+    }
+    if (motivo.present) {
+      map['motivo'] = Variable<String?>(motivo.value);
     }
     return map;
   }
@@ -2503,8 +2592,10 @@ class TabelaSaidaCompanion extends UpdateCompanion<TabelaSaidaData> {
           ..write('estado: $estado, ')
           ..write('idProduto: $idProduto, ')
           ..write('idVenda: $idVenda, ')
+          ..write('idDivida: $idDivida, ')
           ..write('quantidade: $quantidade, ')
-          ..write('data: $data')
+          ..write('data: $data, ')
+          ..write('motivo: $motivo')
           ..write(')'))
         .toString();
   }
@@ -2536,8 +2627,13 @@ class $TabelaSaidaTable extends TabelaSaida
   final VerificationMeta _idVendaMeta = const VerificationMeta('idVenda');
   @override
   late final GeneratedColumn<int?> idVenda = GeneratedColumn<int?>(
-      'id_venda', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      'id_venda', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _idDividaMeta = const VerificationMeta('idDivida');
+  @override
+  late final GeneratedColumn<int?> idDivida = GeneratedColumn<int?>(
+      'id_divida', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _quantidadeMeta = const VerificationMeta('quantidade');
   @override
   late final GeneratedColumn<int?> quantidade = GeneratedColumn<int?>(
@@ -2548,9 +2644,14 @@ class $TabelaSaidaTable extends TabelaSaida
   late final GeneratedColumn<DateTime?> data = GeneratedColumn<DateTime?>(
       'data', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _motivoMeta = const VerificationMeta('motivo');
+  @override
+  late final GeneratedColumn<String?> motivo = GeneratedColumn<String?>(
+      'motivo', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, estado, idProduto, idVenda, quantidade, data];
+      [id, estado, idProduto, idVenda, idDivida, quantidade, data, motivo];
   @override
   String get aliasedName => _alias ?? 'tabela_saida';
   @override
@@ -2578,8 +2679,10 @@ class $TabelaSaidaTable extends TabelaSaida
     if (data.containsKey('id_venda')) {
       context.handle(_idVendaMeta,
           idVenda.isAcceptableOrUnknown(data['id_venda']!, _idVendaMeta));
-    } else if (isInserting) {
-      context.missing(_idVendaMeta);
+    }
+    if (data.containsKey('id_divida')) {
+      context.handle(_idDividaMeta,
+          idDivida.isAcceptableOrUnknown(data['id_divida']!, _idDividaMeta));
     }
     if (data.containsKey('quantidade')) {
       context.handle(
@@ -2594,6 +2697,10 @@ class $TabelaSaidaTable extends TabelaSaida
           _dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
     } else if (isInserting) {
       context.missing(_dataMeta);
+    }
+    if (data.containsKey('motivo')) {
+      context.handle(_motivoMeta,
+          motivo.isAcceptableOrUnknown(data['motivo']!, _motivoMeta));
     }
     return context;
   }
@@ -4300,6 +4407,9 @@ mixin _$RececcaoDaoMixin on DatabaseAccessor<BancoDados> {
 mixin _$EntradaDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaEntradaTable get tabelaEntrada => attachedDatabase.tabelaEntrada;
   $TabelaProdutoTable get tabelaProduto => attachedDatabase.tabelaProduto;
+  $TabelaRececcaoTable get tabelaRececcao => attachedDatabase.tabelaRececcao;
+  $TabelaFuncionarioTable get tabelaFuncionario =>
+      attachedDatabase.tabelaFuncionario;
 }
 mixin _$ClienteDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaClienteTable get tabelaCliente => attachedDatabase.tabelaCliente;

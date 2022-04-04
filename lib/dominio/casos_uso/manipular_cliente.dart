@@ -14,7 +14,11 @@ class ManipularCliente implements ManipularClienteI {
 
   @override
   Future<int> registarCliente(Cliente dado) async {
-    return await _provedorClienteI.adicionarCliente(dado);
+    var teste = await existeCliente(dado.nome!, dado.numero!);
+    if(teste == -1){
+      teste = await _provedorClienteI.adicionarCliente(dado);
+    }
+    return teste;
   }
 
   @override
@@ -30,5 +34,10 @@ class ManipularCliente implements ManipularClienteI {
   @override
   Future<List<Cliente>> todos() async {
     return await _provedorClienteI.todos();
+  }
+
+  @override
+  Future<int> existeCliente(String nome, String numero) async {
+    return (await _provedorClienteI.existeCliente(nome, numero))!;
   }
 }
