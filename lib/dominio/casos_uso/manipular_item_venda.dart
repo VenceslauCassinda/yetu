@@ -46,9 +46,9 @@ class ManipularItemVenda implements ManipularItemVendaI {
   double aplicarDescontoVenda(double totalApagar, int porcentagem) {
     if (porcentagem >= 0 && porcentagem <= 100) {
       if (porcentagem == 0) {
-        return 0;
+        return totalApagar;
       }
-      totalApagar = totalApagar - ((porcentagem / 100) * 100);
+      totalApagar = totalApagar - ((porcentagem / 100) * totalApagar);
     } else {
       throw ErroPercentagemInvalida("PERCENTAGEM INCORRECTA!");
     }
@@ -64,5 +64,14 @@ class ManipularItemVenda implements ManipularItemVendaI {
       itens[i].total = totalDescontado;
     }
     return itens;
+  }
+
+  @override
+  Future<double> calcularTotalApagar(List<ItemVenda> itens) async {
+    double soma = 0.0;
+    for (var i = 0; i < itens.length; i++) {
+      soma += itens[i].total!;
+    }
+    return soma;
   }
 }

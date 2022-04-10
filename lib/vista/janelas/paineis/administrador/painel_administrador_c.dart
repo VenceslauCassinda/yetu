@@ -21,6 +21,7 @@ class PainelAdministradorC extends GetxController {
   RxList<Usuario> usuarios = RxList();
   var dadoPesquisado = "".obs;
   var usuario = Rx<Usuario?>(null);
+  int indiceTabActual = 0;
 
   late ManipularFuncionarioI _manipularFuncionarioI;
   late ManipularUsuarioI _manipularUsuarioI;
@@ -67,6 +68,7 @@ class PainelAdministradorC extends GetxController {
   }
 
   Future<void> navegar(int tab) async {
+    indiceTabActual = tab;
     if (tab == 0) {
       await pegarUsuarios();
     }
@@ -92,6 +94,24 @@ class PainelAdministradorC extends GetxController {
 
   void mudar(Usuario? dado) {
     usuario.value = dado;
+  }
+
+  Future<void> mostrarDialogoEliminar(Usuario usuario) async {
+    mostrarDialogoDeLayou(LayoutConfirmacaoAccao(
+        pergunta: "Deseja mesmo eliminar?",
+        accaoAoConfirmar: () async {
+          await removerUsuario(usuario);
+        },
+        accaoAoCancelar: () {
+          voltar();
+        },
+        corButaoSim: primaryColor));
+  }
+
+  Future<void> removerUsuario(Usuario usuario) async {
+    await _manipularUsuarioI.removerUsuarioDefinitivamente(usuario);
+    usuarios.removeWhere((element) => element.id == usuario.id);
+    voltar();
   }
 
   Future<void> actualizarUsuario(String nomeUsuario, String palavraPasse,

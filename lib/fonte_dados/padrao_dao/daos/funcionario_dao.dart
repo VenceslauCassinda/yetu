@@ -6,11 +6,10 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
   FuncionarioDao(BancoDados bancoDados) : super(bancoDados);
   Future<List<Funcionario>> todos() async {
     var consulta = select(tabelaFuncionario).join([
-      leftOuterJoin(
-          tabelaUsuario, tabelaFuncionario.id.equalsExp(tabelaUsuario.id))
+      leftOuterJoin(tabelaUsuario,
+          tabelaFuncionario.idUsuario.equalsExp(tabelaUsuario.id))
     ])
-      ..where(tabelaFuncionario.estado
-              .isBiggerOrEqualValue(Estado.DESACTIVADO) &
+      ..where(tabelaUsuario.estado.isBiggerOrEqualValue(Estado.DESACTIVADO) &
           tabelaUsuario.nivelAcesso.isSmallerThanValue(NivelAcesso.GERENTE));
 
     var res = (await consulta.get()).map((linhas) {
@@ -20,6 +19,7 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
           SerializadorFuncionario().fromTabela(tabela1, usuario: tabela2);
       funcionario.idUsuario = tabela2.id;
       funcionario.nomeUsuario = tabela2.nomeUsuario;
+      funcionario.estado = tabela2.estado;
       return funcionario;
     }).toList();
 
@@ -84,8 +84,8 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
 
   Future<Funcionario> pegarFuncionarioDoUsuarioDeId(int id) async {
     var res = await (select(tabelaUsuario).join([
-      leftOuterJoin(
-          tabelaFuncionario, tabelaUsuario.id.equalsExp(tabelaFuncionario.id))
+      leftOuterJoin(tabelaFuncionario,
+          tabelaUsuario.id.equalsExp(tabelaFuncionario.idUsuario))
     ])
           ..where(tabelaUsuario.id.equals(id)))
         .getSingle();

@@ -14,6 +14,14 @@ void main() {
   TestConfig.prepareInitDataBase();
   Get.put(BancoDados());
   ManipularUsuario manipularUsuario = ManipularUsuario(ProvedorUsuario());
+
+  test("LISTAR USUARIOS", () async {
+    var lista = await manipularUsuario.todos();
+    for (var cada in lista) {
+      print(cada.nomeUsuario.toString());
+      print(cada.nivelAcesso.toString());
+    }
+  });
   test("REGISTAR USUARIO", () async {
     Usuario usuario = Usuario(
         nomeUsuario: "admin",
@@ -33,31 +41,32 @@ void main() {
   test("FAZER LOGIN", () async {
     // var lista = (await manipularUsuario.pegarLista());
     // if (lista.isNotEmpty) {
-      // var usuario = lista.last;
+    // var usuario = lista.last;
 
-      var usuario = Usuario.registo("Loja", "11111111");
+    var usuario = Usuario.registo("Loja", "11111111");
 
-      try {
-        var usuarioLogado =await manipularUsuario.fazerLogin(usuario.nomeUsuario!, usuario.palavraPasse!);
-        expect(usuarioLogado != null, true);
-        expect(usuarioLogado!.logado, true);
-        expect(usuarioLogado.nomeUsuario, usuario.nomeUsuario);
-      } catch (e) {
-        expect(true,e is ErroUsuarioJaLogado || e is ErroUsuarioNaoExiste);
-      }
+    try {
+      var usuarioLogado = await manipularUsuario.fazerLogin(
+          usuario.nomeUsuario!, usuario.palavraPasse!);
+      expect(usuarioLogado != null, true);
+      expect(usuarioLogado!.logado, true);
+      expect(usuarioLogado.nomeUsuario, usuario.nomeUsuario);
+    } catch (e) {
+      expect(true, e is ErroUsuarioJaLogado || e is ErroUsuarioNaoExiste);
+    }
     // }
   });
 
   test("TERMINAR SESSAO", () async {
     // var lista = (await manipularUsuario.pegarLista());
     // if (lista.isNotEmpty) {
-      // var usuario = lista[lista.length - 1];
-      var usuario = Usuario.registo("mario", "11111111");
-      try {
-        await manipularUsuario.terminarSessao(usuario);
-      } catch (e) {
-        expect(e, isA<ErroUsuarioNaoLogado>());
-      }
+    // var usuario = lista[lista.length - 1];
+    var usuario = Usuario.registo("admin", "11111111");
+    try {
+      await manipularUsuario.terminarSessao(usuario);
+    } catch (e) {
+      expect(e, isA<ErroUsuarioNaoLogado>());
+    }
     // }
   });
 

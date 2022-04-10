@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-
 import '../../fonte_dados/padrao_dao/base_dados.dart';
 import 'cliente.dart';
 import 'funcionario.dart';

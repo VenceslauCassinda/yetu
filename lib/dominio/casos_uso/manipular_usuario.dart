@@ -74,4 +74,9 @@ class ManipularUsuario implements ManipularUsuarioI {
         .map((e) => SerializadorUsuario().fromTabela(e))
         .toList();
   }
+
+  @override
+  Future<void> removerUsuarioDefinitivamente(Usuario usuario) async {
+    await _provedorUsuario.removerUsuario(usuario);
+  }
 }

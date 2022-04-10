@@ -31,6 +31,7 @@ import 'package:yetu_gestor/fonte_dados/provedores/provedor_saida.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_stock.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_venda.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedores_usuario.dart';
+import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
 
 import '../configuracao/test_config.dart';
 
@@ -116,5 +117,9 @@ void main() {
       expect(e, isA<ErroStockInsuficiente>());
       print((e as Erro).sms);
     }
+  });
+
+  test("MOSTRAR PREÇO", () {
+    print(formatar(200));
   });
 }

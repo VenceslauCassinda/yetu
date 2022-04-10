@@ -7,6 +7,7 @@ abstract class ManipularUsuarioI {
   Future<int> registarUsuario(Usuario usuario);
   Future<bool> existeNomeUsuario(String nomeUsuario);
   Future<void> removerUsuario(Usuario usuario);
+  Future<void> removerUsuarioDefinitivamente(Usuario usuario);
   Future<void> activarUsuario(Usuario usuario);
   Future<void> recuperarUsuario(Usuario usuario);
   Future<void> desactivarUsuario(Usuario usuario);

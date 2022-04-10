@@ -11,7 +11,7 @@ import '../../../../../../componentes/item_produto.dart';
 
 class LayoutProdutos extends StatelessWidget {
   final List<Produto> lista;
-  Function? accaoAoClicarCadaProduto;
+  Function(Produto produto)? accaoAoClicarCadaProduto;
   ProdutosC? c;
   LayoutProdutos({required this.lista, this.c, this.accaoAoClicarCadaProduto});
   @override
@@ -27,7 +27,7 @@ class LayoutProdutos extends StatelessWidget {
               .map((produto) => InkWell(
                     onTap: () {
                       if (accaoAoClicarCadaProduto != null) {
-                        accaoAoClicarCadaProduto!();
+                        accaoAoClicarCadaProduto!(produto);
                       }
                     },
                     child: ItemProduto(

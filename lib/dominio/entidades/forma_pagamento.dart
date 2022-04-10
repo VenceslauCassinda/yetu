@@ -9,9 +9,9 @@ class FormaPagamento{
   String? descricao;
   FormaPagamento(
       {this.id,
-      required this.estado,
-      required this.tipo,
-      required this.descricao});
+      this.estado,
+      this.tipo,
+      this.descricao});
   factory FormaPagamento.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';

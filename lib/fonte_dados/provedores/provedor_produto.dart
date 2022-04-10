@@ -28,18 +28,7 @@ class ProvedorProduto implements ProvedorProdutoI {
 
   @override
   Future<List<Produto>> pegarLista() async {
-    return (await _dao.todos())
-        .map((e) => Produto(
-              preco: e.preco,
-              stock: e.stock,
-              listaPreco: e.listaPreco,
-              id: e.id,
-              nome: e.nome,
-              estado: e.estado,
-              precoCompra: e.precoCompra,
-              recebivel: e.recebivel,
-            ))
-        .toList();
+    return await _dao.todos();
   }
 
   @override

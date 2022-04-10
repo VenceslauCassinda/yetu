@@ -59,7 +59,10 @@ class PainelProdutos extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: LayoutProdutos(lista: _c.lista, c: _c),
+          child: Obx(() {
+            _c.lista.isEmpty;
+            return LayoutProdutos(lista: _c.lista, c: _c);
+          }),
         ),
         Container(
           // width: MediaQuery.of(context).size.width,

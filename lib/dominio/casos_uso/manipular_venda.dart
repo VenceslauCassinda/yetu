@@ -24,7 +24,7 @@ class ManipularVenda implements ManipularVendaI {
   final ManipularClienteI _manipularClienteI;
   final ManipularStockI _manipularStockI;
 
-  7ManipularVenda(
+  ManipularVenda(
       this._provedorVendaI,
       this._manipularSaidaI,
       this._manipularPagamentoI,
@@ -83,7 +83,7 @@ class ManipularVenda implements ManipularVendaI {
   }
 
   @override
-  Future<void> vender(
+  Future<int> vender(
       List<ItemVenda> itensVenda,
       List<Pagamento> pagamentos,
       double total,
@@ -115,6 +115,7 @@ class ManipularVenda implements ManipularVendaI {
     } else {
       throw ErroVendaInvalida("VENDA INVÁLIDA!");
     }
+    return idVenda;
   }
 
   @override

@@ -84,7 +84,12 @@ class ManipularProduto implements ManipularProdutoI {
 
   @override
   Future<bool> atualizarPrecoProduto(Produto dado, double preco) async {
-    dado.preco!.preco = preco;
+    if (dado.preco != null) {
+      dado.preco!.preco = preco;
+    } else {
+      await adicionarPrecoProduto(dado, preco);
+      return true;
+    }
     return await _manipularPrecoI.atualizarPrecoProduto(dado.preco!);
   }
 
@@ -101,7 +106,7 @@ class ManipularProduto implements ManipularProdutoI {
   }
 
   @override
-  Future<void> desactivarrProduto(Produto dado)  async {
+  Future<void> desactivarrProduto(Produto dado) async {
     dado.estado = Estado.DESACTIVADO;
     await _provedorProdutoI.actualizarProduto(dado);
   }

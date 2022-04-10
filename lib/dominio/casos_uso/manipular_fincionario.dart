@@ -6,6 +6,7 @@ import 'package:yetu_gestor/dominio/entidades/usuario.dart';
 import '../../contratos/casos_uso/manipular_funcionario_i.dart';
 import '../../contratos/casos_uso/manipular_usuario_i.dart';
 import '../../contratos/provedores/provedor_funcionario_i.dart';
+import '../../fonte_dados/erros.dart';
 
 class ManipularFuncionario implements ManipularFuncionarioI {
   final ManipularUsuarioI _manipularUsuarioI;
@@ -32,9 +33,15 @@ class ManipularFuncionario implements ManipularFuncionarioI {
       nomeUsuario = "${nomeUsuario.toLowerCase()}$acrescimoId";
     }
     dado.nomeUsuario = nomeUsuario;
-    await _provedorFuncionarioI.adicionarFuncionario(dado);
+    if ((await _provedorFuncionarioI
+            .existeFuncionarioComNomeUsuario(dado.nomeCompelto!)) ==
+        true) {
+      throw ErroFuncionarioJaExiste("FUNCIONARIO JA EXISTENTE!");
+    }
     var novoUsuario = Usuario.registo(nomeUsuario, dado.palavraPasse);
-    await _manipularUsuarioI.registarUsuario(novoUsuario);
+    var id = await _manipularUsuarioI.registarUsuario(novoUsuario);
+    dado.idUsuario = id;
+    await _provedorFuncionarioI.adicionarFuncionario(dado);
     novoUsuario.palavraPasse = "";
     return novoUsuario;
   }

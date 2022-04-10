@@ -24,7 +24,8 @@ class ProvedorUsuario implements ProvedorUsuarioI {
     if (await existeUsuarioComNomeUsuario(usuario.nomeUsuario!)) {
       throw ErroUsuarioJaExiste("NOME DE USUARIO JA EXISTENTE!");
     }
-    return await _usuarioDao.adicionar(_serializadorUsuario.toCompanion(usuario));
+    return await _usuarioDao
+        .adicionar(_serializadorUsuario.toCompanion(usuario));
   }
 
   @override
@@ -36,7 +37,7 @@ class ProvedorUsuario implements ProvedorUsuarioI {
 
   @override
   Future<void> removerUsuario(Usuario usuario) async {
-    await _usuarioDao.remover(_serializadorUsuario.toTabela(usuario));
+    await _usuarioDao.remover(usuario.id!);
   }
 
   @override
@@ -60,9 +61,7 @@ class ProvedorUsuario implements ProvedorUsuarioI {
 
   @override
   Future<void> terminarSessao(Usuario usuario) async {
-    if ((await _usuarioDao.usuarioLogado(
-            usuario.nomeUsuario!)) ==
-        true) {
+    if ((await _usuarioDao.usuarioLogado(usuario.nomeUsuario!)) == true) {
       await _usuarioDao.terminarSessao(
           usuario.nomeUsuario!, usuario.palavraPasse!);
       return;

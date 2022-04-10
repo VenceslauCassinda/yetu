@@ -33,12 +33,11 @@ class VendasC extends GetxController {
   RxList<Venda> lista = RxList<Venda>();
   late ManipularProdutoI _manipularProdutoI;
   late ManipularStockI _manipularStockI;
-  late ManipularPagamentoI _manipularPagamentoI;
+
   VendasC() {
     _manipularStockI = ManipularStock(ProvedorStock());
     _manipularProdutoI = ManipularProduto(
         ProvedorProduto(), _manipularStockI, ManipularPreco(ProvedorPreco()));
-    _manipularPagamentoI = ManipularPagamento(ProvedorPagamento());
   }
 
   @override
@@ -54,28 +53,7 @@ class VendasC extends GetxController {
   void navegar(int indice) {}
 
   void mostrarDialogoNovaVenda(BuildContext context) {
-    mostrarDialogoDeLayou(LayoutMesaVenda(this));
-  }
-
-  void mostrarFormasPagamento(BuildContext context,
-      {required Function(String valor, String? opcaoRetiradaSelecionada)
-          accaoAoFinalizar}) {
-    mostrarDialogoDeLayou(
-        FutureBuilder<List<FormaPagamento>>(
-            future: _manipularPagamentoI.pegarListaFormasPagamento(),
-            builder: (context, snapshot) {
-              if (snapshot.data == null) {
-                return CircularProgressIndicator();
-              }
-              var lista = snapshot.data!.map((e) => e.descricao!).toList();
-              return LayoutFormaPagamento(
-                  accaoAoFinalizar: (valor, opcao) {
-                    accaoAoFinalizar(valor, opcao);
-                  },
-                  titulo: "Selecione a Forma de Pagamento",
-                  listaItens: lista);
-            }),
-        naoFechar: true);
+    mostrarDialogoDeLayou(LayoutMesaVenda());
   }
 
   Future<List<Produto>> pegarLista() async {

@@ -12,7 +12,7 @@ abstract class ManipularVendaI {
       Funcionario funcionario,
       Cliente cliente,
       DateTime dataLevantamentoCompra);
-  Future<void> vender(
+  Future<int> vender(
       List<ItemVenda> itensVenda,
       List<Pagamento> pagamentos,
       double total,

@@ -6,6 +6,7 @@ import '../../fonte_dados/padrao_dao/base_dados.dart';
 class Pagamento {
   FormaPagamento? formaPagamento;
   int? id;
+  String? idParaVista;
   int? idFormaPagamento;
   int? estado;
   int? idVenda;
@@ -14,7 +15,8 @@ class Pagamento {
   Pagamento(
       {this.id,
       this.formaPagamento,
-      required this.idFormaPagamento,
+      this.idParaVista,
+      this.idFormaPagamento,
       required this.estado,
       this.idVenda,
       required this.valor});
@@ -96,7 +98,9 @@ class Pagamento {
           ..write('idFormaPagamento: $idFormaPagamento, ')
           ..write('estado: $estado, ')
           ..write('idVenda: $idVenda, ')
-          ..write('valor: $valor, ', )
+          ..write(
+            'valor: $valor, ',
+          )
           ..write('FORMA PAGAMENTO: {${formaPagamento?.toString()}}, ')
           ..write(')'))
         .toString();

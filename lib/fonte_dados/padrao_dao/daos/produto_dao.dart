@@ -7,12 +7,22 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
   Future<List<Produto>> todos() async {
     var res = await ((select(tabelaProduto)).join([
       leftOuterJoin(
-          tabelaStock, tabelaProduto.id.equalsExp(tabelaStock.idProduto))
+          tabelaStock, tabelaProduto.id.equalsExp(tabelaStock.idProduto)),
+      leftOuterJoin(
+          tabelaPreco, tabelaProduto.id.equalsExp(tabelaPreco.idProduto))
     ])).get();
     var lista = res.map((linha) {
       var stock = linha.readTable(tabelaStock);
       var produto = linha.readTable(tabelaProduto);
+      var preco = linha.readTableOrNull(tabelaPreco);
       return Produto(
+        idPreco: preco?.id,
+        preco: preco == null
+            ? null
+            : Preco(
+                estado: preco.estado,
+                idProduto: preco.idProduto,
+                preco: preco.preco),
         stock: Stock(
             id: stock.id,
             estado: stock.estado,

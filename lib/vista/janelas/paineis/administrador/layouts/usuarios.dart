@@ -7,6 +7,7 @@ import '../../../../../dominio/entidades/estado.dart';
 import '../../../../../dominio/entidades/nivel_acesso.dart';
 import '../../../../../dominio/entidades/usuario.dart';
 import '../../../../../recursos/constantes.dart';
+import '../../../../componentes/item_usuario.dart';
 import '../painel_administrador_c.dart';
 
 class LayoutUsuarios extends StatelessWidget {
@@ -34,6 +35,11 @@ class LayoutUsuarios extends StatelessWidget {
                       aoClicar: () {
                         _c.mudar(element);
                       },
+                      aoEliminar: _c.indiceTabActual == 3
+                          ? () {
+                              _c.mostrarDialogoEliminar(element);
+                            }
+                          : null,
                     ))
                 .toList(),
           ),
@@ -87,39 +93,6 @@ class LayoutPesquisa extends StatelessWidget {
             ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class ItemUsuario extends StatelessWidget {
-  final Usuario usuario;
-  final Function aoClicar;
-  const ItemUsuario({
-    Key? key,
-    required this.usuario,
-    required this.aoClicar,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        onTap: () {
-          aoClicar();
-        },
-        leading: Container(
-            width: 50,
-            child: ImagemNoCirculo(
-                Icon(
-                  Icons.person,
-                  color: primaryColor,
-                ),
-                20)),
-        title: Text("${usuario.nomeUsuario}"),
-        subtitle: Text("Estado: ${Estado.paraTexto(usuario.estado!)}"),
-        trailing:
-            Text("Usuário: ${NivelAcesso.paraTexto(usuario.nivelAcesso!)}"),
       ),
     );
   }

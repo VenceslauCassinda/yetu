@@ -10,6 +10,7 @@ class Produto {
   List<double>? listaPreco = [];
   Stock? stock;
   int? id;
+  int? idPreco;
   int? estado;
   String? nome;
   double? precoCompra;
@@ -17,6 +18,7 @@ class Produto {
   Produto(
       {this.id,
       this.estado,
+      this.idPreco,
       this.preco,
       this.stock,
       this.listaPreco,

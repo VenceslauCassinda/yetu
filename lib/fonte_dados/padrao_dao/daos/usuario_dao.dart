@@ -11,7 +11,7 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
 
     await ((select(tabelaUsuario))
           ..where((tbl) {
-            return tbl.estado.isBiggerOrEqualValue(0);
+            return tbl.estado.isBiggerOrEqualValue(Estado.DESACTIVADO);
           })
           ..orderBy([
             (tbl) => OrderingTerm(
@@ -28,7 +28,6 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
                 expression: tbl.nomeUsuario, mode: OrderingMode.asc)
           ]))
         .get();
-
     return consulta;
   }
 
@@ -37,7 +36,7 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
           ..orderBy(
               [(tbl) => OrderingTerm(expression: tbl.nomeUsuario, mode: OrderingMode.asc)]))
           ..where((tbl) {
-            return tbl.estado.equals(-1) | tbl.estado.isNull();
+            return tbl.estado.equals(Estado.ELIMINADO) | tbl.estado.isNull();
           }))
         .get();
   }
@@ -111,8 +110,8 @@ class UsuarioDao extends DatabaseAccessor<BancoDados> with _$UsuarioDaoMixin {
         .isNotEmpty;
   }
 
-  Future<void> remover(TabelaUsuarioData usuarioData) async {
-    await (delete(tabelaUsuario)..where((tbl) => tbl.id.equals(usuarioData.id)))
+  Future<void> remover(int idUsuario) async {
+    await (delete(tabelaUsuario)..where((tbl) => tbl.id.equals(idUsuario)))
         .go();
   }
 
