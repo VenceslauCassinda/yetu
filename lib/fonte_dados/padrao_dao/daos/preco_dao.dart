@@ -31,4 +31,12 @@ class PrecoDao extends DatabaseAccessor<BancoDados> with _$PrecoDaoMixin {
         .getSingleOrNull();
     return res;
   }
+
+  Future<Preco> pegarPrecoDeIdDeProduto(int id) async {
+    var res = await (select(tabelaPreco)
+          ..where((tbl) => tbl.idProduto.equals(id)))
+        .getSingle();
+    return Preco(
+        estado: res.estado, idProduto: res.idProduto, preco: res.preco);
+  }
 }

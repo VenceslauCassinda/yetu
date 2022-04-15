@@ -52,7 +52,12 @@ void main() {
       ManipularSaida(ProvedorSaida(), ManipularStock(ProvedorStock())),
       ManipularPagamento(ProvedorPagamento()),
       manipularCliente,
-      ManipularStock(ProvedorStock()));
+      ManipularStock(ProvedorStock()),
+      ManipularItemVenda(
+          ProvedorItemVenda(),
+          ManipularProduto(ProvedorProduto(), ManipularStock(ProvedorStock()),
+              ManipularPreco(ProvedorPreco())),
+          ManipularStock(ProvedorStock())));
 
   ManipularItemVendaI manipularItemVendaI = ManipularItemVenda(
       ProvedorItemVenda(), manipularProdutoI, ManipularStock(ProvedorStock()));
@@ -61,10 +66,10 @@ void main() {
       ManipularPagamento(ProvedorPagamento());
 
   test("LISTAR VENDAS", () async {
-    var vendas = await ProvedorVenda().pegarLista();
-    for (var cada in vendas) {
-      print(cada.toString());
-    }
+    // var vendas = await ProvedorVenda().pegarLista();
+    // for (var cada in vendas) {
+    //   print(cada.toString());
+    // }
   });
 
   test("VENDER", () async {
@@ -112,7 +117,7 @@ void main() {
           manipularVendaI.calcularTotalVenda(listaItens),
           funcionarios.first,
           Cliente(estado: Estado.ATIVADO, nome: "Vences", numero: "926886839"),
-          DateTime(2022, 04, 01));
+          DateTime(2022, 04, 01), 10);
     } catch (e) {
       expect(e, isA<ErroStockInsuficiente>());
       print((e as Erro).sms);

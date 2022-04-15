@@ -4,6 +4,7 @@ import 'package:componentes_visuais/dialogo/dialogos.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_usuario.dart';
+import 'package:yetu_gestor/dominio/entidades/nivel_acesso.dart';
 import 'package:yetu_gestor/fonte_dados/erros.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedores_usuario.dart';
 import 'package:yetu_gestor/vista/componentes/sobre_app.dart';

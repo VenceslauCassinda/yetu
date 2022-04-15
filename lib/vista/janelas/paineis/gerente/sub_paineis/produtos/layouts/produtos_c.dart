@@ -56,11 +56,12 @@ class ProdutosC extends GetxController {
   }
   @override
   void onInit() async {
-    await pegarActivos();
+    // await pegarActivos();
     super.onInit();
   }
 
   Future<void> pegarTodos() async {
+    lista.clear();
     var res = await _manipularProdutoI.pegarLista();
     for (var cada in res) {
       lista.add(cada);
@@ -68,6 +69,7 @@ class ProdutosC extends GetxController {
   }
 
   Future<void> pegarActivos() async {
+    lista.clear();
     var res = await _manipularProdutoI.pegarLista();
     for (var cada in res) {
       if (cada.estado == Estado.ATIVADO) {
@@ -77,6 +79,7 @@ class ProdutosC extends GetxController {
   }
 
   Future<void> pegarDesactivos() async {
+    lista.clear();
     var res = await _manipularProdutoI.pegarLista();
     for (var cada in res) {
       if (cada.estado == Estado.DESACTIVADO) {
@@ -86,6 +89,7 @@ class ProdutosC extends GetxController {
   }
 
   Future<void> pegarElimindados() async {
+    lista.clear();
     var res = await _manipularProdutoI.pegarLista();
     for (var cada in res) {
       if (cada.estado == Estado.ELIMINADO) {
@@ -96,7 +100,6 @@ class ProdutosC extends GetxController {
 
   Future<void> navegar(int tab) async {
     indiceTabActual.value = tab;
-    lista.clear();
     if (tab == 0) {
       await pegarTodos();
     }

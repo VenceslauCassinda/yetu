@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:get/get.dart' as gett;
 import 'package:yetu_gestor/dominio/entidades/cliente.dart';
 import 'package:yetu_gestor/dominio/entidades/entrada.dart';
 import 'package:yetu_gestor/dominio/entidades/forma_pagamento.dart';
@@ -17,21 +18,22 @@ import '../../dominio/entidades/estado.dart';
 import '../../dominio/entidades/item_venda.dart';
 import '../../dominio/entidades/nivel_acesso.dart';
 import '../../dominio/entidades/pagamento.dart';
+import '../../dominio/entidades/pagamento_final.dart';
 import '../../dominio/entidades/preco.dart';
 import '../../dominio/entidades/produto.dart';
 import '../../dominio/entidades/receccao.dart';
 import '../../dominio/entidades/saida.dart';
 import '../../dominio/entidades/stock.dart';
-import '../../dominio/entidades/usuario.dart';
 import '../../dominio/entidades/venda.dart';
+import '../../solucoes_uteis/console.dart';
 import '../serializadores/serializador_funcionario.dart';
-import '../serializadores/serializador_usuario.dart';
 import 'tabelas/tabela_cliente.dart';
 import 'tabelas/tabela_dinheiro_sobra.dart';
 import 'tabelas/tabela_entrada.dart';
 import 'tabelas/tabela_forma_pagamento.dart';
 import 'tabelas/tabela_funcionario.dart';
 import 'tabelas/tabela_pagamento.dart';
+import 'tabelas/tabela_pagamento_final.dart';
 import 'tabelas/tabela_preco.dart';
 import 'tabelas/tabela_receccao.dart';
 import 'tabelas/tabela_saida.dart';
@@ -62,21 +64,35 @@ LazyDatabase defaultConnection() {
   });
 }
 
-@DriftDatabase(tables: [TabelaUsuario, TabelaFuncionario, TabelaProduto, TabelaPreco, TabelaVenda, TabelaItemVenda, TabelaEntrada, TabelaSaida, TabelaStock, TabelaRececcao, TabelaCliente, TabelaItemVenda, TabelaFormaPagamento, TabelaPagamento, TabelaDinheiroSobra])
+@DriftDatabase(tables: [
+  TabelaUsuario,
+  TabelaFuncionario,
+  TabelaProduto,
+  TabelaPreco,
+  TabelaVenda,
+  TabelaItemVenda,
+  TabelaEntrada,
+  TabelaSaida,
+  TabelaStock,
+  TabelaRececcao,
+  TabelaCliente,
+  TabelaItemVenda,
+  TabelaFormaPagamento,
+  TabelaPagamento,
+  TabelaDinheiroSobra,
+  TabelaPagamentoFinal
+])
 class BancoDados extends _$BancoDados {
   BancoDados() : super(defaultConnection());
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(
-      onCreate: (Migrator m) async {
-        await m.createAll();
-      },
-      onUpgrade: (m, a,n)async{
-        // m.addColumn(tabelaEntrada, tabelaEntrada.motivo);
-      }
-    );
+    return MigrationStrategy(onCreate: (Migrator m) async {
+      await m.createAll();
+    }, onUpgrade: (m, a, n) async {
+      await m.createAll();
+    });
   }
 }

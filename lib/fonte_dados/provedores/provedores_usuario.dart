@@ -51,9 +51,9 @@ class ProvedorUsuario implements ProvedorUsuarioI {
     if (dado == null) {
       throw ErroUsuarioNaoExiste("CREDENCIAIS INVALIDAS");
     }
-    if ((await _usuarioDao.usuarioLogado(nomeUsuario)) == true) {
-      throw ErroUsuarioJaLogado("USUARIO JA LOGADO");
-    }
+    // if ((await _usuarioDao.usuarioLogado(nomeUsuario)) == true) {
+    //   throw ErroUsuarioJaLogado("USUARIO JA LOGADO");
+    // }
     await _usuarioDao.logarUsuario(nomeUsuario, palavraPasse);
     return _serializadorUsuario
         .fromTabela((await _usuarioDao.pegarUsuario(nomeUsuario)));

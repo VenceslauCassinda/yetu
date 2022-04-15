@@ -40,6 +40,7 @@ dependencies:
   font_awesome_flutter: ^9.2.0
   google_fonts: ^2.3.1
   flutter_screenutil: ^5.3.1
+  keyboard_event: ^0.3.2
   componentes_visuais: 
     path: ../componentes_visuais
 

@@ -4346,6 +4346,261 @@ class $TabelaDinheiroSobraTable extends TabelaDinheiroSobra
   }
 }
 
+class TabelaPagamentoFinalData extends DataClass
+    implements Insertable<TabelaPagamentoFinalData> {
+  final int id;
+  final int estado;
+  final int idPagamento;
+  final DateTime data;
+  TabelaPagamentoFinalData(
+      {required this.id,
+      required this.estado,
+      required this.idPagamento,
+      required this.data});
+  factory TabelaPagamentoFinalData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return TabelaPagamentoFinalData(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      estado: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
+      idPagamento: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_pagamento'])!,
+      data: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['estado'] = Variable<int>(estado);
+    map['id_pagamento'] = Variable<int>(idPagamento);
+    map['data'] = Variable<DateTime>(data);
+    return map;
+  }
+
+  TabelaPagamentoFinalCompanion toCompanion(bool nullToAbsent) {
+    return TabelaPagamentoFinalCompanion(
+      id: Value(id),
+      estado: Value(estado),
+      idPagamento: Value(idPagamento),
+      data: Value(data),
+    );
+  }
+
+  factory TabelaPagamentoFinalData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TabelaPagamentoFinalData(
+      id: serializer.fromJson<int>(json['id']),
+      estado: serializer.fromJson<int>(json['estado']),
+      idPagamento: serializer.fromJson<int>(json['idPagamento']),
+      data: serializer.fromJson<DateTime>(json['data']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'estado': serializer.toJson<int>(estado),
+      'idPagamento': serializer.toJson<int>(idPagamento),
+      'data': serializer.toJson<DateTime>(data),
+    };
+  }
+
+  TabelaPagamentoFinalData copyWith(
+          {int? id, int? estado, int? idPagamento, DateTime? data}) =>
+      TabelaPagamentoFinalData(
+        id: id ?? this.id,
+        estado: estado ?? this.estado,
+        idPagamento: idPagamento ?? this.idPagamento,
+        data: data ?? this.data,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TabelaPagamentoFinalData(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idPagamento: $idPagamento, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, estado, idPagamento, data);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TabelaPagamentoFinalData &&
+          other.id == this.id &&
+          other.estado == this.estado &&
+          other.idPagamento == this.idPagamento &&
+          other.data == this.data);
+}
+
+class TabelaPagamentoFinalCompanion
+    extends UpdateCompanion<TabelaPagamentoFinalData> {
+  final Value<int> id;
+  final Value<int> estado;
+  final Value<int> idPagamento;
+  final Value<DateTime> data;
+  const TabelaPagamentoFinalCompanion({
+    this.id = const Value.absent(),
+    this.estado = const Value.absent(),
+    this.idPagamento = const Value.absent(),
+    this.data = const Value.absent(),
+  });
+  TabelaPagamentoFinalCompanion.insert({
+    this.id = const Value.absent(),
+    required int estado,
+    required int idPagamento,
+    required DateTime data,
+  })  : estado = Value(estado),
+        idPagamento = Value(idPagamento),
+        data = Value(data);
+  static Insertable<TabelaPagamentoFinalData> custom({
+    Expression<int>? id,
+    Expression<int>? estado,
+    Expression<int>? idPagamento,
+    Expression<DateTime>? data,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (estado != null) 'estado': estado,
+      if (idPagamento != null) 'id_pagamento': idPagamento,
+      if (data != null) 'data': data,
+    });
+  }
+
+  TabelaPagamentoFinalCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? estado,
+      Value<int>? idPagamento,
+      Value<DateTime>? data}) {
+    return TabelaPagamentoFinalCompanion(
+      id: id ?? this.id,
+      estado: estado ?? this.estado,
+      idPagamento: idPagamento ?? this.idPagamento,
+      data: data ?? this.data,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (estado.present) {
+      map['estado'] = Variable<int>(estado.value);
+    }
+    if (idPagamento.present) {
+      map['id_pagamento'] = Variable<int>(idPagamento.value);
+    }
+    if (data.present) {
+      map['data'] = Variable<DateTime>(data.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TabelaPagamentoFinalCompanion(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idPagamento: $idPagamento, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TabelaPagamentoFinalTable extends TabelaPagamentoFinal
+    with TableInfo<$TabelaPagamentoFinalTable, TabelaPagamentoFinalData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TabelaPagamentoFinalTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _estadoMeta = const VerificationMeta('estado');
+  @override
+  late final GeneratedColumn<int?> estado = GeneratedColumn<int?>(
+      'estado', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _idPagamentoMeta =
+      const VerificationMeta('idPagamento');
+  @override
+  late final GeneratedColumn<int?> idPagamento = GeneratedColumn<int?>(
+      'id_pagamento', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _dataMeta = const VerificationMeta('data');
+  @override
+  late final GeneratedColumn<DateTime?> data = GeneratedColumn<DateTime?>(
+      'data', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, estado, idPagamento, data];
+  @override
+  String get aliasedName => _alias ?? 'tabela_pagamento_final';
+  @override
+  String get actualTableName => 'tabela_pagamento_final';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<TabelaPagamentoFinalData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('estado')) {
+      context.handle(_estadoMeta,
+          estado.isAcceptableOrUnknown(data['estado']!, _estadoMeta));
+    } else if (isInserting) {
+      context.missing(_estadoMeta);
+    }
+    if (data.containsKey('id_pagamento')) {
+      context.handle(
+          _idPagamentoMeta,
+          idPagamento.isAcceptableOrUnknown(
+              data['id_pagamento']!, _idPagamentoMeta));
+    } else if (isInserting) {
+      context.missing(_idPagamentoMeta);
+    }
+    if (data.containsKey('data')) {
+      context.handle(
+          _dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
+    } else if (isInserting) {
+      context.missing(_dataMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TabelaPagamentoFinalData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    return TabelaPagamentoFinalData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $TabelaPagamentoFinalTable createAlias(String alias) {
+    return $TabelaPagamentoFinalTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TabelaUsuarioTable tabelaUsuario = $TabelaUsuarioTable(this);
@@ -4367,6 +4622,8 @@ abstract class _$BancoDados extends GeneratedDatabase {
       $TabelaPagamentoTable(this);
   late final $TabelaDinheiroSobraTable tabelaDinheiroSobra =
       $TabelaDinheiroSobraTable(this);
+  late final $TabelaPagamentoFinalTable tabelaPagamentoFinal =
+      $TabelaPagamentoFinalTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -4384,7 +4641,8 @@ abstract class _$BancoDados extends GeneratedDatabase {
         tabelaCliente,
         tabelaFormaPagamento,
         tabelaPagamento,
-        tabelaDinheiroSobra
+        tabelaDinheiroSobra,
+        tabelaPagamentoFinal
       ];
 }
 
@@ -4441,6 +4699,8 @@ mixin _$FormaPagamentoDaoMixin on DatabaseAccessor<BancoDados> {
 }
 mixin _$PagamentoDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaPagamentoTable get tabelaPagamento => attachedDatabase.tabelaPagamento;
+  $TabelaPagamentoFinalTable get tabelaPagamentoFinal =>
+      attachedDatabase.tabelaPagamentoFinal;
 }
 mixin _$DinheiroSobraDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaDinheiroSobraTable get tabelaDinheiroSobra =>
@@ -4457,4 +4717,7 @@ mixin _$VendaDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaFormaPagamentoTable get tabelaFormaPagamento =>
       attachedDatabase.tabelaFormaPagamento;
   $TabelaItemVendaTable get tabelaItemVenda => attachedDatabase.tabelaItemVenda;
+  $TabelaProdutoTable get tabelaProduto => attachedDatabase.tabelaProduto;
+  $TabelaPagamentoFinalTable get tabelaPagamentoFinal =>
+      attachedDatabase.tabelaPagamentoFinal;
 }

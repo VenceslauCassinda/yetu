@@ -2,6 +2,7 @@ import 'package:yetu_gestor/contratos/casos_uso/manipular_pagamento_i.dart';
 import 'package:yetu_gestor/contratos/provedores/provedor_pagamento_i.dart';
 import 'package:yetu_gestor/dominio/entidades/forma_pagamento.dart';
 import 'package:yetu_gestor/dominio/entidades/pagamento.dart';
+import 'package:yetu_gestor/dominio/entidades/pagamento_final.dart';
 import 'package:yetu_gestor/fonte_dados/erros.dart';
 
 class ManipularPagamento implements ManipularPagamentoI {
@@ -48,5 +49,10 @@ class ManipularPagamento implements ManipularPagamentoI {
   @override
   Future<int> removerFormaDeId(int idForma) async {
     return _provedorPagamentoI.removerFormaDeId(idForma);
+  }
+
+  @override
+  Future<int> registarPagamentoFinal(PagamentoFinal pagamentoFinal) async {
+    return await _provedorPagamentoI.registarPagamentoFinal(pagamentoFinal);
   }
 }

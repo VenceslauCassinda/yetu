@@ -6,7 +6,7 @@ import '../../dominio/entidades/funcionario.dart';
 import '../../dominio/entidades/item_venda.dart';
 
 abstract class ManipularVendaI {
-  Future<int> registarVenda(
+  Future<int> _registarVenda(
       double total,
       double parcela,
       Funcionario funcionario,
@@ -18,16 +18,23 @@ abstract class ManipularVendaI {
       double total,
       Funcionario funcionario,
       Cliente cliente,
-      DateTime dataLevantamentoCompra);
+      DateTime dataLevantamentoCompra,
+      double parcela);
   double calcularTotalVenda(List<ItemVenda> itensVenda);
   List<Pagamento> associarPagamentosAvenda(
       List<Pagamento> pagamentos, int idVenda);
   double calcularParcelaApagar(double totalApagar, double parcelaJaPaga);
   double calcularParcelaPaga(List<Pagamento> pagamentos);
   double aplicarDescontoVenda(double totalApagar, int porcentagem);
-  Future<List<Venda>> pegarLista();
+  Future<List<Venda>> pegarLista(Funcionario funcionario, DateTime data);
+  Future<List<Venda>> pegarListaVendas(Funcionario funcionario, DateTime data);
+  Future<List<Venda>> pegarListaEncomendas(
+      Funcionario funcionario, DateTime data);
+  Future<List<Venda>> pegarListaDividas(Funcionario funcionario, DateTime data);
+  Future<void> entregarEncomenda(Venda venda);
   bool vendaEstaPaga(Venda venda);
   bool vendaOuEncomenda(Venda venda);
   bool vendaOuDivida(Venda venda);
   Future<ItemVenda?> pegarItemComStockInsuficiente(List<ItemVenda> lista);
+  Future<bool> actualizarVenda(Venda venda);
 }

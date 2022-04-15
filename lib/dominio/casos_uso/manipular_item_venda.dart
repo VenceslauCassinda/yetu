@@ -24,11 +24,6 @@ class ManipularItemVenda implements ManipularItemVendaI {
 
   @override
   Future<int> registarItemVenda(ItemVenda dado) async {
-    var produto = await _manipularProdutoI.pegarProdutoDeId(dado.idProduto!);
-    var stock = await _manipularStockI.pegarStockDoProdutoDeId(produto!.id!);
-    if (stock.quantidade! < dado.quantidade!) {
-      throw ErroStockInsuficiente("QUANTIDADE INSUFICIENTE!");
-    }
     return await _provedorItemVendaI.registarItemVenda(dado);
   }
 
@@ -70,7 +65,7 @@ class ManipularItemVenda implements ManipularItemVendaI {
   Future<double> calcularTotalApagar(List<ItemVenda> itens) async {
     double soma = 0.0;
     for (var i = 0; i < itens.length; i++) {
-      soma += itens[i].total!;
+      soma += itens[i].total??0;
     }
     return soma;
   }

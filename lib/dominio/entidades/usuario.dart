@@ -9,7 +9,7 @@ class Usuario {
   int? estado;
   bool? logado;
 
-  Usuario.registo(this.nomeUsuario, this.palavraPasse);
+  Usuario.registo(this.nomeUsuario, this.palavraPasse, [this.nivelAcesso]);
 
   Usuario(
       {this.id,

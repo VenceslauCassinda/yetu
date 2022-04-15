@@ -2,9 +2,11 @@ import 'package:drift/drift.dart';
 import 'package:yetu_gestor/dominio/entidades/forma_pagamento.dart';
 
 import '../../fonte_dados/padrao_dao/base_dados.dart';
+import 'pagamento_final.dart';
 
 class Pagamento {
   FormaPagamento? formaPagamento;
+  PagamentoFinal? pagamentoFinal;
   int? id;
   String? idParaVista;
   int? idFormaPagamento;
@@ -15,6 +17,7 @@ class Pagamento {
   Pagamento(
       {this.id,
       this.formaPagamento,
+      this.pagamentoFinal,
       this.idParaVista,
       this.idFormaPagamento,
       required this.estado,

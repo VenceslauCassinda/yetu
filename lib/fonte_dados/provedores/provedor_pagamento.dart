@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:yetu_gestor/contratos/provedores/provedor_pagamento_i.dart';
 import 'package:yetu_gestor/dominio/entidades/forma_pagamento.dart';
+import 'package:yetu_gestor/dominio/entidades/pagamento_final.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 
 import '../../dominio/entidades/pagamento.dart';
@@ -53,5 +54,10 @@ class ProvedorPagamento implements ProvedorPagamentoI {
   @override
   Future<int> removerFormaDeId(int idForma) async {
     return await _formaPagamentoDao.removerFormaPagamento(idForma);
+  }
+
+  @override
+  Future<int> registarPagamentoFinal(PagamentoFinal pagamentoFinal) async {
+    return await _dao.adicionarPagamentoFinal(pagamentoFinal);
   }
 }

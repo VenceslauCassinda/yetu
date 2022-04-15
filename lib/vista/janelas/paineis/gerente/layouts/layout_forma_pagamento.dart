@@ -30,7 +30,9 @@ class LayoutFormaPagamento extends StatelessWidget {
       required this.titulo,
       valor,
       required this.listaItens}) {
-    opcaoRetiradaSelecionada = listaItens[0];
+    if (listaItens.isNotEmpty) {
+      opcaoRetiradaSelecionada = listaItens[0];
+    }
     _observadorCampoTexto = ObservadorCampoTexto();
     _observadorButoes = ObservadorButoes();
   }

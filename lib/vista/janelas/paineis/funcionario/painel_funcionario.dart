@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/painel_vendas.dart';
+import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/vendas/painel_vendas.dart';
 import 'componentes/gaveta.dart';
 import 'painel_funcionario_c.dart';
 
@@ -46,8 +47,14 @@ class Corpo extends StatelessWidget {
         Expanded(
           flex: 5,
           child: Obx(() {
-            _c.painelActual.value;
-            return PainelVendas();
+            if (_c.painelActual.value.indicadorPainel ==
+                PainelActual.HISTORICO_VENDAS) {
+              return Text("data");
+            }
+            return PainelVendas(
+              data: DateTime.now(),
+              funcionario: _c.funcionarioActual,
+            );
           }),
         ),
       ],

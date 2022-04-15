@@ -13,6 +13,7 @@ import 'janelas/cadastro/janela_cadastro.dart';
 import 'janelas/cadastro/janela_cadastro_c.dart';
 import 'janelas/login/janela_login.dart';
 import 'janelas/login/janela_login_c.dart';
+import 'janelas/paineis/funcionario/painel_funcionario_c.dart';
 
 class AplicacaoC extends GetxController {
   String chaveCacheConfiguracaoApp = "configuracao_app";
@@ -43,7 +44,7 @@ class AplicacaoC extends GetxController {
     }
   }
 
-  static void logar(Usuario usuario) {
+  static void logar(Usuario usuario) async {
     if (usuario.nivelAcesso == null) {
       voltar();
       voltar();
@@ -59,6 +60,8 @@ class AplicacaoC extends GetxController {
       return;
     }
     if (usuario.nivelAcesso == NivelAcesso.FUNCIONARIO) {
+      var c = Get.put(PainelFuncionarioC());
+      await c.inicializarFuncionario();
       irParaPainelFuncionario();
       return;
     }

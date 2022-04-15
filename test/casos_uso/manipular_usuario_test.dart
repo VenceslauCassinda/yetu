@@ -43,7 +43,7 @@ void main() {
     // if (lista.isNotEmpty) {
     // var usuario = lista.last;
 
-    var usuario = Usuario.registo("Loja", "11111111");
+    var usuario = Usuario.registo("Loja", "11111111", NivelAcesso.GERENTE);
 
     try {
       var usuarioLogado = await manipularUsuario.fazerLogin(
@@ -61,7 +61,7 @@ void main() {
     // var lista = (await manipularUsuario.pegarLista());
     // if (lista.isNotEmpty) {
     // var usuario = lista[lista.length - 1];
-    var usuario = Usuario.registo("admin", "11111111");
+    var usuario = Usuario.registo("admin", "11111111", NivelAcesso.ADMINISTRADOR);
     try {
       await manipularUsuario.terminarSessao(usuario);
     } catch (e) {

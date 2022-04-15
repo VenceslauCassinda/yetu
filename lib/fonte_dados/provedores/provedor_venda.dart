@@ -3,6 +3,7 @@ import 'package:yetu_gestor/dominio/entidades/venda.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 
 import '../../contratos/provedores/provedor_venda_i.dart';
+import '../../dominio/entidades/funcionario.dart';
 
 class ProvedorVenda implements ProvedorVendaI {
   late VendaDao _dao;
@@ -21,8 +22,8 @@ class ProvedorVenda implements ProvedorVendaI {
   }
 
   @override
-  Future<List<Venda>> pegarLista() async {
-    return await _dao.todas();
+  Future<List<Venda>> pegarLista(Funcionario funcionario, DateTime data) async {
+    return await _dao.pegarVendasDeFuncionarioNaData(funcionario, data);
   }
 
   @override

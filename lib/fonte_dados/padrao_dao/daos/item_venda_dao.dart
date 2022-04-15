@@ -22,7 +22,8 @@ class ItemVendaDao extends DatabaseAccessor<BancoDados>
   }
 
   Future<TabelaItemVendaData?> pegarItemVendaDeId(int id) async {
-    var res = await (select(tabelaItemVenda)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    var res = await (select(tabelaItemVenda)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
     return res;
   }
 

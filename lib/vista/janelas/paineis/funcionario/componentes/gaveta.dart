@@ -45,10 +45,10 @@ class GavetaNavegacao extends StatelessWidget {
                     }),
                 ItemDaGaveta(
                     cor: branca,
-                    icone: Icons.store,
-                    titulo: "Vendas",
+                    icone: Icons.history,
+                    titulo: "Histórico de Vendas",
                     metodoQuandoItemClicado: () async {
-                      // c.irParaPainel(PainelActual.VENDAS);
+                      c.irParaPainel(PainelActual.HISTORICO_VENDAS);
                     }),
                 ItemDaGaveta(
                     cor: branca,

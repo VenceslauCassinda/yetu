@@ -13,4 +13,5 @@ class PainelActual {
   static int PAGAMENTOS = 8;
   static int INVESTIMENTO = 9;
   static int RELATORIO = 10;
+  static int HISTORICO_VENDAS = 11;
 }

@@ -9,6 +9,7 @@ class ItemVenda {
   int? estado;
   int? idProduto;
   int? idVenda;
+  String? idVista;
   int? quantidade;
   double? total;
   int? desconto;
@@ -17,6 +18,7 @@ class ItemVenda {
       required this.estado,
       required this.idProduto,
       this.idVenda,
+      this.idVista,
       required this.quantidade,
       this.total,
       this.produto,
@@ -55,13 +57,13 @@ class ItemVenda {
 
   TabelaItemVendaCompanion toCompanion(bool nullToAbsent) {
     return TabelaItemVendaCompanion(
-      id: Value(id!),
+      id: id == null ? Value.absent() : Value(id!),
       estado: Value(estado!),
       idProduto: Value(idProduto!),
       idVenda: Value(idVenda!),
-      quantidade: Value(quantidade!),
-      total: Value(total!),
-      desconto: Value(desconto!),
+      quantidade: Value(quantidade ?? 0),
+      total: Value(total ?? 0),
+      desconto: Value(desconto ?? 0),
     );
   }
 

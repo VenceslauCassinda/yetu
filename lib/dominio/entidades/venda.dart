@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:yetu_gestor/dominio/entidades/item_venda.dart';
 import '../../fonte_dados/padrao_dao/base_dados.dart';
 import 'cliente.dart';
 import 'funcionario.dart';
@@ -7,7 +8,8 @@ import 'pagamento.dart';
 class Venda {
   Funcionario? funcionario;
   Cliente? cliente;
-  List<Pagamento> pagamentos = [];
+  List<Pagamento>? pagamentos = [];
+  List<ItemVenda>? itensVenda = [];
   int? id;
   int? estado;
   int? idFuncionario;
@@ -16,9 +18,14 @@ class Venda {
   DateTime? dataLevantamentoCompra;
   double? total;
   double? parcela;
+  bool get divida => (total != parcela);
+  bool get encomenda => (data != dataLevantamentoCompra);
+  bool get venda => !divida;
   Venda(
       {this.id,
       this.funcionario,
+      this.itensVenda,
+      this.pagamentos,
       this.cliente,
       required this.estado,
       required this.idFuncionario,
@@ -67,6 +74,7 @@ class Venda {
 
   TabelaVendaCompanion toCompanion(bool nullToAbsent) {
     return TabelaVendaCompanion(
+      id: id == null ? Value.absent() : Value(id!),
       estado: Value(estado!),
       idFuncionario: Value(idFuncionario!),
       idCliente: Value(idCliente!),
@@ -74,8 +82,8 @@ class Venda {
       dataLevantamentoCompra: dataLevantamentoCompra == null && nullToAbsent
           ? const Value.absent()
           : Value(dataLevantamentoCompra),
-      total: Value(total!),
-      parcela: Value(parcela!),
+      total: Value(total ?? 0),
+      parcela: Value(parcela ?? 0),
     );
   }
 
@@ -145,7 +153,8 @@ class Venda {
             'parcela: $parcela',
           )
           ..write('\nCLIENTE: {${cliente?.toString()}}')
-          ..write('\nPAGAMENTOS: {${pagamentos.map((e) => e.toString() +"\n").toList()}}\n')
+          ..write(
+              '\nPAGAMENTOS: {${pagamentos?.map((e) => e.toString() + "\n").toList()}}\n')
           ..write(')'))
         .toString();
   }

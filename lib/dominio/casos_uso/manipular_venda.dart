@@ -1,5 +1,6 @@
 import 'package:yetu_gestor/contratos/casos_uso/manipular_cliente_I.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_funcionario_i.dart';
+import 'package:yetu_gestor/contratos/casos_uso/manipular_item_venda_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_pagamento_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_saida_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_stock_i.dart';
@@ -16,6 +17,7 @@ import 'package:yetu_gestor/fonte_dados/erros.dart';
 
 import '../../contratos/casos_uso/manipular_venda_i.dart';
 import '../../contratos/provedores/provedor_venda_i.dart';
+import '../../solucoes_uteis/console.dart';
 
 class ManipularVenda implements ManipularVendaI {
   final ProvedorVendaI _provedorVendaI;
@@ -23,15 +25,17 @@ class ManipularVenda implements ManipularVendaI {
   final ManipularPagamentoI _manipularPagamentoI;
   final ManipularClienteI _manipularClienteI;
   final ManipularStockI _manipularStockI;
+  final ManipularItemVendaI _manipularItemVendaI;
 
   ManipularVenda(
       this._provedorVendaI,
       this._manipularSaidaI,
       this._manipularPagamentoI,
       this._manipularClienteI,
-      this._manipularStockI);
+      this._manipularStockI,
+      this._manipularItemVendaI);
   @override
-  Future<int> registarVenda(
+  Future<int> _registarVenda(
       double total,
       double parcela,
       Funcionario funcionario,
@@ -46,7 +50,7 @@ class ManipularVenda implements ManipularVendaI {
         dataLevantamentoCompra: dataLevantamentoCompra,
         idCliente: idCliente,
         data: dataVenda,
-        total: 100,
+        total: total,
         parcela: parcela);
     var idVenda = await _provedorVendaI.adicionarVenda(novaVenda);
     return idVenda;
@@ -78,8 +82,8 @@ class ManipularVenda implements ManipularVendaI {
   }
 
   @override
-  Future<List<Venda>> pegarLista() async {
-    return await _provedorVendaI.pegarLista();
+  Future<List<Venda>> pegarLista(Funcionario funcionario, DateTime data) async {
+    return await _provedorVendaI.pegarLista(funcionario, data);
   }
 
   @override
@@ -89,18 +93,19 @@ class ManipularVenda implements ManipularVendaI {
       double total,
       Funcionario funcionario,
       Cliente cliente,
-      DateTime dataLevantamentoCompra) async {
+      DateTime dataLevantamentoCompra,
+      double parcela) async {
     var teste = await pegarItemComStockInsuficiente(itensVenda);
     if (teste != null) {
-      throw ErroStockInsuficiente("QUANTIDADE INSUFICIENTE!");
+      throw ErroStockInsuficiente(
+          "PRODUTO ${teste.produto?.nome} COM QUANTIDADE INSUFICIENTE!");
     }
-    var parcela = calcularParcelaPaga(pagamentos);
     if (parcela > total) {
       throw ErroPagamentoInvalido(
           "PAGAMENTOS INCORRECTOS!\nRETIFIQUE O VALOR DOS PAGAMENTOS!");
     }
 
-    int idVenda = await registarVenda(
+    int idVenda = await _registarVenda(
       total,
       parcela,
       funcionario,
@@ -112,6 +117,10 @@ class ManipularVenda implements ManipularVendaI {
       await _manipularPagamentoI.registarListaPagamentos(pagamentos, idVenda);
       await _manipularSaidaI.registarListaSaidas(
           itensVenda, idVenda, vendaFeita.data!);
+      for (var cada in itensVenda) {
+        cada.idVenda = idVenda;
+        await _manipularItemVendaI.registarItemVenda(cada);
+      }
     } else {
       throw ErroVendaInvalida("VENDA INVÁLIDA!");
     }
@@ -167,6 +176,57 @@ class ManipularVenda implements ManipularVendaI {
 
   @override
   bool vendaOuDivida(Venda venda) {
-    return venda.pagamentos.isNotEmpty;
+    return venda.pagamentos!.isNotEmpty;
+  }
+
+  @override
+  Future<List<Venda>> pegarListaDividas(
+      Funcionario funcionario, DateTime data) async {
+    var lista = <Venda>[];
+    var originais = await pegarLista(funcionario, data);
+    for (var cada in originais) {
+      if (cada.divida == true) {
+        lista.add(cada);
+      }
+    }
+    return lista;
+  }
+
+  @override
+  Future<List<Venda>> pegarListaEncomendas(
+      Funcionario funcionario, DateTime data) async {
+    var lista = <Venda>[];
+    var originais = await pegarLista(funcionario, data);
+    for (var cada in originais) {
+      if (cada.encomenda == true) {
+        lista.add(cada);
+      }
+    }
+    return lista;
+  }
+
+  @override
+  Future<List<Venda>> pegarListaVendas(
+      Funcionario funcionario, DateTime data) async {
+    var lista = <Venda>[];
+    var originais = await pegarLista(funcionario, data);
+    for (var cada in originais) {
+      if (cada.venda == true) {
+        lista.add(cada);
+      }
+    }
+    return lista;
+  }
+
+  @override
+  Future<void> entregarEncomenda(Venda venda) async {
+    venda.dataLevantamentoCompra = venda.data;
+    await _provedorVendaI.actualizarVenda(venda);
+  }
+
+  @override
+  Future<bool> actualizarVenda(Venda venda) async {
+    await _provedorVendaI.actualizarVenda(venda);
+    return false;
   }
 }
