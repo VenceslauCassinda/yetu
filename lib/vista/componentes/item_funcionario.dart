@@ -23,6 +23,7 @@ class ItemFuncionario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 5,
       child: Row(
         children: [
           Container(
@@ -43,7 +44,9 @@ class ItemFuncionario extends StatelessWidget {
             child: IconeItem(
               titulo: "Vendas",
               icone: Icons.sell,
-              metodoQuandoItemClicado: () {},
+              metodoQuandoItemClicado: () {
+                aoClicar();
+              },
               cor: primaryColor,
             ),
           ),

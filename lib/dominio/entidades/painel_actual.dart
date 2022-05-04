@@ -14,4 +14,12 @@ class PainelActual {
   static int INVESTIMENTO = 9;
   static int RELATORIO = 10;
   static int HISTORICO_VENDAS = 11;
+  static int INICIO = 12;
+  static int VENDAS_ANTIGA = 13;
+  static int DIVIDAS_GERAIS = 14;
+  static int ENCOMENDAS_GERAIS = 15;
+  static int VENDAS_FUNCIONARIOS = 16;
+  static int RECEPCOES = 17;
+  static int DINHEIRO_SOBRA = 18;
+  static int SAIDA_CAIXA = 19;
 }

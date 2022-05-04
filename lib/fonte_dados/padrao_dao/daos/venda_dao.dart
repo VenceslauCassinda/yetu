@@ -30,10 +30,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
   }
 
   Future<bool> actualizarVenda(Venda dado) async {
-    mostrar("1===========> ${dado.data}");
-    mostrar("2===========> ${dado.dataLevantamentoCompra}");
     var res = await update(tabelaVenda).replace(dado.toCompanion(true));
-    var nova = await pegarVendaDeId(dado.id!);
     return res;
   }
 
@@ -44,7 +41,8 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
           tabelaVenda.idFuncionario.equalsExp(tabelaFuncionario.id)),
       leftOuterJoin(
           tabelaCliente, tabelaVenda.idCliente.equalsExp(tabelaCliente.id)),
-    ]);
+    ])
+      ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
 
     var resVendasFuncionariosClientes2 =
         await resVendasFuncionariosClientes1.get();
@@ -71,11 +69,13 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var preoDao = PrecoDao(gett.Get.find());
         Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
         var cada = ItemVenda(
+            id: item.id,
             estado: item.estado,
             idProduto: item.idProduto,
             quantidade: item.quantidade,
             desconto: item.desconto,
             idVenda: item.idVenda,
+            total: item.total,
             produto: Produto(
               id: produto.id,
               estado: produto.estado,
@@ -92,6 +92,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
           estado: cliente.estado, nome: cliente.nome, numero: cliente.numero);
 
       var cadaVenda = Venda(
+          id: venda.id,
           cliente: cadaCliente,
           itensVenda: listaItensVenda,
           estado: venda.estado,
@@ -111,7 +112,6 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         ]))
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
-        // print("============> $resPagamentosEformas");
         var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
             formaPagamento: FormaPagamento(
@@ -122,9 +122,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
-        if (cadaVenda.pagamentos == null) {
-          cadaVenda.pagamentos = [];
-        }
+        cadaVenda.pagamentos ??= [];
         cadaVenda.pagamentos!.add(cadaPagamento);
       }
 
@@ -146,7 +144,8 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
       ..where((tabelaVenda.data.year.equals(data.year) &
           tabelaVenda.data.month.equals(data.month) &
           (tabelaVenda.data.day.equals(data.day)) &
-          tabelaFuncionario.id.equals(funcionario.id)));
+          tabelaFuncionario.id.equals(funcionario.id)))
+      ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
 
     var resVendasFuncionariosClientes2 =
         await resVendasFuncionariosClientes1.get();
@@ -178,6 +177,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
             quantidade: item.quantidade,
             desconto: item.desconto,
             idVenda: item.idVenda,
+            total: item.total,
             produto: Produto(
               id: produto.id,
               estado: produto.estado,
@@ -209,7 +209,510 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
 
         var pagamentoFInal = await (select(tabelaPagamentoFinal)
-              ..where((tbl) => tbl.id.equals(pagamento.id)))
+              ..where((tbl) => tbl.idPagamento.equals(pagamento.id)))
+            .getSingleOrNull();
+
+        var resPagamentosEformas = await ((select(tabelaPagamento).join([
+          leftOuterJoin(
+              tabelaFormaPagamento,
+              tabelaFormaPagamento.id
+                  .equalsExp(tabelaPagamento.idFormaPagamento)),
+        ]))
+              ..where(tabelaPagamento.id.equals(pagamento.id)))
+            .getSingle();
+        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var cadaPagamento = Pagamento(
+            pagamentoFinal: pagamentoFInal == null
+                ? null
+                : PagamentoFinal(
+                    id: pagamentoFInal.id,
+                    estado: pagamentoFInal.estado,
+                    idPagamento: pagamentoFInal.idPagamento,
+                    data: pagamentoFInal.data),
+            formaPagamento: FormaPagamento(
+                estado: forma.estado,
+                tipo: forma.tipo,
+                descricao: forma.descricao),
+            idFormaPagamento: forma.id,
+            estado: pagamento.estado,
+            idVenda: pagamento.idVenda,
+            valor: pagamento.valor);
+        cadaVenda.pagamentos ??= [];
+        cadaVenda.pagamentos!.add(cadaPagamento);
+      }
+
+      vendas.add(cadaVenda);
+    }
+
+    return vendas;
+  }
+
+  Future<List<Venda>> pegarVendasNaData(DateTime data) async {
+    var vendas = <Venda>[];
+    var resVendasFuncionariosClientes1 = select(tabelaVenda).join([
+      leftOuterJoin(tabelaFuncionario,
+          tabelaVenda.idFuncionario.equalsExp(tabelaFuncionario.id)),
+      leftOuterJoin(
+          tabelaCliente, tabelaVenda.idCliente.equalsExp(tabelaCliente.id)),
+    ])
+      ..where((tabelaVenda.data.year.equals(data.year) &
+          tabelaVenda.data.month.equals(data.month) &
+          (tabelaVenda.data.day.equals(data.day))))
+      ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
+
+    var resVendasFuncionariosClientes2 =
+        await resVendasFuncionariosClientes1.get();
+    for (var cadaLinha in resVendasFuncionariosClientes2) {
+      var venda = cadaLinha.readTable(tabelaVenda);
+      var cliente = cadaLinha.readTable(tabelaCliente);
+      var resVendasPagamentos = await ((select(tabelaVenda).join([
+        leftOuterJoin(
+            tabelaPagamento, tabelaPagamento.idVenda.equalsExp(tabelaVenda.id)),
+      ]))
+            ..where(tabelaPagamento.idVenda.equals(venda.id)))
+          .get();
+      var resVendasItemVenda = await ((select(tabelaItemVenda).join([
+        leftOuterJoin(tabelaProduto,
+            tabelaItemVenda.idProduto.equalsExp(tabelaProduto.id)),
+      ]))
+            ..where(tabelaItemVenda.idVenda.equals(venda.id)))
+          .get();
+
+      var listaItensVenda = <ItemVenda>[];
+      for (var e in resVendasItemVenda) {
+        var item = e.readTable(tabelaItemVenda);
+        var produto = e.readTable(tabelaProduto);
+        var preoDao = PrecoDao(gett.Get.find());
+        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        var cada = ItemVenda(
+            estado: item.estado,
+            idProduto: item.idProduto,
+            quantidade: item.quantidade,
+            desconto: item.desconto,
+            idVenda: item.idVenda,
+            total: item.total,
+            produto: Produto(
+              id: produto.id,
+              estado: produto.estado,
+              precoCompra: produto.precoCompra,
+              recebivel: produto.recebivel,
+              nome: produto.nome,
+              idPreco: preco.id,
+              preco: preco,
+              listaPreco: [preco.preco!],
+            ));
+        listaItensVenda.add(cada);
+      }
+      var cadaCliente = Cliente(
+          estado: cliente.estado, nome: cliente.nome, numero: cliente.numero);
+
+      var cadaVenda = Venda(
+          id: venda.id,
+          cliente: cadaCliente,
+          itensVenda: listaItensVenda,
+          estado: venda.estado,
+          idFuncionario: venda.idFuncionario,
+          idCliente: venda.idCliente,
+          data: venda.data,
+          dataLevantamentoCompra: venda.dataLevantamentoCompra,
+          total: venda.total,
+          parcela: venda.parcela);
+
+      for (var linhaVendasPagamentos in resVendasPagamentos) {
+        var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
+
+        var pagamentoFInal = await (select(tabelaPagamentoFinal)
+              ..where((tbl) => tbl.idPagamento.equals(pagamento.id)))
+            .getSingleOrNull();
+
+        var resPagamentosEformas = await ((select(tabelaPagamento).join([
+          leftOuterJoin(
+              tabelaFormaPagamento,
+              tabelaFormaPagamento.id
+                  .equalsExp(tabelaPagamento.idFormaPagamento)),
+        ]))
+              ..where(tabelaPagamento.id.equals(pagamento.id)))
+            .getSingle();
+        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var cadaPagamento = Pagamento(
+            pagamentoFinal: pagamentoFInal == null
+                ? null
+                : PagamentoFinal(
+                    id: pagamentoFInal.id,
+                    estado: pagamentoFInal.estado,
+                    idPagamento: pagamentoFInal.idPagamento,
+                    data: pagamentoFInal.data),
+            formaPagamento: FormaPagamento(
+                estado: forma.estado,
+                tipo: forma.tipo,
+                descricao: forma.descricao),
+            idFormaPagamento: forma.id,
+            estado: pagamento.estado,
+            idVenda: pagamento.idVenda,
+            valor: pagamento.valor);
+        cadaVenda.pagamentos ??= [];
+        cadaVenda.pagamentos!.add(cadaPagamento);
+      }
+
+      vendas.add(cadaVenda);
+    }
+
+    return vendas;
+  }
+
+  Future<List<Venda>> pegarVendasDeFuncionario(Funcionario funcionario) async {
+    var vendas = <Venda>[];
+    var resVendasFuncionariosClientes1 = select(tabelaVenda).join([
+      leftOuterJoin(tabelaFuncionario,
+          tabelaVenda.idFuncionario.equalsExp(tabelaFuncionario.id)),
+      leftOuterJoin(
+          tabelaCliente, tabelaVenda.idCliente.equalsExp(tabelaCliente.id)),
+    ])
+      ..distinct
+      ..where(tabelaFuncionario.id.equals(funcionario.id))
+      ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
+
+    var resVendasFuncionariosClientes2 =
+        await resVendasFuncionariosClientes1.get();
+    for (var cadaLinha in resVendasFuncionariosClientes2) {
+      var venda = cadaLinha.readTable(tabelaVenda);
+      var cliente = cadaLinha.readTable(tabelaCliente);
+      var resVendasPagamentos = await ((select(tabelaVenda).join([
+        leftOuterJoin(
+            tabelaPagamento, tabelaPagamento.idVenda.equalsExp(tabelaVenda.id)),
+      ]))
+            ..where(tabelaPagamento.idVenda.equals(venda.id)))
+          .get();
+      var resVendasItemVenda = await ((select(tabelaItemVenda).join([
+        leftOuterJoin(tabelaProduto,
+            tabelaItemVenda.idProduto.equalsExp(tabelaProduto.id)),
+      ]))
+            ..where(tabelaItemVenda.idVenda.equals(venda.id)))
+          .get();
+
+      var listaItensVenda = <ItemVenda>[];
+      for (var e in resVendasItemVenda) {
+        var item = e.readTable(tabelaItemVenda);
+        var produto = e.readTable(tabelaProduto);
+        var preoDao = PrecoDao(gett.Get.find());
+        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+
+        var cada = ItemVenda(
+            estado: item.estado,
+            idProduto: item.idProduto,
+            quantidade: item.quantidade,
+            desconto: item.desconto,
+            idVenda: item.idVenda,
+            total: item.total,
+            produto: Produto(
+              id: produto.id,
+              estado: produto.estado,
+              precoCompra: produto.precoCompra,
+              recebivel: produto.recebivel,
+              nome: produto.nome,
+              idPreco: preco.id,
+              preco: preco,
+              listaPreco: [preco.preco!],
+            ));
+        listaItensVenda.add(cada);
+      }
+      var cadaCliente = Cliente(
+          estado: cliente.estado, nome: cliente.nome, numero: cliente.numero);
+
+      var cadaVenda = Venda(
+          id: venda.id,
+          cliente: cadaCliente,
+          itensVenda: listaItensVenda,
+          estado: venda.estado,
+          idFuncionario: venda.idFuncionario,
+          idCliente: venda.idCliente,
+          data: venda.data,
+          dataLevantamentoCompra: venda.dataLevantamentoCompra,
+          total: venda.total,
+          parcela: venda.parcela);
+
+      for (var linhaVendasPagamentos in resVendasPagamentos) {
+        var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
+
+        var pagamentoFInal = await (select(tabelaPagamentoFinal)
+              ..where((tbl) => tbl.idPagamento.equals(pagamento.id)))
+            .getSingleOrNull();
+
+        var resPagamentosEformas = await ((select(tabelaPagamento).join([
+          leftOuterJoin(
+              tabelaFormaPagamento,
+              tabelaFormaPagamento.id
+                  .equalsExp(tabelaPagamento.idFormaPagamento)),
+        ]))
+              ..where(tabelaPagamento.id.equals(pagamento.id)))
+            .getSingle();
+        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var cadaPagamento = Pagamento(
+            pagamentoFinal: pagamentoFInal == null
+                ? null
+                : PagamentoFinal(
+                    id: pagamentoFInal.id,
+                    estado: pagamentoFInal.estado,
+                    idPagamento: pagamentoFInal.idPagamento,
+                    data: pagamentoFInal.data),
+            formaPagamento: FormaPagamento(
+                estado: forma.estado,
+                tipo: forma.tipo,
+                descricao: forma.descricao),
+            idFormaPagamento: forma.id,
+            estado: pagamento.estado,
+            idVenda: pagamento.idVenda,
+            valor: pagamento.valor);
+        cadaVenda.pagamentos ??= [];
+        cadaVenda.pagamentos!.add(cadaPagamento);
+      }
+
+      if (vendas.isNotEmpty) {
+        var teste = vendas.firstWhereOrNull((element) {
+          var conversao1 = DateTime(
+            element.data!.year,
+            element.data!.month,
+            element.data!.day,
+          );
+          var conversao2 = DateTime(
+            cadaVenda.data!.year,
+            cadaVenda.data!.month,
+            cadaVenda.data!.day,
+          );
+
+          if (conversao1.isAtSameMomentAs(conversao2)) {
+            return true;
+          }
+          return false;
+        });
+
+        if (teste == null) {
+          vendas.add(cadaVenda);
+        } else {
+          continue;
+        }
+      } else {
+        vendas.add(cadaVenda);
+      }
+    }
+
+    return vendas;
+  }
+
+  Future<List<Venda>> pegarVendasComDatasUnicas() async {
+    var vendas = <Venda>[];
+    var resVendasFuncionariosClientes1 = select(tabelaVenda).join([
+      leftOuterJoin(tabelaFuncionario,
+          tabelaVenda.idFuncionario.equalsExp(tabelaFuncionario.id)),
+      leftOuterJoin(
+          tabelaCliente, tabelaVenda.idCliente.equalsExp(tabelaCliente.id)),
+    ])
+      ..distinct
+      ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
+
+    var resVendasFuncionariosClientes2 =
+        await resVendasFuncionariosClientes1.get();
+    for (var cadaLinha in resVendasFuncionariosClientes2) {
+      var venda = cadaLinha.readTable(tabelaVenda);
+      var cliente = cadaLinha.readTable(tabelaCliente);
+      var resVendasPagamentos = await ((select(tabelaVenda).join([
+        leftOuterJoin(
+            tabelaPagamento, tabelaPagamento.idVenda.equalsExp(tabelaVenda.id)),
+      ]))
+            ..where(tabelaPagamento.idVenda.equals(venda.id)))
+          .get();
+      var resVendasItemVenda = await ((select(tabelaItemVenda).join([
+        leftOuterJoin(tabelaProduto,
+            tabelaItemVenda.idProduto.equalsExp(tabelaProduto.id)),
+      ]))
+            ..where(tabelaItemVenda.idVenda.equals(venda.id)))
+          .get();
+
+      var listaItensVenda = <ItemVenda>[];
+      for (var e in resVendasItemVenda) {
+        var item = e.readTable(tabelaItemVenda);
+        var produto = e.readTable(tabelaProduto);
+        var preoDao = PrecoDao(gett.Get.find());
+        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+
+        var cada = ItemVenda(
+            estado: item.estado,
+            idProduto: item.idProduto,
+            quantidade: item.quantidade,
+            desconto: item.desconto,
+            idVenda: item.idVenda,
+            total: item.total,
+            produto: Produto(
+              id: produto.id,
+              estado: produto.estado,
+              precoCompra: produto.precoCompra,
+              recebivel: produto.recebivel,
+              nome: produto.nome,
+              idPreco: preco.id,
+              preco: preco,
+              listaPreco: [preco.preco!],
+            ));
+        listaItensVenda.add(cada);
+      }
+      var cadaCliente = Cliente(
+          estado: cliente.estado, nome: cliente.nome, numero: cliente.numero);
+
+      var cadaVenda = Venda(
+          id: venda.id,
+          cliente: cadaCliente,
+          itensVenda: listaItensVenda,
+          estado: venda.estado,
+          idFuncionario: venda.idFuncionario,
+          idCliente: venda.idCliente,
+          data: venda.data,
+          dataLevantamentoCompra: venda.dataLevantamentoCompra,
+          total: venda.total,
+          parcela: venda.parcela);
+
+      for (var linhaVendasPagamentos in resVendasPagamentos) {
+        var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
+
+        var pagamentoFInal = await (select(tabelaPagamentoFinal)
+              ..where((tbl) => tbl.idPagamento.equals(pagamento.id)))
+            .getSingleOrNull();
+
+        var resPagamentosEformas = await ((select(tabelaPagamento).join([
+          leftOuterJoin(
+              tabelaFormaPagamento,
+              tabelaFormaPagamento.id
+                  .equalsExp(tabelaPagamento.idFormaPagamento)),
+        ]))
+              ..where(tabelaPagamento.id.equals(pagamento.id)))
+            .getSingle();
+        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var cadaPagamento = Pagamento(
+            pagamentoFinal: pagamentoFInal == null
+                ? null
+                : PagamentoFinal(
+                    id: pagamentoFInal.id,
+                    estado: pagamentoFInal.estado,
+                    idPagamento: pagamentoFInal.idPagamento,
+                    data: pagamentoFInal.data),
+            formaPagamento: FormaPagamento(
+                estado: forma.estado,
+                tipo: forma.tipo,
+                descricao: forma.descricao),
+            idFormaPagamento: forma.id,
+            estado: pagamento.estado,
+            idVenda: pagamento.idVenda,
+            valor: pagamento.valor);
+        cadaVenda.pagamentos ??= [];
+        cadaVenda.pagamentos!.add(cadaPagamento);
+      }
+
+      if (vendas.isNotEmpty) {
+        var teste = vendas.firstWhereOrNull((element) {
+          var conversao1 = DateTime(
+            element.data!.year,
+            element.data!.month,
+            element.data!.day,
+          );
+          var conversao2 = DateTime(
+            cadaVenda.data!.year,
+            cadaVenda.data!.month,
+            cadaVenda.data!.day,
+          );
+
+          if (conversao1.isAtSameMomentAs(conversao2)) {
+            return true;
+          }
+          return false;
+        });
+
+        if (teste == null) {
+          vendas.add(cadaVenda);
+        } else {
+          continue;
+        }
+      } else {
+        vendas.add(cadaVenda);
+      }
+    }
+
+    return vendas;
+  }
+
+  Future<List<Venda>> pegarDividasDeFuncionario(Funcionario funcionario) async {
+    var vendas = <Venda>[];
+    var resVendasFuncionariosClientes1 = select(tabelaVenda).join([
+      leftOuterJoin(tabelaFuncionario,
+          tabelaVenda.idFuncionario.equalsExp(tabelaFuncionario.id)),
+      leftOuterJoin(
+          tabelaCliente, tabelaVenda.idCliente.equalsExp(tabelaCliente.id)),
+    ])
+      ..where(tabelaFuncionario.id.equals(funcionario.id) &
+          ((tabelaVenda.total.equalsExp(tabelaVenda.parcela)).not()))
+      ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
+
+    var resVendasFuncionariosClientes2 =
+        await resVendasFuncionariosClientes1.get();
+    for (var cadaLinha in resVendasFuncionariosClientes2) {
+      var venda = cadaLinha.readTable(tabelaVenda);
+      var cliente = cadaLinha.readTable(tabelaCliente);
+      var resVendasPagamentos = await ((select(tabelaVenda).join([
+        leftOuterJoin(
+            tabelaPagamento, tabelaPagamento.idVenda.equalsExp(tabelaVenda.id)),
+      ]))
+            ..where(tabelaPagamento.idVenda.equals(venda.id)))
+          .get();
+      var resVendasItemVenda = await ((select(tabelaItemVenda).join([
+        leftOuterJoin(tabelaProduto,
+            tabelaItemVenda.idProduto.equalsExp(tabelaProduto.id)),
+      ]))
+            ..where(tabelaItemVenda.idVenda.equals(venda.id)))
+          .get();
+
+      var listaItensVenda = <ItemVenda>[];
+      for (var e in resVendasItemVenda) {
+        var item = e.readTable(tabelaItemVenda);
+        var produto = e.readTable(tabelaProduto);
+        var preoDao = PrecoDao(gett.Get.find());
+        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+
+        var cada = ItemVenda(
+            estado: item.estado,
+            idProduto: item.idProduto,
+            quantidade: item.quantidade,
+            desconto: item.desconto,
+            idVenda: item.idVenda,
+            total: item.total,
+            produto: Produto(
+              id: produto.id,
+              estado: produto.estado,
+              precoCompra: produto.precoCompra,
+              recebivel: produto.recebivel,
+              nome: produto.nome,
+              idPreco: preco.id,
+              preco: preco,
+              listaPreco: [preco.preco!],
+            ));
+        listaItensVenda.add(cada);
+      }
+      var cadaCliente = Cliente(
+          estado: cliente.estado, nome: cliente.nome, numero: cliente.numero);
+
+      var cadaVenda = Venda(
+          id: venda.id,
+          cliente: cadaCliente,
+          itensVenda: listaItensVenda,
+          estado: venda.estado,
+          idFuncionario: venda.idFuncionario,
+          idCliente: venda.idCliente,
+          data: venda.data,
+          dataLevantamentoCompra: venda.dataLevantamentoCompra,
+          total: venda.total,
+          parcela: venda.parcela);
+
+      for (var linhaVendasPagamentos in resVendasPagamentos) {
+        var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
+
+        var pagamentoFInal = await (select(tabelaPagamentoFinal)
+              ..where((tbl) => tbl.idPagamento.equals(pagamento.id)))
             .getSingleOrNull();
 
         var resPagamentosEformas = await ((select(tabelaPagamento).join([
@@ -238,9 +741,239 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
-        if (cadaVenda.pagamentos == null) {
-          cadaVenda.pagamentos = [];
-        }
+        cadaVenda.pagamentos ??= [];
+        cadaVenda.pagamentos!.add(cadaPagamento);
+      }
+      vendas.add(cadaVenda);
+    }
+
+    return vendas;
+  }
+
+  Future<List<Venda>> todasDividas() async {
+    var vendas = <Venda>[];
+    var resVendasFuncionariosClientes1 = select(tabelaVenda).join([
+      leftOuterJoin(tabelaFuncionario,
+          tabelaVenda.idFuncionario.equalsExp(tabelaFuncionario.id)),
+      leftOuterJoin(
+          tabelaCliente, tabelaVenda.idCliente.equalsExp(tabelaCliente.id)),
+    ])
+      ..where(((tabelaVenda.total.equalsExp(tabelaVenda.parcela)).not()))
+      ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
+
+    var resVendasFuncionariosClientes2 =
+        await resVendasFuncionariosClientes1.get();
+    for (var cadaLinha in resVendasFuncionariosClientes2) {
+      var venda = cadaLinha.readTable(tabelaVenda);
+      var cliente = cadaLinha.readTable(tabelaCliente);
+      var resVendasPagamentos = await ((select(tabelaVenda).join([
+        leftOuterJoin(
+            tabelaPagamento, tabelaPagamento.idVenda.equalsExp(tabelaVenda.id)),
+      ]))
+            ..where(tabelaPagamento.idVenda.equals(venda.id)))
+          .get();
+      var resVendasItemVenda = await ((select(tabelaItemVenda).join([
+        leftOuterJoin(tabelaProduto,
+            tabelaItemVenda.idProduto.equalsExp(tabelaProduto.id)),
+      ]))
+            ..where(tabelaItemVenda.idVenda.equals(venda.id)))
+          .get();
+
+      var listaItensVenda = <ItemVenda>[];
+      for (var e in resVendasItemVenda) {
+        var item = e.readTable(tabelaItemVenda);
+        var produto = e.readTable(tabelaProduto);
+        var preoDao = PrecoDao(gett.Get.find());
+        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+
+        var cada = ItemVenda(
+            estado: item.estado,
+            idProduto: item.idProduto,
+            quantidade: item.quantidade,
+            desconto: item.desconto,
+            idVenda: item.idVenda,
+            total: item.total,
+            produto: Produto(
+              id: produto.id,
+              estado: produto.estado,
+              precoCompra: produto.precoCompra,
+              recebivel: produto.recebivel,
+              nome: produto.nome,
+              idPreco: preco.id,
+              preco: preco,
+              listaPreco: [preco.preco!],
+            ));
+        listaItensVenda.add(cada);
+      }
+      var cadaCliente = Cliente(
+          estado: cliente.estado, nome: cliente.nome, numero: cliente.numero);
+
+      var cadaVenda = Venda(
+          id: venda.id,
+          cliente: cadaCliente,
+          itensVenda: listaItensVenda,
+          estado: venda.estado,
+          idFuncionario: venda.idFuncionario,
+          idCliente: venda.idCliente,
+          data: venda.data,
+          dataLevantamentoCompra: venda.dataLevantamentoCompra,
+          total: venda.total,
+          parcela: venda.parcela);
+
+      for (var linhaVendasPagamentos in resVendasPagamentos) {
+        var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
+
+        var pagamentoFInal = await (select(tabelaPagamentoFinal)
+              ..where((tbl) => tbl.idPagamento.equals(pagamento.id)))
+            .getSingleOrNull();
+
+        var resPagamentosEformas = await ((select(tabelaPagamento).join([
+          leftOuterJoin(
+              tabelaFormaPagamento,
+              tabelaFormaPagamento.id
+                  .equalsExp(tabelaPagamento.idFormaPagamento)),
+        ]))
+              ..where(tabelaPagamento.id.equals(pagamento.id)))
+            .getSingle();
+        // print("============> $resPagamentosEformas");
+        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var cadaPagamento = Pagamento(
+            pagamentoFinal: pagamentoFInal == null
+                ? null
+                : PagamentoFinal(
+                    id: pagamentoFInal.id,
+                    estado: pagamentoFInal.estado,
+                    idPagamento: pagamentoFInal.idPagamento,
+                    data: pagamentoFInal.data),
+            formaPagamento: FormaPagamento(
+                estado: forma.estado,
+                tipo: forma.tipo,
+                descricao: forma.descricao),
+            idFormaPagamento: forma.id,
+            estado: pagamento.estado,
+            idVenda: pagamento.idVenda,
+            valor: pagamento.valor);
+        cadaVenda.pagamentos ??= [];
+        cadaVenda.pagamentos!.add(cadaPagamento);
+      }
+      vendas.add(cadaVenda);
+    }
+
+    return vendas;
+  }
+
+  Future<List<Venda>> pegarEncomendasDeFuncionario(
+      Funcionario funcionario) async {
+    var vendas = <Venda>[];
+    var resVendasFuncionariosClientes1 = select(tabelaVenda).join([
+      leftOuterJoin(tabelaFuncionario,
+          tabelaVenda.idFuncionario.equalsExp(tabelaFuncionario.id)),
+      leftOuterJoin(
+          tabelaCliente, tabelaVenda.idCliente.equalsExp(tabelaCliente.id)),
+    ])
+      ..where(tabelaFuncionario.id.equals(funcionario.id) &
+          ((tabelaVenda.data.year
+                      .equalsExp(tabelaVenda.dataLevantamentoCompra.year).not() |
+                  tabelaVenda.data.month
+                      .equalsExp(tabelaVenda.dataLevantamentoCompra.month).not() |
+                  (tabelaVenda.data.day
+                      .equalsExp(tabelaVenda.dataLevantamentoCompra.day).not()))
+              ))
+      ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
+
+    var resVendasFuncionariosClientes2 =
+        await resVendasFuncionariosClientes1.get();
+    for (var cadaLinha in resVendasFuncionariosClientes2) {
+      var venda = cadaLinha.readTable(tabelaVenda);
+      var cliente = cadaLinha.readTable(tabelaCliente);
+      var resVendasPagamentos = await ((select(tabelaVenda).join([
+        leftOuterJoin(
+            tabelaPagamento, tabelaPagamento.idVenda.equalsExp(tabelaVenda.id)),
+      ]))
+            ..where(tabelaPagamento.idVenda.equals(venda.id)))
+          .get();
+      var resVendasItemVenda = await ((select(tabelaItemVenda).join([
+        leftOuterJoin(tabelaProduto,
+            tabelaItemVenda.idProduto.equalsExp(tabelaProduto.id)),
+      ]))
+            ..where(tabelaItemVenda.idVenda.equals(venda.id)))
+          .get();
+
+      var listaItensVenda = <ItemVenda>[];
+      for (var e in resVendasItemVenda) {
+        var item = e.readTable(tabelaItemVenda);
+        var produto = e.readTable(tabelaProduto);
+        var preoDao = PrecoDao(gett.Get.find());
+        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+
+        var cada = ItemVenda(
+            estado: item.estado,
+            idProduto: item.idProduto,
+            quantidade: item.quantidade,
+            desconto: item.desconto,
+            idVenda: item.idVenda,
+            total: item.total,
+            produto: Produto(
+              id: produto.id,
+              estado: produto.estado,
+              precoCompra: produto.precoCompra,
+              recebivel: produto.recebivel,
+              nome: produto.nome,
+              idPreco: preco.id,
+              preco: preco,
+              listaPreco: [preco.preco!],
+            ));
+        listaItensVenda.add(cada);
+      }
+      var cadaCliente = Cliente(
+          estado: cliente.estado, nome: cliente.nome, numero: cliente.numero);
+
+      var cadaVenda = Venda(
+          id: venda.id,
+          cliente: cadaCliente,
+          itensVenda: listaItensVenda,
+          estado: venda.estado,
+          idFuncionario: venda.idFuncionario,
+          idCliente: venda.idCliente,
+          data: venda.data,
+          dataLevantamentoCompra: venda.dataLevantamentoCompra,
+          total: venda.total,
+          parcela: venda.parcela);
+
+      for (var linhaVendasPagamentos in resVendasPagamentos) {
+        var pagamento = linhaVendasPagamentos.readTable(tabelaPagamento);
+
+        var pagamentoFInal = await (select(tabelaPagamentoFinal)
+              ..where((tbl) => tbl.idPagamento.equals(pagamento.id)))
+            .getSingleOrNull();
+
+        var resPagamentosEformas = await ((select(tabelaPagamento).join([
+          leftOuterJoin(
+              tabelaFormaPagamento,
+              tabelaFormaPagamento.id
+                  .equalsExp(tabelaPagamento.idFormaPagamento)),
+        ]))
+              ..where(tabelaPagamento.id.equals(pagamento.id)))
+            .getSingle();
+        // print("============> $resPagamentosEformas");
+        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var cadaPagamento = Pagamento(
+            pagamentoFinal: pagamentoFInal == null
+                ? null
+                : PagamentoFinal(
+                    id: pagamentoFInal.id,
+                    estado: pagamentoFInal.estado,
+                    idPagamento: pagamentoFInal.idPagamento,
+                    data: pagamentoFInal.data),
+            formaPagamento: FormaPagamento(
+                estado: forma.estado,
+                tipo: forma.tipo,
+                descricao: forma.descricao),
+            idFormaPagamento: forma.id,
+            estado: pagamento.estado,
+            idVenda: pagamento.idVenda,
+            valor: pagamento.valor);
+        cadaVenda.pagamentos ??= [];
         cadaVenda.pagamentos!.add(cadaPagamento);
       }
 
@@ -248,5 +981,30 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
     }
 
     return vendas;
+  }
+
+  Future<List<Pagamento>> pegarListaPagamentoDaData(DateTime data) async {
+    var res = await (select(tabelaPagamento).join([
+      leftOuterJoin(tabelaPagamentoFinal,
+          tabelaPagamentoFinal.idPagamento.equalsExp(tabelaPagamento.id))
+    ])
+          ..where((tabelaPagamentoFinal.data.year.equals(data.year) &
+              tabelaPagamentoFinal.data.month.equals(data.month) &
+              (tabelaPagamentoFinal.data.day.equals(data.day)))))
+        .get();
+    var lista = <Pagamento>[];
+    for (var linha in res) {
+      var cada = linha.readTable(tabelaPagamento);
+      var pagFinal = linha.readTable(tabelaPagamentoFinal);
+      lista.add(Pagamento(
+          estado: cada.estado,
+          valor: cada.valor,
+          pagamentoFinal: PagamentoFinal(
+              data: pagFinal.data,
+              estado: pagFinal.estado,
+              idPagamento: cada.id,
+              id: pagFinal.id)));
+    }
+    return lista;
   }
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:componentes_visuais/componentes/item_gaveta.dart';
+import 'package:get/get.dart';
 import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/recursos/constantes.dart';
 import 'package:yetu_gestor/vista/componentes/logo.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente_c.dart';
 
 import '../painel_funcionario_c.dart';
+import '../sub_paineis/vendas/layouts/vendas_c.dart';
 
 class GavetaNavegacao extends StatelessWidget {
   final String linkImagem;
@@ -38,10 +40,17 @@ class GavetaNavegacao extends StatelessWidget {
               children: [
                 ItemDaGaveta(
                     cor: branca,
-                    icone: Icons.person,
-                    titulo: "Perfil",
+                    icone: Icons.home,
+                    titulo: "Início",
                     metodoQuandoItemClicado: () async {
-                      // c.irParaPainel(PainelActual.FUNCIONARIOS);
+                      c.irParaPainel(PainelActual.INICIO);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.person,
+                    titulo: "Dinheiro a mais",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.DINHEIRO_SOBRA);
                     }),
                 ItemDaGaveta(
                     cor: branca,
@@ -53,16 +62,31 @@ class GavetaNavegacao extends StatelessWidget {
                 ItemDaGaveta(
                     cor: branca,
                     icone: Icons.storefront,
-                    titulo: "Dívidas",
+                    titulo: "Dívidas Gerais",
                     metodoQuandoItemClicado: () async {
-                      // c.irParaPainel(PainelActual.VENDAS);
+                      c.irParaPainel(PainelActual.DIVIDAS_GERAIS);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.monetization_on,
+                    titulo: "Saídas de Caixa",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.SAIDA_CAIXA);
+                    }),
+                    
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.storefront,
+                    titulo: "Encomendas Gerais",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.ENCOMENDAS_GERAIS);
                     }),
                 ItemDaGaveta(
                     cor: branca,
                     icone: Icons.arrow_circle_down,
                     titulo: "Recepções",
                     metodoQuandoItemClicado: () async {
-                      // c.irParaPainel(PainelActual.ENTRADAS_GERAL);
+                      c.irParaPainel(PainelActual.RECEPCOES);
                     }),
               ],
             ),

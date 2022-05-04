@@ -20,7 +20,6 @@ class PagamentosC extends GetxController {
   }
   @override
   void onInit() async {
-    await pegarDados();
     super.onInit();
   }
 

@@ -18,6 +18,7 @@ class Aplicacao extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => GetMaterialApp(
+        localizationsDelegates: [],
         theme: ThemeData(
             primaryColor: Color.fromRGBO(86, 0, 78, 1),
             accentColor: Color.fromRGBO(86, 0, 78, 1),

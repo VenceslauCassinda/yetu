@@ -10,7 +10,7 @@ class RececcaoDao extends DatabaseAccessor<BancoDados> with _$RececcaoDaoMixin {
           tabelaFuncionario.id.equalsExp(tabelaRececcao.idFuncionario)),
       leftOuterJoin(
           tabelaProduto, tabelaProduto.id.equalsExp(tabelaRececcao.idProduto))
-    ])).get();
+    ])..orderBy([OrderingTerm.desc(tabelaRececcao.data)])).get();
     var lista = res.map((linha) {
       var receccao = linha.readTable(tabelaRececcao);
       var funcionario = linha.readTable(tabelaFuncionario);
@@ -23,6 +23,30 @@ class RececcaoDao extends DatabaseAccessor<BancoDados> with _$RececcaoDaoMixin {
             idUsuario: funcionario.idUsuario,
             nomeCompelto: funcionario.nomeCompleto,
           ),
+          produto: Produto(
+              id: produto.id,
+              estado: produto.estado,
+              nome: produto.nome,
+              precoCompra: produto.precoCompra,
+              recebivel: produto.recebivel),
+          idFuncionario: receccao.idFuncionario,
+          idProduto: receccao.idProduto,
+          quantidade: receccao.quantidade,
+          data: receccao.data);
+    }).toList();
+    return lista;
+  }
+  
+  Future<List<Receccao>> todasDoFuncionario(int id) async {
+    var res = await ((select(tabelaRececcao)..where((tbl) => tbl.idFuncionario.equals(id))).join([
+      leftOuterJoin(tabelaProduto,
+          tabelaProduto.id.equalsExp(tabelaRececcao.idProduto))
+    ])..orderBy([OrderingTerm.desc(tabelaRececcao.data)])).get();
+    var lista = res.map((linha) {
+      var receccao = linha.readTable(tabelaRececcao);
+      var produto = linha.readTable(tabelaProduto);
+      return Receccao(
+          estado: receccao.estado,
           produto: Produto(
               id: produto.id,
               estado: produto.estado,

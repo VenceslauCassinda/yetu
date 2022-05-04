@@ -5,10 +5,10 @@ class SaidaDao extends DatabaseAccessor<BancoDados> with _$SaidaDaoMixin {
   SaidaDao(BancoDados attachedDatabase) : super(attachedDatabase);
 
   Future<List<Saida>> todas() async {
-    var res = await select(tabelaSaida).join([
+    var res = await (select(tabelaSaida).join([
       leftOuterJoin(
           tabelaProduto, tabelaSaida.idProduto.equalsExp(tabelaProduto.id))
-    ]).get();
+    ])..orderBy([OrderingTerm.desc(tabelaSaida.data)])).get();
     var lista = res.map((linha) {
       var produto = linha.readTable(tabelaProduto);
       var saida = linha.readTable(tabelaSaida);
@@ -31,12 +31,12 @@ class SaidaDao extends DatabaseAccessor<BancoDados> with _$SaidaDaoMixin {
   }
 
   Future<List<Saida>> todasComProdutoDeId(int idProduto) async {
-    var res = await (select(tabelaSaida)
+    var res = await ((select(tabelaSaida)
           ..where((tbl) => tbl.idProduto.equals(idProduto)))
         .join([
       leftOuterJoin(
           tabelaProduto, tabelaSaida.idProduto.equalsExp(tabelaProduto.id))
-    ]).get();
+    ])..orderBy([OrderingTerm.desc(tabelaSaida.data)])).get();
     var lista = res.map((linha) {
       var produto = linha.readTable(tabelaProduto);
       var saida = linha.readTable(tabelaSaida);

@@ -25,7 +25,7 @@ class ItemItemVenda extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: Card(
-        elevation: 4,
+        elevation: 5,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(

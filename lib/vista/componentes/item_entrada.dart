@@ -25,21 +25,22 @@ class ItemEntrada extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 5,
       child: Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Visibility(
+                visible: visaoGeral,
+                child: Text("Produto: ${entrada.produto?.nome ?? "Nenhum"}")),
             Text("Quantidade: ${entrada.quantidade ?? 0}"),
             Text(
                 "Data da Entrada: ${entrada.data.toString().replaceAll(" ", " às ").replaceAll(".000", "")}"),
             Text("Motivo: ${entrada.motivo ?? "Sem Motivo"}"),
             Text(
                 "Recebido por: ${entrada.receccao?.funcionario?.nomeCompelto ?? "Ninguem"}"),
-            Visibility(
-                visible: visaoGeral,
-                child: Text("Produto: ${entrada.produto?.nome ?? "Nenhum"}")),
           ],
         ),
       ),

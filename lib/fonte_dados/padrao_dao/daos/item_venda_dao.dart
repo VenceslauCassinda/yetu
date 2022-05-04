@@ -11,6 +11,7 @@ class ItemVendaDao extends DatabaseAccessor<BancoDados>
   }
 
   Future<int> adicionarItemVenda(ItemVenda dado) async {
+    mostrar(dado.total);
     var res = await (into(tabelaItemVenda).insert(dado.toCompanion(true)));
     return res;
   }

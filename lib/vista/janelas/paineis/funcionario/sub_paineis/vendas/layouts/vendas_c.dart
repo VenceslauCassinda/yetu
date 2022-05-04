@@ -13,7 +13,6 @@ import 'package:yetu_gestor/dominio/entidades/produto.dart';
 import 'package:yetu_gestor/dominio/entidades/venda.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_pagamento.dart';
 import 'package:yetu_gestor/recursos/constantes.dart';
-import 'package:yetu_gestor/solucoes_uteis/console.dart';
 import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/vendas/layouts/mesa_venda/mesa_venda.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/painel_funcionario_c.dart';
@@ -50,8 +49,9 @@ class VendasC extends GetxController {
   late PainelFuncionarioC _painelFuncionarioC;
   late ManipularPagamentoI _manipularPagamentoI;
   int indiceTabActual = 0;
+  var totalDividaPagas = 0.0.obs;
   late DateTime data;
-  late Funcionario funcionario;
+  late Funcionario? funcionario;
 
   VendasC(this.data, this.funcionario) {
     _manipularStockI = ManipularStock(ProvedorStock());
@@ -74,14 +74,18 @@ class VendasC extends GetxController {
 
   @override
   void onInit() async {
-    _painelFuncionarioC = Get.find();
+    try {
+      _painelFuncionarioC = Get.find();
+    } catch (e) {
+      _painelFuncionarioC = Get.put(PainelFuncionarioC());
+    }
     await pegarLista();
+    await pegarTotalDividas();
     super.onInit();
   }
 
   void terminarSessao() {
-    PainelFuncionarioC c = Get.find();
-    c.terminarSessao();
+    _painelFuncionarioC.terminarSessao();
   }
 
   void navegar(int indice) async {
@@ -101,16 +105,23 @@ class VendasC extends GetxController {
   }
 
   void mostrarDialogoNovaVenda(BuildContext context) {
-    mostrarDialogoDeLayou(LayoutMesaVenda(data, funcionario));
+    mostrarDialogoDeLayou(LayoutMesaVenda(data, funcionario!));
   }
 
   Future<List<Produto>> pegarListaProdutos() async {
     return await _manipularProdutoI.pegarLista();
   }
 
+  Future pegarTotalDividas() async {
+    var res = await _manipularVendaI.pegarListaTodasPagamentoDividas(data);
+    for (var cada in res) {
+      totalDividaPagas.value += cada.valor ?? 0;
+    }
+  }
+
   Future pegarLista() async {
     lista.clear();
-    var res = await _manipularVendaI.pegarListaVendas(funcionario, data);
+    var res = await _manipularVendaI.pegarLista(funcionario, data);
     for (var cada in res) {
       lista.add(cada);
     }
@@ -170,7 +181,8 @@ class VendasC extends GetxController {
     voltar();
   }
 
-  void mostrarFormasPagamento(Venda venda, BuildContext context) async {
+  void mostrarFormasPagamento(Venda venda, BuildContext context,
+      {bool? comPagamentoFinal}) async {
     if (venda.divida == false) {
       mostrarSnack("Está tudo pago!");
       return;
@@ -191,7 +203,8 @@ class VendasC extends GetxController {
               var lista = snapshot.data!.map((e) => e.descricao!).toList();
               return LayoutFormaPagamento(
                   accaoAoFinalizar: (valor, opcao) async {
-                    await adicionarValorPagamento(venda, valor, opcao);
+                    await adicionarValorPagamento(venda, valor, opcao,
+                        comPagamentoFinal: comPagamentoFinal);
                   },
                   titulo: "Selecione a Forma de Pagamento",
                   listaItens: lista);
@@ -199,8 +212,8 @@ class VendasC extends GetxController {
         naoFechar: true);
   }
 
-  Future<void> adicionarValorPagamento(
-      Venda venda, String valor, String? opcao) async {
+  Future<void> adicionarValorPagamento(Venda venda, String valor, String? opcao,
+      {bool? comPagamentoFinal}) async {
     var soma = (venda.pagamentos ?? []).fold<double>(
         0, (previousValue, element) => element.valor! + previousValue);
     if ((soma + double.parse(valor)) > venda.total!) {
@@ -220,16 +233,16 @@ class VendasC extends GetxController {
     venda.pagamentos!.add(novoPagamento);
     venda.parcela = venda.parcela! + double.parse(valor);
 
-    var hoje = data;
+    var hoje = DateTime.now();
     var id = await _manipularPagamentoI.registarPagamento(novoPagamento);
     var pagamentoFinal =
         PagamentoFinal(estado: Estado.ATIVADO, idPagamento: id, data: hoje);
     novoPagamento.pagamentoFinal = pagamentoFinal;
 
-    if (DateTime(venda.data!.year, venda.data!.month, venda.data!.day) !=
-        DateTime(hoje.year, hoje.month, hoje.day)) {
+    if (comPagamentoFinal != null) {
       await _manipularPagamentoI.registarPagamentoFinal(pagamentoFinal);
     }
+    totalDividaPagas.value += double.parse(valor);
 
     for (var i = 0; i < lista.length; i++) {
       if (lista[i].id == venda.id) {

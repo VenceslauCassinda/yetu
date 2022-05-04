@@ -3,21 +3,20 @@ import 'package:componentes_visuais/componentes/icone_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/vendas/layouts/vendas_c.dart';
 
 import '../../dominio/entidades/item_venda.dart';
 import '../../dominio/entidades/venda.dart';
 import '../../recursos/constantes.dart';
-import '../janelas/paineis/funcionario/sub_paineis/vendas/layouts/vendas_c.dart';
 
 class ItemModeloVenda extends StatelessWidget {
   const ItemModeloVenda({
     Key? key,
-    required VendasC c,
+    required this.c,
     required this.venda,
-  })  : _c = c,
-        super(key: key);
+  }) : super(key: key);
 
-  final VendasC _c;
+  final c;
   final Venda venda;
 
   @override
@@ -27,14 +26,16 @@ class ItemModeloVenda extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       width: 340,
@@ -42,17 +43,17 @@ class ItemModeloVenda extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Visibility(
-                            visible: _c.indiceTabActual == 0,
+                            visible: c.indiceTabActual == 0,
                             child: Text(
                                 "Tipo de Item: ${venda.venda ? "Venda" : (venda.encomenda ? "Encomenda" : "Dívida")}"),
                           ),
                           Text(mostrarCadaProduto(venda.itensVenda ?? [])),
                           Text("Total: ${formatar(venda.total!)} KZ"),
                           Visibility(
-                            visible: _c.indiceTabActual != 1,
+                            visible: c.indiceTabActual != 1,
                             child: Obx(
                               () {
-                                _c.lista.isEmpty;
+                                c.lista.isEmpty;
                                 return Text(
                                     "Total Pago: ${formatar((venda.pagamentos ?? []).fold<double>(0, (previousValue, element) => ((element.valor ?? 0) + previousValue)))} KZ");
                               },
@@ -62,7 +63,7 @@ class ItemModeloVenda extends StatelessWidget {
                             visible: venda.divida == true,
                             child: Obx(
                               () {
-                                _c.lista.isEmpty;
+                                c.lista.isEmpty;
                                 return Text(
                                     "Por pagar: ${formatar(venda.total! - venda.parcela!)} KZ");
                               },
@@ -81,6 +82,8 @@ class ItemModeloVenda extends StatelessWidget {
                               visible: venda.encomenda == true,
                               child: Text(
                                   "Data de Levantamento: ${formatarMesOuDia(venda.dataLevantamentoCompra?.day ?? "")}/${formatarMesOuDia(venda.dataLevantamentoCompra?.month ?? "")}/${venda.dataLevantamentoCompra?.year ?? ""} às ${formatarMesOuDia(venda.dataLevantamentoCompra?.hour ?? "")}h e ${formatarMesOuDia(venda.dataLevantamentoCompra?.minute ?? "")}min")),
+                          Text(
+                              "Data: ${formatarMesOuDia(venda.data?.day ?? "")}/${formatarMesOuDia(venda.data?.month ?? "")}/${venda.data?.year ?? ""}")
                         ],
                       ),
                     ),
@@ -102,21 +105,22 @@ class ItemModeloVenda extends StatelessWidget {
                       visible: venda.encomenda == true,
                       child: IconeItem(
                         metodoQuandoItemClicado: () {
-                          _c.mostraDialogoEntregarEncomenda(venda);
+                          c.mostraDialogoEntregarEncomenda(venda);
                         },
                         icone: Icons.swipe_up,
                         titulo: "Entregar\nEncomenda",
                         cor: primaryColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 30,
                     ),
                     Visibility(
                       visible: venda.divida == true,
                       child: IconeItem(
                         metodoQuandoItemClicado: () {
-                          _c.mostrarFormasPagamento(venda, context);
+                          c.mostrarFormasPagamento(venda, context,
+                              comPagamentoFinal: true);
                         },
                         icone: Icons.monetization_on_outlined,
                         titulo: "Finallizar\nPagamento",
@@ -130,7 +134,7 @@ class ItemModeloVenda extends StatelessWidget {
             Spacer(),
             IconeItem(
                 metodoQuandoItemClicado: () {
-                  _c.mostrarDialogoDetalhesVenda(venda);
+                  c.mostrarDialogoDetalhesVenda(venda);
                 },
                 icone: Icons.list,
                 titulo: "Detalhes")

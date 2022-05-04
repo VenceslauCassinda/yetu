@@ -48,4 +48,11 @@ class ManipularRececcao implements ManipularRececcaoI {
   Future<List<Receccao>> todas() async {
     return await _provedorRececcaoI.todas();
   }
+
+  @override
+  Future<List<Receccao>> pegarListaRececcoesFuncionario(
+      Funcionario funcionario) async {
+    return await _provedorRececcaoI
+        .pegarListaRececcoesFuncionario(funcionario.id!);
+  }
 }

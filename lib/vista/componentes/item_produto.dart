@@ -2,6 +2,7 @@ import 'package:componentes_visuais/componentes/icone_item.dart';
 import 'package:componentes_visuais/componentes/imagem_circulo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
 
 import '../../dominio/entidades/produto.dart';
 import '../../recursos/constantes.dart';
@@ -19,7 +20,7 @@ class ItemProduto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
+      elevation: 5,
       child: Row(
         children: [
           Container(
@@ -44,14 +45,14 @@ class ItemProduto extends StatelessWidget {
                 Text("Quantidade: ${produto.stock?.quantidade}"),
                 Visibility(
                     visible: c != null,
-                    child:
-                        Text("Preço de Compra: ${produto.precoCompra ?? 0}")),
+                    child: Text(
+                        "Preço de Compra: ${formatar(produto.precoCompra ?? 0)}")),
                 Visibility(
                   visible: c != null,
                   child: Text(
-                      "Preço de Venda: ${produto.listaPreco!.isEmpty ? "Sem Preço" : produto.listaPreco![0]}"),
+                      "Preço de Venda: ${produto.listaPreco!.isEmpty ? "Sem Preço" : formatar(produto.listaPreco![0])}"),
                   replacement: Text(
-                      "Preço: ${produto.listaPreco!.isEmpty ? "Sem Preço" : produto.listaPreco![0]}"),
+                      "Preço: ${produto.listaPreco!.isEmpty ? "Sem Preço" : formatar(produto.listaPreco![0])}"),
                 ),
               ],
             ),

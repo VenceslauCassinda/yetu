@@ -15,19 +15,20 @@ class ItemSaida extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 5,
       child: Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Quantidade: ${saida.quantidade ?? 0}"),
-            Text(
-                "Data da Entrada: ${saida.data.toString().replaceAll(" ", " às ").replaceAll(".000", "")}"),
-            Text("Motivo: ${saida.motivo ?? "Sem Motivo"}"),
             Visibility(
                 visible: visaoGeral,
                 child: Text("Produto: ${saida.produto?.nome ?? "Nenhum"}")),
+            Text("Quantidade: ${saida.quantidade ?? 0}"),
+            Text(
+                "Data da Saída: ${saida.data.toString().replaceAll(" ", " às ").replaceAll(".000", "")}"),
+            Text("Motivo: ${saida.motivo ?? "Sem Motivo"}"),
           ],
         ),
       ),

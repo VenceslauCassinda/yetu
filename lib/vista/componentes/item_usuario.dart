@@ -20,6 +20,7 @@ class ItemUsuario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 5,
       child: ListTile(
         onTap: () {
           aoClicar();

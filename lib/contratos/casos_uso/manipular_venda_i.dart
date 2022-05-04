@@ -11,6 +11,7 @@ abstract class ManipularVendaI {
       double parcela,
       Funcionario funcionario,
       Cliente cliente,
+      DateTime data,
       DateTime dataLevantamentoCompra);
   Future<int> vender(
       List<ItemVenda> itensVenda,
@@ -18,6 +19,7 @@ abstract class ManipularVendaI {
       double total,
       Funcionario funcionario,
       Cliente cliente,
+      DateTime data,
       DateTime dataLevantamentoCompra,
       double parcela);
   double calcularTotalVenda(List<ItemVenda> itensVenda);
@@ -26,15 +28,27 @@ abstract class ManipularVendaI {
   double calcularParcelaApagar(double totalApagar, double parcelaJaPaga);
   double calcularParcelaPaga(List<Pagamento> pagamentos);
   double aplicarDescontoVenda(double totalApagar, int porcentagem);
-  Future<List<Venda>> pegarLista(Funcionario funcionario, DateTime data);
-  Future<List<Venda>> pegarListaVendas(Funcionario funcionario, DateTime data);
+  Future<List<Venda>> pegarLista(Funcionario? funcionario, DateTime data);
+  Future<List<Venda>> todasDividas();
+  Future<List<Venda>> pegarListaTodasDividas(Funcionario? funcionario);
+  Future<List<Pagamento>> pegarListaTodasPagamentoDividas(DateTime data);
+  Future<List<Venda>> pegarListaTodasEncomendas(Funcionario? funcionario);
+  Future<List<Venda>> pegarListaVendas(Funcionario? funcionario, DateTime data);
   Future<List<Venda>> pegarListaEncomendas(
-      Funcionario funcionario, DateTime data);
-  Future<List<Venda>> pegarListaDividas(Funcionario funcionario, DateTime data);
+      Funcionario? funcionario, DateTime data);
+  Future<List<Venda>> pegarListaDividas(Funcionario? funcionario, DateTime data);
   Future<void> entregarEncomenda(Venda venda);
   bool vendaEstaPaga(Venda venda);
   bool vendaOuEncomenda(Venda venda);
   bool vendaOuDivida(Venda venda);
   Future<ItemVenda?> pegarItemComStockInsuficiente(List<ItemVenda> lista);
   Future<bool> actualizarVenda(Venda venda);
+  Future<bool> removerVenda(Venda venda);
+  Future<bool> removerTodasVendas();
+  Future<bool> removerVendasAntesData(DateTime data);
+
+  Future<List<DateTime>> pegarListaDataVendasFuncionario(
+      Funcionario funcionario);
+
+  Future<List<DateTime>> pegarListaDataVendas();
 }

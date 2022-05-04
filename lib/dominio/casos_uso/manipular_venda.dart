@@ -1,5 +1,4 @@
 import 'package:yetu_gestor/contratos/casos_uso/manipular_cliente_I.dart';
-import 'package:yetu_gestor/contratos/casos_uso/manipular_funcionario_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_item_venda_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_pagamento_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_saida_i.dart';
@@ -17,7 +16,6 @@ import 'package:yetu_gestor/fonte_dados/erros.dart';
 
 import '../../contratos/casos_uso/manipular_venda_i.dart';
 import '../../contratos/provedores/provedor_venda_i.dart';
-import '../../solucoes_uteis/console.dart';
 
 class ManipularVenda implements ManipularVendaI {
   final ProvedorVendaI _provedorVendaI;
@@ -40,16 +38,16 @@ class ManipularVenda implements ManipularVendaI {
       double parcela,
       Funcionario funcionario,
       Cliente cliente,
+      DateTime data,
       DateTime dataLevantamentoCompra) async {
     var idCliente = await _manipularClienteI.registarCliente(cliente);
 
-    var dataVenda = DateTime.now();
     var novaVenda = Venda(
         estado: Estado.ATIVADO,
         idFuncionario: funcionario.id,
         dataLevantamentoCompra: dataLevantamentoCompra,
         idCliente: idCliente,
-        data: dataVenda,
+        data: data,
         total: total,
         parcela: parcela);
     var idVenda = await _provedorVendaI.adicionarVenda(novaVenda);
@@ -82,7 +80,8 @@ class ManipularVenda implements ManipularVendaI {
   }
 
   @override
-  Future<List<Venda>> pegarLista(Funcionario funcionario, DateTime data) async {
+  Future<List<Venda>> pegarLista(
+      Funcionario? funcionario, DateTime data) async {
     return await _provedorVendaI.pegarLista(funcionario, data);
   }
 
@@ -93,6 +92,7 @@ class ManipularVenda implements ManipularVendaI {
       double total,
       Funcionario funcionario,
       Cliente cliente,
+      DateTime data,
       DateTime dataLevantamentoCompra,
       double parcela) async {
     var teste = await pegarItemComStockInsuficiente(itensVenda);
@@ -110,6 +110,7 @@ class ManipularVenda implements ManipularVendaI {
       parcela,
       funcionario,
       cliente,
+      data,
       dataLevantamentoCompra,
     );
     var vendaFeita = await _provedorVendaI.pegarVendaDeId(idVenda);
@@ -181,7 +182,7 @@ class ManipularVenda implements ManipularVendaI {
 
   @override
   Future<List<Venda>> pegarListaDividas(
-      Funcionario funcionario, DateTime data) async {
+      Funcionario? funcionario, DateTime data) async {
     var lista = <Venda>[];
     var originais = await pegarLista(funcionario, data);
     for (var cada in originais) {
@@ -194,7 +195,7 @@ class ManipularVenda implements ManipularVendaI {
 
   @override
   Future<List<Venda>> pegarListaEncomendas(
-      Funcionario funcionario, DateTime data) async {
+      Funcionario? funcionario, DateTime data) async {
     var lista = <Venda>[];
     var originais = await pegarLista(funcionario, data);
     for (var cada in originais) {
@@ -207,7 +208,7 @@ class ManipularVenda implements ManipularVendaI {
 
   @override
   Future<List<Venda>> pegarListaVendas(
-      Funcionario funcionario, DateTime data) async {
+      Funcionario? funcionario, DateTime data) async {
     var lista = <Venda>[];
     var originais = await pegarLista(funcionario, data);
     for (var cada in originais) {
@@ -228,5 +229,89 @@ class ManipularVenda implements ManipularVendaI {
   Future<bool> actualizarVenda(Venda venda) async {
     await _provedorVendaI.actualizarVenda(venda);
     return false;
+  }
+
+  @override
+  Future<List<DateTime>> pegarListaDataVendasFuncionario(
+      Funcionario funcionario) async {
+    return (await _provedorVendaI.pegarListaVendasFuncionario(funcionario))
+        .map((e) => e.data!)
+        .toList();
+  }
+
+  @override
+  Future<List<Venda>> pegarListaTodasDividas(Funcionario? funcionario) async {
+    return await _provedorVendaI.pegarListaTodasDividas(funcionario!);
+  }
+
+  @override
+  Future<List<Venda>> pegarListaTodasEncomendas(
+      Funcionario? funcionario) async {
+    return await _provedorVendaI.pegarListaTodasEncomendas(funcionario!);
+  }
+
+  @override
+  Future<List<Pagamento>> pegarListaTodasPagamentoDividas(DateTime data) async {
+    return await _provedorVendaI.pegarListaTodasPagamentoDividas(data);
+  }
+
+  @override
+  Future<List<Venda>> todasDividas() async {
+    return await _provedorVendaI.todasDividas();
+  }
+
+  @override
+  Future<bool> removerVenda(Venda venda) async {
+    var itens = venda.itensVenda ?? [];
+    var pagamentos = venda.pagamentos ?? [];
+    for (var item in itens) {
+      await _manipularItemVendaI.removerItemVenda(item);
+    }
+    for (var pagamento in pagamentos) {
+      await _manipularPagamentoI.registarPagamento(pagamento);
+    }
+    await _provedorVendaI.removerVendaDeId(venda.id!);
+    return false;
+  }
+
+  @override
+  Future<bool> removerVendasAntesData(DateTime data) async {
+    for (var venda in (await _provedorVendaI.todas())) {
+      if (venda.data!.isBefore(data)) {
+        var itens = venda.itensVenda ?? [];
+        var pagamentos = venda.pagamentos ?? [];
+        for (var item in itens) {
+          await _manipularItemVendaI.removerItemVenda(item);
+        }
+        for (var pagamento in pagamentos) {
+          await _manipularPagamentoI.registarPagamento(pagamento);
+        }
+        await _provedorVendaI.removerVendaDeId(venda.id!);
+      }
+    }
+    return false;
+  }
+
+  @override
+  Future<bool> removerTodasVendas() async {
+    for (var venda in (await _provedorVendaI.todas())) {
+      var itens = venda.itensVenda ?? [];
+      var pagamentos = venda.pagamentos ?? [];
+      for (var item in itens) {
+        await _manipularItemVendaI.removerItemVenda(item);
+      }
+      for (var pagamento in pagamentos) {
+        await _manipularPagamentoI.registarPagamento(pagamento);
+      }
+      await _provedorVendaI.removerVendaDeId(venda.id!);
+    }
+    return false;
+  }
+
+  @override
+  Future<List<DateTime>> pegarListaDataVendas() async {
+    return (await _provedorVendaI.pegarListaVendas())
+        .map((e) => e.data!)
+        .toList();
   }
 }

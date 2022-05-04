@@ -4097,11 +4097,13 @@ class TabelaDinheiroSobraData extends DataClass
   final int estado;
   final int idFuncionario;
   final double valor;
+  final DateTime data;
   TabelaDinheiroSobraData(
       {required this.id,
       required this.estado,
       required this.idFuncionario,
-      required this.valor});
+      required this.valor,
+      required this.data});
   factory TabelaDinheiroSobraData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -4114,6 +4116,8 @@ class TabelaDinheiroSobraData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}id_funcionario'])!,
       valor: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}valor'])!,
+      data: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
     );
   }
   @override
@@ -4123,6 +4127,7 @@ class TabelaDinheiroSobraData extends DataClass
     map['estado'] = Variable<int>(estado);
     map['id_funcionario'] = Variable<int>(idFuncionario);
     map['valor'] = Variable<double>(valor);
+    map['data'] = Variable<DateTime>(data);
     return map;
   }
 
@@ -4132,6 +4137,7 @@ class TabelaDinheiroSobraData extends DataClass
       estado: Value(estado),
       idFuncionario: Value(idFuncionario),
       valor: Value(valor),
+      data: Value(data),
     );
   }
 
@@ -4143,6 +4149,7 @@ class TabelaDinheiroSobraData extends DataClass
       estado: serializer.fromJson<int>(json['estado']),
       idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
       valor: serializer.fromJson<double>(json['valor']),
+      data: serializer.fromJson<DateTime>(json['data']),
     );
   }
   @override
@@ -4153,16 +4160,22 @@ class TabelaDinheiroSobraData extends DataClass
       'estado': serializer.toJson<int>(estado),
       'idFuncionario': serializer.toJson<int>(idFuncionario),
       'valor': serializer.toJson<double>(valor),
+      'data': serializer.toJson<DateTime>(data),
     };
   }
 
   TabelaDinheiroSobraData copyWith(
-          {int? id, int? estado, int? idFuncionario, double? valor}) =>
+          {int? id,
+          int? estado,
+          int? idFuncionario,
+          double? valor,
+          DateTime? data}) =>
       TabelaDinheiroSobraData(
         id: id ?? this.id,
         estado: estado ?? this.estado,
         idFuncionario: idFuncionario ?? this.idFuncionario,
         valor: valor ?? this.valor,
+        data: data ?? this.data,
       );
   @override
   String toString() {
@@ -4170,13 +4183,14 @@ class TabelaDinheiroSobraData extends DataClass
           ..write('id: $id, ')
           ..write('estado: $estado, ')
           ..write('idFuncionario: $idFuncionario, ')
-          ..write('valor: $valor')
+          ..write('valor: $valor, ')
+          ..write('data: $data')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, estado, idFuncionario, valor);
+  int get hashCode => Object.hash(id, estado, idFuncionario, valor, data);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4184,7 +4198,8 @@ class TabelaDinheiroSobraData extends DataClass
           other.id == this.id &&
           other.estado == this.estado &&
           other.idFuncionario == this.idFuncionario &&
-          other.valor == this.valor);
+          other.valor == this.valor &&
+          other.data == this.data);
 }
 
 class TabelaDinheiroSobraCompanion
@@ -4193,31 +4208,37 @@ class TabelaDinheiroSobraCompanion
   final Value<int> estado;
   final Value<int> idFuncionario;
   final Value<double> valor;
+  final Value<DateTime> data;
   const TabelaDinheiroSobraCompanion({
     this.id = const Value.absent(),
     this.estado = const Value.absent(),
     this.idFuncionario = const Value.absent(),
     this.valor = const Value.absent(),
+    this.data = const Value.absent(),
   });
   TabelaDinheiroSobraCompanion.insert({
     this.id = const Value.absent(),
     required int estado,
     required int idFuncionario,
     required double valor,
+    required DateTime data,
   })  : estado = Value(estado),
         idFuncionario = Value(idFuncionario),
-        valor = Value(valor);
+        valor = Value(valor),
+        data = Value(data);
   static Insertable<TabelaDinheiroSobraData> custom({
     Expression<int>? id,
     Expression<int>? estado,
     Expression<int>? idFuncionario,
     Expression<double>? valor,
+    Expression<DateTime>? data,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (estado != null) 'estado': estado,
       if (idFuncionario != null) 'id_funcionario': idFuncionario,
       if (valor != null) 'valor': valor,
+      if (data != null) 'data': data,
     });
   }
 
@@ -4225,12 +4246,14 @@ class TabelaDinheiroSobraCompanion
       {Value<int>? id,
       Value<int>? estado,
       Value<int>? idFuncionario,
-      Value<double>? valor}) {
+      Value<double>? valor,
+      Value<DateTime>? data}) {
     return TabelaDinheiroSobraCompanion(
       id: id ?? this.id,
       estado: estado ?? this.estado,
       idFuncionario: idFuncionario ?? this.idFuncionario,
       valor: valor ?? this.valor,
+      data: data ?? this.data,
     );
   }
 
@@ -4249,6 +4272,9 @@ class TabelaDinheiroSobraCompanion
     if (valor.present) {
       map['valor'] = Variable<double>(valor.value);
     }
+    if (data.present) {
+      map['data'] = Variable<DateTime>(data.value);
+    }
     return map;
   }
 
@@ -4258,7 +4284,8 @@ class TabelaDinheiroSobraCompanion
           ..write('id: $id, ')
           ..write('estado: $estado, ')
           ..write('idFuncionario: $idFuncionario, ')
-          ..write('valor: $valor')
+          ..write('valor: $valor, ')
+          ..write('data: $data')
           ..write(')'))
         .toString();
   }
@@ -4293,8 +4320,14 @@ class $TabelaDinheiroSobraTable extends TabelaDinheiroSobra
   late final GeneratedColumn<double?> valor = GeneratedColumn<double?>(
       'valor', aliasedName, false,
       type: const RealType(), requiredDuringInsert: true);
+  final VerificationMeta _dataMeta = const VerificationMeta('data');
   @override
-  List<GeneratedColumn> get $columns => [id, estado, idFuncionario, valor];
+  late final GeneratedColumn<DateTime?> data = GeneratedColumn<DateTime?>(
+      'data', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, estado, idFuncionario, valor, data];
   @override
   String get aliasedName => _alias ?? 'tabela_dinheiro_sobra';
   @override
@@ -4327,6 +4360,12 @@ class $TabelaDinheiroSobraTable extends TabelaDinheiroSobra
           _valorMeta, valor.isAcceptableOrUnknown(data['valor']!, _valorMeta));
     } else if (isInserting) {
       context.missing(_valorMeta);
+    }
+    if (data.containsKey('data')) {
+      context.handle(
+          _dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
+    } else if (isInserting) {
+      context.missing(_dataMeta);
     }
     return context;
   }
@@ -4601,6 +4640,334 @@ class $TabelaPagamentoFinalTable extends TabelaPagamentoFinal
   }
 }
 
+class TabelaSaidaCaixaData extends DataClass
+    implements Insertable<TabelaSaidaCaixaData> {
+  final int id;
+  final int estado;
+  final int idFuncionario;
+  final DateTime data;
+  final String motivo;
+  final double valor;
+  TabelaSaidaCaixaData(
+      {required this.id,
+      required this.estado,
+      required this.idFuncionario,
+      required this.data,
+      required this.motivo,
+      required this.valor});
+  factory TabelaSaidaCaixaData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return TabelaSaidaCaixaData(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      estado: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
+      idFuncionario: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_funcionario'])!,
+      data: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
+      motivo: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}motivo'])!,
+      valor: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}valor'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['estado'] = Variable<int>(estado);
+    map['id_funcionario'] = Variable<int>(idFuncionario);
+    map['data'] = Variable<DateTime>(data);
+    map['motivo'] = Variable<String>(motivo);
+    map['valor'] = Variable<double>(valor);
+    return map;
+  }
+
+  TabelaSaidaCaixaCompanion toCompanion(bool nullToAbsent) {
+    return TabelaSaidaCaixaCompanion(
+      id: Value(id),
+      estado: Value(estado),
+      idFuncionario: Value(idFuncionario),
+      data: Value(data),
+      motivo: Value(motivo),
+      valor: Value(valor),
+    );
+  }
+
+  factory TabelaSaidaCaixaData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TabelaSaidaCaixaData(
+      id: serializer.fromJson<int>(json['id']),
+      estado: serializer.fromJson<int>(json['estado']),
+      idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
+      data: serializer.fromJson<DateTime>(json['data']),
+      motivo: serializer.fromJson<String>(json['motivo']),
+      valor: serializer.fromJson<double>(json['valor']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'estado': serializer.toJson<int>(estado),
+      'idFuncionario': serializer.toJson<int>(idFuncionario),
+      'data': serializer.toJson<DateTime>(data),
+      'motivo': serializer.toJson<String>(motivo),
+      'valor': serializer.toJson<double>(valor),
+    };
+  }
+
+  TabelaSaidaCaixaData copyWith(
+          {int? id,
+          int? estado,
+          int? idFuncionario,
+          DateTime? data,
+          String? motivo,
+          double? valor}) =>
+      TabelaSaidaCaixaData(
+        id: id ?? this.id,
+        estado: estado ?? this.estado,
+        idFuncionario: idFuncionario ?? this.idFuncionario,
+        data: data ?? this.data,
+        motivo: motivo ?? this.motivo,
+        valor: valor ?? this.valor,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TabelaSaidaCaixaData(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idFuncionario: $idFuncionario, ')
+          ..write('data: $data, ')
+          ..write('motivo: $motivo, ')
+          ..write('valor: $valor')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, estado, idFuncionario, data, motivo, valor);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TabelaSaidaCaixaData &&
+          other.id == this.id &&
+          other.estado == this.estado &&
+          other.idFuncionario == this.idFuncionario &&
+          other.data == this.data &&
+          other.motivo == this.motivo &&
+          other.valor == this.valor);
+}
+
+class TabelaSaidaCaixaCompanion extends UpdateCompanion<TabelaSaidaCaixaData> {
+  final Value<int> id;
+  final Value<int> estado;
+  final Value<int> idFuncionario;
+  final Value<DateTime> data;
+  final Value<String> motivo;
+  final Value<double> valor;
+  const TabelaSaidaCaixaCompanion({
+    this.id = const Value.absent(),
+    this.estado = const Value.absent(),
+    this.idFuncionario = const Value.absent(),
+    this.data = const Value.absent(),
+    this.motivo = const Value.absent(),
+    this.valor = const Value.absent(),
+  });
+  TabelaSaidaCaixaCompanion.insert({
+    this.id = const Value.absent(),
+    required int estado,
+    required int idFuncionario,
+    required DateTime data,
+    required String motivo,
+    required double valor,
+  })  : estado = Value(estado),
+        idFuncionario = Value(idFuncionario),
+        data = Value(data),
+        motivo = Value(motivo),
+        valor = Value(valor);
+  static Insertable<TabelaSaidaCaixaData> custom({
+    Expression<int>? id,
+    Expression<int>? estado,
+    Expression<int>? idFuncionario,
+    Expression<DateTime>? data,
+    Expression<String>? motivo,
+    Expression<double>? valor,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (estado != null) 'estado': estado,
+      if (idFuncionario != null) 'id_funcionario': idFuncionario,
+      if (data != null) 'data': data,
+      if (motivo != null) 'motivo': motivo,
+      if (valor != null) 'valor': valor,
+    });
+  }
+
+  TabelaSaidaCaixaCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? estado,
+      Value<int>? idFuncionario,
+      Value<DateTime>? data,
+      Value<String>? motivo,
+      Value<double>? valor}) {
+    return TabelaSaidaCaixaCompanion(
+      id: id ?? this.id,
+      estado: estado ?? this.estado,
+      idFuncionario: idFuncionario ?? this.idFuncionario,
+      data: data ?? this.data,
+      motivo: motivo ?? this.motivo,
+      valor: valor ?? this.valor,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (estado.present) {
+      map['estado'] = Variable<int>(estado.value);
+    }
+    if (idFuncionario.present) {
+      map['id_funcionario'] = Variable<int>(idFuncionario.value);
+    }
+    if (data.present) {
+      map['data'] = Variable<DateTime>(data.value);
+    }
+    if (motivo.present) {
+      map['motivo'] = Variable<String>(motivo.value);
+    }
+    if (valor.present) {
+      map['valor'] = Variable<double>(valor.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TabelaSaidaCaixaCompanion(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('idFuncionario: $idFuncionario, ')
+          ..write('data: $data, ')
+          ..write('motivo: $motivo, ')
+          ..write('valor: $valor')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TabelaSaidaCaixaTable extends TabelaSaidaCaixa
+    with TableInfo<$TabelaSaidaCaixaTable, TabelaSaidaCaixaData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TabelaSaidaCaixaTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _estadoMeta = const VerificationMeta('estado');
+  @override
+  late final GeneratedColumn<int?> estado = GeneratedColumn<int?>(
+      'estado', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _idFuncionarioMeta =
+      const VerificationMeta('idFuncionario');
+  @override
+  late final GeneratedColumn<int?> idFuncionario = GeneratedColumn<int?>(
+      'id_funcionario', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _dataMeta = const VerificationMeta('data');
+  @override
+  late final GeneratedColumn<DateTime?> data = GeneratedColumn<DateTime?>(
+      'data', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _motivoMeta = const VerificationMeta('motivo');
+  @override
+  late final GeneratedColumn<String?> motivo = GeneratedColumn<String?>(
+      'motivo', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _valorMeta = const VerificationMeta('valor');
+  @override
+  late final GeneratedColumn<double?> valor = GeneratedColumn<double?>(
+      'valor', aliasedName, false,
+      type: const RealType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, estado, idFuncionario, data, motivo, valor];
+  @override
+  String get aliasedName => _alias ?? 'tabela_saida_caixa';
+  @override
+  String get actualTableName => 'tabela_saida_caixa';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<TabelaSaidaCaixaData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('estado')) {
+      context.handle(_estadoMeta,
+          estado.isAcceptableOrUnknown(data['estado']!, _estadoMeta));
+    } else if (isInserting) {
+      context.missing(_estadoMeta);
+    }
+    if (data.containsKey('id_funcionario')) {
+      context.handle(
+          _idFuncionarioMeta,
+          idFuncionario.isAcceptableOrUnknown(
+              data['id_funcionario']!, _idFuncionarioMeta));
+    } else if (isInserting) {
+      context.missing(_idFuncionarioMeta);
+    }
+    if (data.containsKey('data')) {
+      context.handle(
+          _dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
+    } else if (isInserting) {
+      context.missing(_dataMeta);
+    }
+    if (data.containsKey('motivo')) {
+      context.handle(_motivoMeta,
+          motivo.isAcceptableOrUnknown(data['motivo']!, _motivoMeta));
+    } else if (isInserting) {
+      context.missing(_motivoMeta);
+    }
+    if (data.containsKey('valor')) {
+      context.handle(
+          _valorMeta, valor.isAcceptableOrUnknown(data['valor']!, _valorMeta));
+    } else if (isInserting) {
+      context.missing(_valorMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TabelaSaidaCaixaData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return TabelaSaidaCaixaData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $TabelaSaidaCaixaTable createAlias(String alias) {
+    return $TabelaSaidaCaixaTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TabelaUsuarioTable tabelaUsuario = $TabelaUsuarioTable(this);
@@ -4624,6 +4991,8 @@ abstract class _$BancoDados extends GeneratedDatabase {
       $TabelaDinheiroSobraTable(this);
   late final $TabelaPagamentoFinalTable tabelaPagamentoFinal =
       $TabelaPagamentoFinalTable(this);
+  late final $TabelaSaidaCaixaTable tabelaSaidaCaixa =
+      $TabelaSaidaCaixaTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -4642,7 +5011,8 @@ abstract class _$BancoDados extends GeneratedDatabase {
         tabelaFormaPagamento,
         tabelaPagamento,
         tabelaDinheiroSobra,
-        tabelaPagamentoFinal
+        tabelaPagamentoFinal,
+        tabelaSaidaCaixa
       ];
 }
 
@@ -4720,4 +5090,10 @@ mixin _$VendaDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaProdutoTable get tabelaProduto => attachedDatabase.tabelaProduto;
   $TabelaPagamentoFinalTable get tabelaPagamentoFinal =>
       attachedDatabase.tabelaPagamentoFinal;
+}
+mixin _$SaidaCaixaDaoMixin on DatabaseAccessor<BancoDados> {
+  $TabelaSaidaCaixaTable get tabelaSaidaCaixa =>
+      attachedDatabase.tabelaSaidaCaixa;
+  $TabelaFuncionarioTable get tabelaFuncionario =>
+      attachedDatabase.tabelaFuncionario;
 }

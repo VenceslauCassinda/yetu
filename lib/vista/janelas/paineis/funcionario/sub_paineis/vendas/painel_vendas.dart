@@ -3,7 +3,10 @@ import 'package:componentes_visuais/componentes/formatos/formatos.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
+import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
+import 'package:yetu_gestor/solucoes_uteis/console.dart';
 import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/funcionario/painel_funcionario_c.dart';
 
 import '../../../../../../../recursos/constantes.dart';
 import '../../../../../componentes/pesquisa.dart';
@@ -14,14 +17,19 @@ import 'layouts/vendas_c.dart';
 class PainelVendas extends StatelessWidget {
   PainelVendas({
     Key? key,
-    required this.data, required this.funcionario,
+    required this.data,
+    required this.funcionario,
+    required this.funcionarioC,
+    this.accaoAoVoltar,
   }) {
     initiC();
   }
 
+  Function? accaoAoVoltar;
+  late PainelFuncionarioC funcionarioC;
   late VendasC _c;
   final DateTime data;
-  final Funcionario funcionario;
+  final Funcionario? funcionario;
 
   initiC() {
     try {
@@ -35,6 +43,7 @@ class PainelVendas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var totalDividasPagas;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -45,15 +54,32 @@ class PainelVendas extends StatelessWidget {
             accaoAoSair: () {
               _c.terminarSessao();
             },
+            accaoAoVoltar: (accaoAoVoltar != null ||
+                    funcionarioC.painelActual.value.valor != null)
+                ? () {
+                    if (accaoAoVoltar != null) {
+                      accaoAoVoltar!();
+                      return;
+                    }
+                    funcionarioC.irParaPainel(PainelActual.HISTORICO_VENDAS);
+                  }
+                : null,
           ),
         ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 20),
           width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.all(6),
-            child: Text(
-              "CAIXA: ${formatar(_c.lista.fold<double>(0, (antigoV, cadaV) => ((cadaV.pagamentos ?? []).fold<double>(0, (antigoP, cadaP) => (cadaP.valor ?? 0) + antigoP)) + antigoV))} KZ",
+          child: Text(
+            "CAIXA: ${formatar(_c.lista.fold<double>(0, (antigoV, cadaV) => ((cadaV.pagamentos ?? []).fold<double>(0, (antigoP, cadaP) => (cadaP.valor ?? 0) + antigoP)) + antigoV))} KZ",
+            style: TextStyle(color: primaryColor, fontSize: 30),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 20),
+          width: double.infinity,
+          child: Obx(
+            () => Text(
+              "DÍVIDAS PAGAS: ${formatar(_c.totalDividaPagas.value)} KZ",
               style: TextStyle(color: primaryColor, fontSize: 30),
             ),
           ),
@@ -63,7 +89,7 @@ class PainelVendas extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "HOJE - ${formatarMesOuDia(data.day)}/${formatarMesOuDia(data.month)}/${data.year}",
+                "${(data.day == DateTime.now().day && data.month == DateTime.now().month && data.year == DateTime.now().year) ? "HOJE" : "DATA"} - ${formatarMesOuDia(data.day)}/${formatarMesOuDia(data.month)}/${data.year}",
                 style: TextStyle(color: primaryColor),
               ),
               Spacer(),

@@ -24,7 +24,7 @@ class LayoutVendas extends StatelessWidget {
               .map((venda) => ItemModeloVenda(c: _c, venda: venda,))
               .toList();
           if (itens.isEmpty) {
-            return Center(child: Text("Sem Vendas!"));
+            return const Center(child: Text("Sem Vendas!"));
           }
           return Padding(
             padding: const EdgeInsets.all(20),

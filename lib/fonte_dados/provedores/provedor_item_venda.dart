@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:yetu_gestor/contratos/provedores/provedor_item_venda_i.dart';
 import 'package:yetu_gestor/dominio/entidades/item_venda.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
+import 'package:yetu_gestor/solucoes_uteis/console.dart';
 
 class ProvedorItemVenda implements ProvedorItemVendaI {
   late ItemVendaDao _dao;
@@ -44,14 +45,15 @@ class ProvedorItemVenda implements ProvedorItemVendaI {
   Future<List<ItemVenda>> todos() async {
     var lista = await _dao.todos();
 
-    return lista
-        .map((cada) => ItemVenda(
-            estado: cada.estado,
-            idProduto: cada.idProduto,
-            idVenda: cada.idVenda,
-            quantidade: cada.quantidade,
-            total: cada.total,
-            desconto: cada.desconto))
-        .toList();
+    return lista.map((cada) {
+      mostrar(cada.total);
+      return ItemVenda(
+          estado: cada.estado,
+          idProduto: cada.idProduto,
+          idVenda: cada.idVenda,
+          quantidade: cada.quantidade,
+          total: cada.total,
+          desconto: cada.desconto);
+    }).toList();
   }
 }

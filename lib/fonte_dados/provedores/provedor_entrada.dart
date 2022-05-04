@@ -23,4 +23,10 @@ class ProvedorEntrada implements ProvedorEntradaI {
   Future<List<Entrada>> pegarListaDoProduto(int idProduto) async {
     return await _dao.todasComProdutoDeId(idProduto);
   }
+
+  @override
+  Future<List<Entrada>> pegarListaEntradasFuncionario(int idFuncionario) {
+    // TODO: implement pegarListaEntradasFuncionario
+    throw UnimplementedError();
+  }
 }

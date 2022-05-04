@@ -117,7 +117,9 @@ void main() {
           manipularVendaI.calcularTotalVenda(listaItens),
           funcionarios.first,
           Cliente(estado: Estado.ATIVADO, nome: "Vences", numero: "926886839"),
-          DateTime(2022, 04, 01), 10);
+          DateTime(2022, 04, 01),
+          DateTime(2022, 04, 01),
+          10);
     } catch (e) {
       expect(e, isA<ErroStockInsuficiente>());
       print((e as Erro).sms);

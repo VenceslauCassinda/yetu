@@ -10,7 +10,7 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
           tabelaFuncionario.idUsuario.equalsExp(tabelaUsuario.id))
     ])
       ..where(tabelaUsuario.estado.isBiggerOrEqualValue(Estado.DESACTIVADO) &
-          tabelaUsuario.nivelAcesso.isSmallerThanValue(NivelAcesso.GERENTE));
+          tabelaUsuario.nivelAcesso.isSmallerThanValue(NivelAcesso.GERENTE))..orderBy([OrderingTerm.asc(tabelaFuncionario.nomeCompleto)]);
 
     var res = (await consulta.get()).map((linhas) {
       var tabela1 = linhas.readTable(tabelaFuncionario);
@@ -45,7 +45,7 @@ class FuncionarioDao extends DatabaseAccessor<BancoDados>
       leftOuterJoin(
           tabelaUsuario, tabelaFuncionario.id.equalsExp(tabelaUsuario.id))
     ])
-      ..where(tabelaFuncionario.estado.isSmallerThanValue(0));
+      ..where(tabelaFuncionario.estado.isSmallerThanValue(0))..orderBy([OrderingTerm.asc(tabelaFuncionario.nomeCompleto)]);
     var res = (await consulta.get()).map((linhas) {
       var tabela1 = linhas.readTable(tabelaFuncionario);
       var tabela2 = linhas.readTable(tabelaUsuario);

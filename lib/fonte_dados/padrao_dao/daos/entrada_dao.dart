@@ -7,12 +7,12 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
 
   Future<List<Entrada>> todas() async {
     List<Entrada> lista = [];
-    var res = await select(tabelaEntrada).join([
+    var res = await (select(tabelaEntrada).join([
       leftOuterJoin(
           tabelaProduto, tabelaEntrada.idProduto.equalsExp(tabelaProduto.id)),
       leftOuterJoin(tabelaRececcao,
           tabelaEntrada.idRececcao.equalsExp(tabelaRececcao.id)),
-    ]).get();
+    ])..orderBy([OrderingTerm.desc(tabelaEntrada.data)])).get();
 
     for (var linhaEntradaVsProdutoVsRececcao in res) {
       var produto =
@@ -64,14 +64,14 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
   Future<List<Entrada>> todasComProdutoDeId(int idProduto) async {
     List<Entrada> lista = [];
 
-    var res = await (select(tabelaEntrada)
+    var res = await ((select(tabelaEntrada)
           ..where((tbl) => tbl.idProduto.equals(idProduto)))
         .join([
       leftOuterJoin(
           tabelaProduto, tabelaEntrada.idProduto.equalsExp(tabelaProduto.id)),
       leftOuterJoin(tabelaRececcao,
           tabelaEntrada.idRececcao.equalsExp(tabelaRececcao.id)),
-    ]).get();
+    ])..orderBy([OrderingTerm.desc(tabelaEntrada.data)])).get();
 
     for (var linhaEntradaVsProdutoVsRececcao in res) {
       var produto =

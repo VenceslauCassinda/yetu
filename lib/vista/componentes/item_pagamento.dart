@@ -18,6 +18,7 @@ class ItemPagamento extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 5,
       child: Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.all(20),

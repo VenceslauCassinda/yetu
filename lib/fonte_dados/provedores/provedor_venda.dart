@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:yetu_gestor/dominio/entidades/pagamento.dart';
 import 'package:yetu_gestor/dominio/entidades/venda.dart';
 import 'package:yetu_gestor/fonte_dados/padrao_dao/base_dados.dart';
 
@@ -22,7 +23,10 @@ class ProvedorVenda implements ProvedorVendaI {
   }
 
   @override
-  Future<List<Venda>> pegarLista(Funcionario funcionario, DateTime data) async {
+  Future<List<Venda>> pegarLista(Funcionario? funcionario, DateTime data) async {
+    if(funcionario == null){
+      return await _dao.pegarVendasNaData(data);
+    }
     return await _dao.pegarVendasDeFuncionarioNaData(funcionario, data);
   }
 
@@ -44,5 +48,41 @@ class ProvedorVenda implements ProvedorVendaI {
           parcela: res.parcela);
     }
     return null;
+  }
+
+  @override
+  Future<List<Venda>> pegarListaVendasFuncionario(
+      Funcionario funcionario) async {
+    return await _dao.pegarVendasDeFuncionario(funcionario);
+  }
+
+  @override
+  Future<List<Venda>> pegarListaTodasDividas(Funcionario funcionario) async {
+    return await _dao.pegarDividasDeFuncionario(funcionario);
+  }
+
+  @override
+  Future<List<Venda>> pegarListaTodasEncomendas(Funcionario funcionario) async {
+    return await _dao.pegarEncomendasDeFuncionario(funcionario);
+  }
+
+  @override
+  Future<List<Pagamento>> pegarListaTodasPagamentoDividas(DateTime data) async {
+    return await _dao.pegarListaPagamentoDaData(data);
+  }
+
+  @override
+  Future<List<Venda>> todasDividas() async {
+    return await _dao.todasDividas();
+  }
+
+  @override
+  Future<List<Venda>> todas() async {
+    return await _dao.todas();
+  }
+
+  @override
+  Future<List<Venda>> pegarListaVendas() async {
+    return await _dao.pegarVendasComDatasUnicas();
   }
 }

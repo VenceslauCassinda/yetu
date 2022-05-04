@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
+import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente_c.dart';
 
 import '../../../../../../componentes/item_funcionario.dart';
@@ -27,7 +28,10 @@ class LayoutFuncionarios extends StatelessWidget {
             children: _c.lista
                 .map((Funcionario element) => ItemFuncionario(
                       usuario: element,
-                      aoClicar: () {},
+                      aoClicar: () {
+                        _c.irParaPainel(PainelActual.VENDAS_FUNCIONARIOS,
+                            valor: element);
+                      },
                     ))
                 .toList(),
           ),
@@ -36,4 +40,3 @@ class LayoutFuncionarios extends StatelessWidget {
     );
   }
 }
-

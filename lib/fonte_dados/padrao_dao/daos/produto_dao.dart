@@ -10,7 +10,7 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
           tabelaStock, tabelaProduto.id.equalsExp(tabelaStock.idProduto)),
       leftOuterJoin(
           tabelaPreco, tabelaProduto.id.equalsExp(tabelaPreco.idProduto))
-    ])).get();
+    ])..orderBy([OrderingTerm.asc(tabelaProduto.nome)])).get();
     var lista = res.map((linha) {
       var stock = linha.readTable(tabelaStock);
       var produto = linha.readTable(tabelaProduto);

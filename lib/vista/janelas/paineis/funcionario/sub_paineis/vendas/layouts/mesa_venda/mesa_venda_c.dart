@@ -8,7 +8,6 @@ import 'package:yetu_gestor/contratos/casos_uso/manipular_funcionario_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_item_venda_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_stock_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_venda_i.dart';
-import 'package:yetu_gestor/contratos/provedores/provedor_funcionario_i.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipula_stock.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_fincionario.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_item_venda.dart';
@@ -129,11 +128,11 @@ class MesaVendaC extends GetxController {
             future: _manipularPagamentoI.pegarListaFormasPagamento(),
             builder: (context, snapshot) {
               if (snapshot.data == null) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
               if (snapshot.data!.isEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
+                return const Padding(
+                  padding: EdgeInsets.only(bottom: 20),
                   child: Text("Nenhuma Forma de Pagamento!"),
                 );
               }
@@ -221,9 +220,7 @@ class MesaVendaC extends GetxController {
 
   void descontar(int? valor, ItemVenda element,
       TextEditingController campoTextoDescontoC) async {
-    if (valor == null) {
-      valor = 0;
-    }
+    valor ??= 0;
     if ((valor < 0) || (valor > 100)) {
       mostrarDialogoDeInformacao("Desconto inválido!");
       campoTextoDescontoC.clear();
@@ -237,6 +234,8 @@ class MesaVendaC extends GetxController {
     if (element.total == 0) {
       element.total = element.quantidade! * element.produto!.listaPreco![0];
     }
+
+    element.desconto = valor;
 
     element.total = _manipularItemVendaI.aplicarDescontoVenda(
         element.quantidade! * element.produto!.listaPreco![0], valor);
@@ -322,7 +321,7 @@ class MesaVendaC extends GetxController {
           nome: nomeCliente.value,
           numero: telefoneCliente.value);
       var id = await _manipularVendaI.vender(listaItensVenda, listaPagamentos,
-          aPagar, funcionario, cliente, dataLevantamento.value!, pago);
+          aPagar, funcionario, cliente, data, dataLevantamento.value!, pago);
       vendasC.lista.add(Venda(
           itensVenda: listaItensVenda,
           pagamentos: listaPagamentos,
@@ -330,6 +329,7 @@ class MesaVendaC extends GetxController {
           idFuncionario: funcionario.id,
           idCliente: cliente.id,
           data: data,
+          dataLevantamentoCompra: dataLevantamento.value,
           total: aPagar,
           cliente: cliente,
           parcela: pago));

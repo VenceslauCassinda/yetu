@@ -46,4 +46,9 @@ class ProvedorRececcao implements ProvedorRececcaoI {
     }
     return null;
   }
+
+  @override
+  Future<List<Receccao>> pegarListaRececcoesFuncionario(int id) async {
+    return await _dao.todasDoFuncionario(id);
+  }
 }

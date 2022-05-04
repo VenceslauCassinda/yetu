@@ -5,8 +5,6 @@ import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/recursos/constantes.dart';
 import 'package:yetu_gestor/vista/componentes/logo.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente_c.dart';
-import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/entradas/layouts/entradas_c.dart';
-import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/produtos/layouts/produtos_c.dart';
 
 class GavetaNavegacao extends StatelessWidget {
   final String linkImagem;
@@ -62,7 +60,7 @@ class GavetaNavegacao extends StatelessWidget {
                     icone: Icons.storefront,
                     titulo: "Dívidas",
                     metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.VENDAS);
+                      c.irParaPainel(PainelActual.DIVIDAS_GERAIS);
                     }),
                 ItemDaGaveta(
                     cor: branca,
@@ -80,7 +78,21 @@ class GavetaNavegacao extends StatelessWidget {
                     }),
                 ItemDaGaveta(
                     cor: branca,
-                    icone: Icons.monetization_on_sharp,
+                    icone: Icons.person,
+                    titulo: "Dinheiro a mais",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.DINHEIRO_SOBRA);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.monetization_on,
+                    titulo: "Saídas de Caixa",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.SAIDA_CAIXA);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.money,
                     titulo: "Investimento",
                     metodoQuandoItemClicado: () async {
                       c.irParaPainel(PainelActual.INVESTIMENTO);

@@ -23,6 +23,7 @@ import '../../dominio/entidades/preco.dart';
 import '../../dominio/entidades/produto.dart';
 import '../../dominio/entidades/receccao.dart';
 import '../../dominio/entidades/saida.dart';
+import '../../dominio/entidades/saida_caixa.dart';
 import '../../dominio/entidades/stock.dart';
 import '../../dominio/entidades/venda.dart';
 import '../../solucoes_uteis/console.dart';
@@ -37,6 +38,7 @@ import 'tabelas/tabela_pagamento_final.dart';
 import 'tabelas/tabela_preco.dart';
 import 'tabelas/tabela_receccao.dart';
 import 'tabelas/tabela_saida.dart';
+import 'tabelas/tabela_saida_caixa.dart';
 import 'tabelas/tabela_stock.dart';
 part 'base_dados.g.dart';
 part 'daos/usuario_dao.dart';
@@ -53,6 +55,7 @@ part 'daos/forma_pagamento_dao.dart';
 part 'daos/pagamento_dao.dart';
 part 'daos/dinheiro_sobra_dao.dart';
 part 'daos/venda_dao.dart';
+part 'daos/saida_caixa_dao.dart';
 
 LazyDatabase defaultConnection() {
   return LazyDatabase(() async {
@@ -80,19 +83,22 @@ LazyDatabase defaultConnection() {
   TabelaFormaPagamento,
   TabelaPagamento,
   TabelaDinheiroSobra,
-  TabelaPagamentoFinal
+  TabelaPagamentoFinal,
+  TabelaSaidaCaixa
 ])
 class BancoDados extends _$BancoDados {
   BancoDados() : super(defaultConnection());
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(onCreate: (Migrator m) async {
       await m.createAll();
     }, onUpgrade: (m, a, n) async {
+      // await m.createTable(tabelaSaidaCaixa);
       await m.createAll();
+      await m.addColumn(tabelaDinheiroSobra, tabelaDinheiroSobra.data);
     });
   }
 }
