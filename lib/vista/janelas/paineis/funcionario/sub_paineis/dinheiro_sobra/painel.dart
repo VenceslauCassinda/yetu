@@ -76,23 +76,17 @@ class PainelDinheiroSobra extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Obx((() {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _c.lista
-                      .map((element) => ItemDinheiroSobra(
-                            dinheiroSobra: element,
-                            aoClicar: () {},
-                            aoRemover: () {
-                              _c.mostrarDialodoRemover(element);
-                            },
-                            visaoGeral:
-                                funcionario.nivelAcesso == NivelAcesso.GERENTE,
-                          ))
-                      .toList(),
-                ),
-              );
+              return ListView.builder(
+                itemCount: _c.lista.length,
+                itemBuilder: (c,i)=>ItemDinheiroSobra(
+                          dinheiroSobra: _c.lista[i],
+                          aoClicar: () {},
+                          aoRemover: () {
+                            _c.mostrarDialodoRemover(_c.lista[i]);
+                          },
+                          visaoGeral:
+                              funcionario.nivelAcesso == NivelAcesso.GERENTE,
+                        ));
             })),
           ),
         ),

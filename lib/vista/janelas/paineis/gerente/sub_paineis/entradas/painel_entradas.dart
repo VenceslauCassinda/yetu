@@ -82,8 +82,10 @@ class PainelEntradas extends StatelessWidget {
               child: Text(
                   "Produto: ${(_painelGerenteC.painelActual.value.valor == null ? null : (_painelGerenteC.painelActual.value.valor as Produto))?.nome ?? "Sem nome"}"),
             )),
-        LayoutEntradas(
-          visaoGeral: visaoGeral,
+        Expanded(
+          child: LayoutEntradas(
+            visaoGeral: visaoGeral,
+          ),
         ),
       ],
     );

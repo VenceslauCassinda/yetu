@@ -82,8 +82,15 @@ class PainelDividas extends StatelessWidget {
           child: Obx(
             () {
               if (_c.lista.isEmpty) {
-                return Center(child: Text("Sem Dívidas!"));
-              }
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Center(child: Text("Sem Dados!")),
+            ],
+          );
+        }
               var itens = _c.lista
                   .map((venda) => ItemModeloVenda(
                         c: _c,
@@ -92,7 +99,8 @@ class PainelDividas extends StatelessWidget {
                   .toList();
               return Padding(
                 padding: const EdgeInsets.all(20),
-                child: ListView.builder(itemCount: itens.length,itemBuilder: (c, i) => itens[i]),
+                child: ListView.builder(
+                    itemCount: itens.length, itemBuilder: (c, i) => itens[i]),
               );
             },
           ),

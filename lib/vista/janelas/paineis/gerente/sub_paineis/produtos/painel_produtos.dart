@@ -56,6 +56,7 @@ class PainelProdutos extends StatelessWidget {
                 listaItens: ["Todos", "Activos", "Desactivos", "Eliminados"],
                 indiceTabInicial: 1,
                 accao: (indice) {
+                  _c.lista.clear();
                   _c.navegar(indice);
                 },
               ))
@@ -64,9 +65,13 @@ class PainelProdutos extends StatelessWidget {
         ),
         Obx(() {
           if (_c.lista.isEmpty) {
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: LinearProgressIndicator(),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Center(child: Text("Sem Dados!")),
+              ],
             );
           }
           return Expanded(child: LayoutProdutos(lista: _c.lista, c: _c));

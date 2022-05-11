@@ -67,30 +67,24 @@ class PainelRecepcoes extends StatelessWidget {
           ],
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Obx(
-              () {
-                var itens = _c.lista
-                    .map((entrada) => ItemRececcao(
-                          visaoGeral: false,
-                          receccao: entrada,
-                          aoClicar: () {},
-                        ))
-                    .toList();
-                if (itens.isEmpty) {
-                  return Center(child: Text("Sem dados!"));
-                }
-                return Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: itens,
-                  ),
-                );
-              },
-            ),
+          child: Obx(
+            () {
+              var itens = _c.lista
+                  .map((entrada) => ItemRececcao(
+                        visaoGeral: false,
+                        receccao: entrada,
+                        aoClicar: () {},
+                      ))
+                  .toList();
+              if (itens.isEmpty) {
+                return Center(child: Text("Sem dados!"));
+              }
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: ListView.builder(
+                    itemCount: itens.length, itemBuilder: (c, i) => itens[i]),
+              );
+            },
           ),
         ),
         Container(

@@ -16,9 +16,16 @@ class LayoutSaidas extends StatelessWidget {
     return Obx(
       () {
         if (_c.lista.isEmpty) {
-          return Padding(
-              padding: const EdgeInsets.all(20),
-              child: LinearProgressIndicator());
+          return Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Center(child: Text("Sem Dados!")),
+              ],
+            ),
+          );
         }
         var itens = _c.lista
             .map((saida) => ItemSaida(

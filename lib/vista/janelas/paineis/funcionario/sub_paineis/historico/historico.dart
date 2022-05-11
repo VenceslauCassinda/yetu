@@ -65,28 +65,24 @@ class PainelHistorico extends StatelessWidget {
             style: TextStyle(color: primaryColor),
           ),
         ),
-        Obx((() {
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _c.lista
-                  .map((element) => Container(
-                        height: 50,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ModeloItemLista(
-                          itemComentado: false,
-                          metodoChamadoAoClicarItem: () {
-                            _c.seleccionarData(element);
-                          },
-                          tituloItem:
-                              "${formatarMesOuDia(element.day)}/${formatarMesOuDia(element.month)}/${element.year}",
-                        ),
-                      ))
-                  .toList(),
-            ),
-          );
-        }))
+        Expanded(
+          child: Obx((() {
+            return ListView.builder(
+                itemCount: _c.lista.length,
+                itemBuilder: (c, i) => Container(
+                      height: 50,
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ModeloItemLista(
+                        itemComentado: false,
+                        metodoChamadoAoClicarItem: () {
+                          _c.seleccionarData(_c.lista[i]);
+                        },
+                        tituloItem:
+                            "${formatarMesOuDia(_c.lista[i].day)}/${formatarMesOuDia(_c.lista[i].month)}/${_c.lista[i].year}",
+                      ),
+                    ));
+          })),
+        )
       ],
     );
   }

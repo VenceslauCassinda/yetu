@@ -15,9 +15,13 @@ class LayoutEntradas extends StatelessWidget {
     return Obx(
       () {
         if (_c.lista.isEmpty) {
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: LinearProgressIndicator(),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Center(child: Text("Sem Dados!")),
+            ],
           );
         }
         var itens = _c.lista
@@ -27,11 +31,12 @@ class LayoutEntradas extends StatelessWidget {
                   aoClicar: () {},
                 ))
             .toList();
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: ListView.builder(itemCount: itens.length,itemBuilder: (c, i) => itens[i]),
-          ),
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: itens.length,
+              itemBuilder: (c, i) => itens[i]),
         );
       },
     );

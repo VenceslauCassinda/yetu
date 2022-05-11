@@ -92,38 +92,55 @@ class RecepcoesC extends GetxController {
     c.irParaPainel(indicePainel);
   }
 
+  var produtos = RxList<Produto>();
+  var produtosCopia = RxList<Produto>();
+  void aoPesquisarProduto(String f) {
+    produtos.clear();
+    var res = produtosCopia;
+    for (var cada in res) {
+      if ((cada.nome ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.stock?.quantidade ?? "").toString().contains(f.toLowerCase()) ||
+          (cada.preco?.preco ?? 0).toString().contains(f.toLowerCase())) {
+        produtos.add(cada);
+      }
+    }
+  }
+
   void mostrarDialogoProdutos(BuildContext context) async {
+    produtos.clear();
+    _manipularProduto.pegarLista().then((dado) {
+      produtos.addAll(dado);
+      produtosCopia.addAll(dado);
+    });
     mostrarDialogoDeLayou(Container(
-      width: MediaQuery.of(context).size.width * .5,
-      child: FutureBuilder<List<Produto>>(
-          future: _manipularProduto.pegarLista(),
-          builder: (c, s) {
-            if (s.data == null) {
-              return const CircularProgressIndicator();
-            }
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: LayoutPesquisa(
-                    accaoNaInsercaoNoCampoTexto: (dado) {},
-                  ),
+        width: MediaQuery.of(context).size.width * .5,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: LayoutPesquisa(
+                accaoNaInsercaoNoCampoTexto: (dado) {
+                  aoPesquisarProduto(dado);
+                },
+              ),
+            ),
+            Obx(() {
+              produtos.isEmpty;
+              return Container(
+                height: MediaQuery.of(context).size.height * .5,
+                child: LayoutProdutos(
+                  lista: produtos,
+                  accaoAoClicarCadaProduto: (p) {
+                    mostrarDialogoReceber(p);
+                  },
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height * .5,
-                  child: SingleChildScrollView(
-                    child: LayoutProdutos(
-                      lista: s.data!,
-                      accaoAoClicarCadaProduto: (p) {
-                        mostrarDialogoReceber(p);
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }),
-    ));
+              );
+            }),
+          ],
+        )));
   }
 
   void mostrarDialogoReceber(Produto produto) {

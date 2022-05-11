@@ -112,13 +112,13 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         ]))
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var forma = resPagamentosEformas.readTableOrNull(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
-            formaPagamento: FormaPagamento(
+            formaPagamento: forma  == null?null : FormaPagamento(
                 estado: forma.estado,
                 tipo: forma.tipo,
                 descricao: forma.descricao),
-            idFormaPagamento: forma.id,
+            idFormaPagamento: forma?.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
@@ -220,7 +220,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         ]))
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var forma = resPagamentosEformas.readTableOrNull(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
             pagamentoFinal: pagamentoFInal == null
                 ? null
@@ -229,11 +229,11 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
                     estado: pagamentoFInal.estado,
                     idPagamento: pagamentoFInal.idPagamento,
                     data: pagamentoFInal.data),
-            formaPagamento: FormaPagamento(
+            formaPagamento: forma  == null?null : FormaPagamento(
                 estado: forma.estado,
                 tipo: forma.tipo,
                 descricao: forma.descricao),
-            idFormaPagamento: forma.id,
+            idFormaPagamento: forma?.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
@@ -333,7 +333,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         ]))
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var forma = resPagamentosEformas.readTableOrNull(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
             pagamentoFinal: pagamentoFInal == null
                 ? null
@@ -342,11 +342,11 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
                     estado: pagamentoFInal.estado,
                     idPagamento: pagamentoFInal.idPagamento,
                     data: pagamentoFInal.data),
-            formaPagamento: FormaPagamento(
+            formaPagamento: forma  == null?null : FormaPagamento(
                 estado: forma.estado,
                 tipo: forma.tipo,
                 descricao: forma.descricao),
-            idFormaPagamento: forma.id,
+            idFormaPagamento: forma?.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
@@ -446,7 +446,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         ]))
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var forma = resPagamentosEformas.readTableOrNull(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
             pagamentoFinal: pagamentoFInal == null
                 ? null
@@ -455,11 +455,11 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
                     estado: pagamentoFInal.estado,
                     idPagamento: pagamentoFInal.idPagamento,
                     data: pagamentoFInal.data),
-            formaPagamento: FormaPagamento(
+            formaPagamento: forma  == null?null : FormaPagamento(
                 estado: forma.estado,
                 tipo: forma.tipo,
                 descricao: forma.descricao),
-            idFormaPagamento: forma.id,
+            idFormaPagamento: forma?.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
@@ -584,7 +584,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         ]))
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var forma = resPagamentosEformas.readTableOrNull(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
             pagamentoFinal: pagamentoFInal == null
                 ? null
@@ -593,11 +593,11 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
                     estado: pagamentoFInal.estado,
                     idPagamento: pagamentoFInal.idPagamento,
                     data: pagamentoFInal.data),
-            formaPagamento: FormaPagamento(
+            formaPagamento: forma  == null?null : FormaPagamento(
                 estado: forma.estado,
                 tipo: forma.tipo,
                 descricao: forma.descricao),
-            idFormaPagamento: forma.id,
+            idFormaPagamento: forma?.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
@@ -724,7 +724,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
         // print("============> $resPagamentosEformas");
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var forma = resPagamentosEformas.readTableOrNull(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
             pagamentoFinal: pagamentoFInal == null
                 ? null
@@ -733,11 +733,11 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
                     estado: pagamentoFInal.estado,
                     idPagamento: pagamentoFInal.idPagamento,
                     data: pagamentoFInal.data),
-            formaPagamento: FormaPagamento(
+            formaPagamento: forma  == null?null : FormaPagamento(
                 estado: forma.estado,
                 tipo: forma.tipo,
                 descricao: forma.descricao),
-            idFormaPagamento: forma.id,
+            idFormaPagamento: forma?.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
@@ -836,7 +836,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
         // print("============> $resPagamentosEformas");
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var forma = resPagamentosEformas.readTableOrNull(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
             pagamentoFinal: pagamentoFInal == null
                 ? null
@@ -845,11 +845,11 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
                     estado: pagamentoFInal.estado,
                     idPagamento: pagamentoFInal.idPagamento,
                     data: pagamentoFInal.data),
-            formaPagamento: FormaPagamento(
+            formaPagamento: forma  == null?null : FormaPagamento(
                 estado: forma.estado,
                 tipo: forma.tipo,
                 descricao: forma.descricao),
-            idFormaPagamento: forma.id,
+            idFormaPagamento: forma?.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);
@@ -958,7 +958,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               ..where(tabelaPagamento.id.equals(pagamento.id)))
             .getSingle();
         // print("============> $resPagamentosEformas");
-        var forma = resPagamentosEformas.readTable(tabelaFormaPagamento);
+        var forma = resPagamentosEformas.readTableOrNull(tabelaFormaPagamento);
         var cadaPagamento = Pagamento(
             pagamentoFinal: pagamentoFInal == null
                 ? null
@@ -967,11 +967,11 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
                     estado: pagamentoFInal.estado,
                     idPagamento: pagamentoFInal.idPagamento,
                     data: pagamentoFInal.data),
-            formaPagamento: FormaPagamento(
+            formaPagamento: forma  == null?null : FormaPagamento(
                 estado: forma.estado,
                 tipo: forma.tipo,
                 descricao: forma.descricao),
-            idFormaPagamento: forma.id,
+            idFormaPagamento: forma?.id,
             estado: pagamento.estado,
             idVenda: pagamento.idVenda,
             valor: pagamento.valor);

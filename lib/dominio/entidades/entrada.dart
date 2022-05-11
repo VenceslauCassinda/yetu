@@ -72,6 +72,10 @@ class Entrada {
     );
   }
 
+  Entrada.simples() {
+    data = DateTime.now();
+  }
+
   factory Entrada.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;

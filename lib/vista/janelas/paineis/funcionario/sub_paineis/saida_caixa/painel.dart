@@ -63,23 +63,18 @@ class PainelSaidaCaixa extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Obx((() {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: saidaCaixaC.lista
-                      .map((element) => ItemSaidaCaixa(
-                            saidaCaixa: element,
-                            aoClicar: () {},
-                            aoRemover: () {
-                              saidaCaixaC.mostrarDialodoRemover(element);
-                            },
-                            visaoGeral:
-                                funcionario.nivelAcesso == NivelAcesso.GERENTE,
-                          ))
-                      .toList(),
-                ),
-              );
+              return ListView.builder(
+                  itemCount: saidaCaixaC.lista.length,
+                  itemBuilder: (c, i) => ItemSaidaCaixa(
+                        saidaCaixa: saidaCaixaC.lista[i],
+                        aoClicar: () {},
+                        aoRemover: () {
+                          saidaCaixaC
+                              .mostrarDialodoRemover(saidaCaixaC.lista[i]);
+                        },
+                        visaoGeral:
+                            funcionario.nivelAcesso == NivelAcesso.GERENTE,
+                      ));
             })),
           ),
         ),

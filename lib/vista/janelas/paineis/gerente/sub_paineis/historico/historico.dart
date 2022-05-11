@@ -96,21 +96,33 @@ class PainelHistorico extends StatelessWidget {
           ),
         ),
         Obx((() {
+          if (_c.lista.isEmpty) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Center(child: Text("Sem Dados!")),
+              ],
+            );
+          }
           return Container(
             height: MediaQuery.of(context).size.height * .72,
-            child: ListView.builder(itemCount: _c.lista.length,itemBuilder: ((context, i) => Container(
-                        height: 50,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ModeloItemLista(
-                          itemComentado: false,
-                          metodoChamadoAoClicarItem: () {
-                            _c.seleccionarData(_c.lista[i],
-                                funcionario: funcionario);
-                          },
-                          tituloItem:
-                              "${formatarMesOuDia(_c.lista[i].day)}/${formatarMesOuDia(_c.lista[i].month)}/${_c.lista[i].year}",
-                        ),
-                      ))),
+            child: ListView.builder(
+                itemCount: _c.lista.length,
+                itemBuilder: ((context, i) => Container(
+                      height: 50,
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ModeloItemLista(
+                        itemComentado: false,
+                        metodoChamadoAoClicarItem: () {
+                          _c.seleccionarData(_c.lista[i],
+                              funcionario: funcionario);
+                        },
+                        tituloItem:
+                            "${formatarMesOuDia(_c.lista[i].day)}/${formatarMesOuDia(_c.lista[i].month)}/${_c.lista[i].year}",
+                      ),
+                    ))),
           );
         }))
       ],

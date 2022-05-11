@@ -12,26 +12,23 @@ class LayoutVendas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Obx(
-        () {
-          var itens = _c.lista
-              .map((venda) => ItemModeloVenda(c: _c, venda: venda,))
-              .toList();
-          if (itens.isEmpty) {
-            return const Center(child: Text("Sem Vendas!"));
-          }
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: itens,
-            ),
-          );
-        },
-      ),
+    return Obx(
+      () {
+        var itens = _c.lista
+            .map((venda) => ItemModeloVenda(
+                  c: _c,
+                  venda: venda,
+                ))
+            .toList();
+        if (itens.isEmpty) {
+          return const Center(child: Text("Sem Vendas!"));
+        }
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: ListView.builder(
+              itemCount: itens.length, itemBuilder: (c, i) => itens[i]),
+        );
+      },
     );
   }
 }

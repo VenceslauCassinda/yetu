@@ -65,26 +65,24 @@ class LayoutMesaVenda extends StatelessWidget {
                       ),
                       Container(
                         height: MediaQuery.of(context).size.height * .5,
-                        child: SingleChildScrollView(
-                          child: Obx(() {
-                            _vendasC.produtos.isEmpty;
-                            return LayoutProdutos(
-                              lista: _vendasC.produtos,
-                              accaoAoClicarCadaProduto: (produto) {
-                                if (produto.stock!.quantidade! > 0) {
-                                  _c.adicionarProdutoAmesa(produto);
-                                  controladores["${produto.id}1"] =
-                                      TextEditingController(text: "0");
-                                  controladores["${produto.id}2"] =
-                                      TextEditingController(text: "0");
-                                } else {
-                                  mostrarDialogoDeInformacao(
-                                      "Produto com quantidade insuficiente em Stock!");
-                                }
-                              },
-                            );
-                          }),
-                        ),
+                        child: Obx(() {
+                          _vendasC.produtos.isEmpty;
+                          return LayoutProdutos(
+                            lista: _vendasC.produtos,
+                            accaoAoClicarCadaProduto: (produto) {
+                              if (produto.stock!.quantidade! > 0) {
+                                _c.adicionarProdutoAmesa(produto);
+                                controladores["${produto.id}1"] =
+                                    TextEditingController(text: "0");
+                                controladores["${produto.id}2"] =
+                                    TextEditingController(text: "0");
+                              } else {
+                                mostrarDialogoDeInformacao(
+                                    "Produto com quantidade insuficiente em Stock!");
+                              }
+                            },
+                          );
+                        }),
                       ),
                     ],
                   ),

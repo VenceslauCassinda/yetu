@@ -73,17 +73,27 @@ class PainelInvestimento extends StatelessWidget {
         ),
         Expanded(
           child: Obx(() {
-            _c.lista.isEmpty;
+            if (_c.lista.isEmpty) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Center(child: Text("Sem Dados!")),
+                ],
+              );
+            }
             return Padding(
-              padding: const EdgeInsets.all(20),
-              child: ListView.builder(itemCount: _c.lista.length,itemBuilder: (c,i)=> InkWell(
+                padding: const EdgeInsets.all(20),
+                child: ListView.builder(
+                    itemCount: _c.lista.length,
+                    itemBuilder: (c, i) => InkWell(
                           onTap: () {},
                           child: ItemInvestimento(
                             produto: _c.lista[i],
                             c: _c,
                           ),
-                        ))
-            );
+                        )));
           }),
         ),
       ],
