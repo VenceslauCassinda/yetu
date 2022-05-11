@@ -1,10 +1,5 @@
-import 'package:componentes_visuais/componentes/icone_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yetu_gestor/dominio/entidades/item_venda.dart';
-import 'package:yetu_gestor/dominio/entidades/venda.dart';
-import 'package:yetu_gestor/solucoes_uteis/console.dart';
-import 'package:yetu_gestor/vista/componentes/item_saida.dart';
 import '../../../../../../componentes/item_modelo_venda.dart';
 import 'vendas_c.dart';
 

@@ -39,18 +39,17 @@ class PainelSaidaCaixa extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
-          child: LayoutPesquisa(
-              accaoNaInsercaoNoCampoTexto: (dado) {},
-              accaoAoSair: () {
-                c.terminarSessao();
-              },
-              accaoAoVoltar: () {
-                if (accaoAoVoltar != null) {
-                  accaoAoVoltar!();
-                  return;
-                }
-                c.irParaPainel(PainelActual.INICIO);
-              }),
+          child: LayoutPesquisa(accaoNaInsercaoNoCampoTexto: (dado) {
+            saidaCaixaC.aoPesquisar(dado);
+          }, accaoAoSair: () {
+            c.terminarSessao();
+          }, accaoAoVoltar: () {
+            if (accaoAoVoltar != null) {
+              accaoAoVoltar!();
+              return;
+            }
+            c.irParaPainel(PainelActual.INICIO);
+          }),
         ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 20),

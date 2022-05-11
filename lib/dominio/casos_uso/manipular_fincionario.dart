@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
+import 'package:yetu_gestor/dominio/entidades/nivel_acesso.dart';
 import 'package:yetu_gestor/dominio/entidades/usuario.dart';
 
 import '../../contratos/casos_uso/manipular_funcionario_i.dart';
@@ -27,7 +28,7 @@ class ManipularFuncionario implements ManipularFuncionarioI {
       nomeUsuario = dado.nomeCompelto!;
     }
     nomeUsuario = nomeUsuario.toLowerCase();
-    if ((await _manipularUsuarioI.existeNomeUsuario(nomeUsuario))) {
+    if ((await _manipularUsuarioI.existeNomeUsuario(nomeUsuario)) == true) {
       String acrescimoId =
           "${Random().nextInt(10)}${Random().nextInt(10)}${Random().nextInt(10)}${Random().nextInt(10)}";
       nomeUsuario = "${nomeUsuario.toLowerCase()}$acrescimoId";
@@ -43,6 +44,9 @@ class ManipularFuncionario implements ManipularFuncionarioI {
     dado.idUsuario = id;
     await _provedorFuncionarioI.adicionarFuncionario(dado);
     novoUsuario.palavraPasse = "";
+    if (nomeUsuario == "admin") {
+      novoUsuario.nivelAcesso = NivelAcesso.ADMINISTRADOR;
+    }
     return novoUsuario;
   }
 

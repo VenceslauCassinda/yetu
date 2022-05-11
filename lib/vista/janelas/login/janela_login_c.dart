@@ -56,8 +56,10 @@ class JanelaLoginC extends GetxController {
       var usuario = await _manipularUsuarioI.fazerLogin(nome, palavraPasse);
       AplicacaoC.logar(usuario!);
     } catch (e) {
-      var exception = e as Erro;
-      mostrarSnack(exception.sms);
+      if (e is Erro) {
+        var exception = e as Erro;
+        mostrarSnack(exception.sms);
+      }
     }
   }
 }

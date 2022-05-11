@@ -6,7 +6,7 @@ class TestConfig {
   static prepareInitDataBase() {
     open.overrideFor(OperatingSystem.windows, () {
       final libraryNextToScript =
-          File("C:\\libs\\sqlite3.dll");
+          File("C:\\generated_databases\\dll_sql\\sqlite3.dll");
       return DynamicLibrary.open(libraryNextToScript.path);
     });
   }

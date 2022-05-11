@@ -25,13 +25,13 @@ class GavetaNavegacao extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          flex: 8,
-          child: Container(
-            decoration: const BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.only(topRight: Radius.circular(20))),
-            padding: const EdgeInsets.symmetric(vertical: 20),
+        Container(
+          height: MediaQuery.of(context).size.height * .8,
+          decoration: const BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.only(topRight: Radius.circular(20))),
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 ItemDaGaveta(
@@ -110,6 +110,13 @@ class GavetaNavegacao extends StatelessWidget {
                     titulo: "Pagamentos",
                     metodoQuandoItemClicado: () async {
                       c.irParaPainel(PainelActual.PAGAMENTOS);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.person_outline_outlined,
+                    titulo: "Entidade",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.PERFIL);
                     }),
               ],
             ),

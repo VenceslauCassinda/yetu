@@ -15,6 +15,9 @@ class Produto {
   String? nome;
   double? precoCompra;
   bool? recebivel;
+  Produto.simples() {
+    nome = "PPPPP";
+  }
   Produto(
       {this.id,
       this.estado,

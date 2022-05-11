@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yetu_gestor/vista/janelas/login/janela_login.dart';
 import 'aplicacao_c.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class Aplicacao extends StatelessWidget {
   late AplicacaoC _controlador;
@@ -18,7 +19,8 @@ class Aplicacao extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => GetMaterialApp(
-        localizationsDelegates: [],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        supportedLocales: [Locale('pt', 'BR')],
         theme: ThemeData(
             primaryColor: Color.fromRGBO(86, 0, 78, 1),
             accentColor: Color.fromRGBO(86, 0, 78, 1),

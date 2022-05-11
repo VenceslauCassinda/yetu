@@ -35,82 +35,80 @@ class LayoutMesaVenda extends StatelessWidget {
     } catch (e) {
       _vendasC = Get.put(VendasC(data, funcionario));
     }
+    _vendasC.produtos.clear();
+    _vendasC.pegarListaProdutos();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * .9,
-      child: FutureBuilder<List<Produto>>(
-          future: _vendasC.pegarListaProdutos(),
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return CircularProgressIndicator();
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+        width: MediaQuery.of(context).size.width * .9,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 0),
-                            child: LayoutPesquisa(
-                              accaoNaInsercaoNoCampoTexto: (dado) {},
-                            ),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * .5,
-                            child: SingleChildScrollView(
-                              child: LayoutProdutos(
-                                lista: snapshot.data ?? [],
-                                accaoAoClicarCadaProduto: (produto) {
-                                  if (produto.stock!.quantidade! > 0) {
-                                    _c.adicionarProdutoAmesa(produto);
-                                    controladores["${produto.id}1"] =
-                                        TextEditingController(text: "0");
-                                    controladores["${produto.id}2"] =
-                                        TextEditingController(text: "0");
-                                  } else {
-                                    mostrarDialogoDeInformacao(
-                                        "Produto com quantidade insuficiente em Stock!");
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 0),
+                        child: LayoutPesquisa(
+                          accaoNaInsercaoNoCampoTexto: (dado) {
+                            _vendasC.aoPesquisarProduto(dado);
+                          },
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 6,
-                      child:
-                          _PainelDireito(c: _c, controladores: controladores),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: ModeloButao(
-                    corButao: primaryColor,
-                    corTitulo: Colors.white,
-                    butaoHabilitado: true,
-                    tituloButao: "Finalizar Venda",
-                    metodoChamadoNoClique: () {
-                      _c.vender(_vendasC);
-                    },
+                      Container(
+                        height: MediaQuery.of(context).size.height * .5,
+                        child: SingleChildScrollView(
+                          child: Obx(() {
+                            _vendasC.produtos.isEmpty;
+                            return LayoutProdutos(
+                              lista: _vendasC.produtos,
+                              accaoAoClicarCadaProduto: (produto) {
+                                if (produto.stock!.quantidade! > 0) {
+                                  _c.adicionarProdutoAmesa(produto);
+                                  controladores["${produto.id}1"] =
+                                      TextEditingController(text: "0");
+                                  controladores["${produto.id}2"] =
+                                      TextEditingController(text: "0");
+                                } else {
+                                  mostrarDialogoDeInformacao(
+                                      "Produto com quantidade insuficiente em Stock!");
+                                }
+                              },
+                            );
+                          }),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                Expanded(
+                  flex: 6,
+                  child: _PainelDireito(c: _c, controladores: controladores),
+                )
               ],
-            );
-          }),
-    );
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: ModeloButao(
+                corButao: primaryColor,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Finalizar Venda",
+                metodoChamadoNoClique: () {
+                  _c.vender(_vendasC);
+                },
+              ),
+            ),
+          ],
+        ));
   }
 }
 
@@ -190,7 +188,7 @@ class _CabecaclhoVenda extends StatelessWidget {
                 ),
                 Container(
                   height: 30,
-                  width: 300,
+                  width: MediaQuery.of(context).size.width * .18,
                   child: TextField(
                     style: TextStyle(fontSize: 20),
                     onChanged: (valor) {
@@ -211,7 +209,7 @@ class _CabecaclhoVenda extends StatelessWidget {
                 ),
                 Container(
                   height: 30,
-                  width: 300,
+                  width: MediaQuery.of(context).size.width * .18,
                   child: TextField(
                       onChanged: (valor) {
                         _c.telefoneCliente.value = valor;

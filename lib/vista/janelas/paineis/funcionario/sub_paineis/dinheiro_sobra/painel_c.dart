@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_dinheiro_sobra_i.dart';
 import 'package:yetu_gestor/dominio/entidades/dinheiro_sobra.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_dinheiro_sobra.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/funcionario/painel_funcionario_c.dart';
 import '../../../../../../dominio/casos_uso/manipular_dinheiro_sobra.dart';
 import '../../../../../../dominio/entidades/estado.dart';
 import '../../../../../../dominio/entidades/funcionario.dart';
@@ -13,6 +14,7 @@ import 'layouts/layout_add_valor.dart';
 
 class PainelDinheiroSobraC extends GetxController {
   RxList<DinheiroSobra> lista = RxList([]);
+  List<DinheiroSobra> listaCopia = [];
   var total = 0.0.obs;
 
   late ManipularDinheiroSobraI _manipularDinheiroSobraI;
@@ -27,7 +29,32 @@ class PainelDinheiroSobraC extends GetxController {
     super.onInit();
   }
 
-  void terminarSessao() {}
+  void terminarSessao() {
+    PainelFuncionarioC c = Get.find();
+    c.terminarSessao();
+  }
+
+  void aoPesquisar(String f) {
+    lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      if ((DateTime(cada.data!.year, cada.data!.month, cada.data!.day))
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.funcionario?.nomeCompelto ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.funcionario?.nomeUsuario ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.valor ?? "").toString().contains(f.toLowerCase())) {
+        lista.add(cada);
+      }
+    }
+  }
 
   pegarLista() async {
     var res = await _manipularDinheiroSobraI.pegarLista();
@@ -35,6 +62,9 @@ class PainelDinheiroSobraC extends GetxController {
       lista.add(cada);
       total.value += cada.valor ?? 0;
     }
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   void mostrarDialogoNovaValor(BuildContext context) {

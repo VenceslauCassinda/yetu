@@ -22,4 +22,5 @@ class PainelActual {
   static int RECEPCOES = 17;
   static int DINHEIRO_SOBRA = 18;
   static int SAIDA_CAIXA = 19;
+  static int PERFIL = 20;
 }

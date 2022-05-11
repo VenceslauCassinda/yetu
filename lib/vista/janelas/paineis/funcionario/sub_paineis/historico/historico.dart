@@ -44,7 +44,9 @@ class PainelHistorico extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
           child: LayoutPesquisa(
-            accaoNaInsercaoNoCampoTexto: (dado) {},
+            accaoNaInsercaoNoCampoTexto: (dado) {
+              _c.aoPesquisar(dado);
+            },
             accaoAoSair: () {
               _c.terminarSessao();
             },

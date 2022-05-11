@@ -12,30 +12,28 @@ class LayoutEntradas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Obx(
-        () {
-          var itens = _c.lista
-              .map((entrada) => ItemEntrada(
-                    visaoGeral: visaoGeral,
-                    entrada: entrada,
-                    aoClicar: () {},
-                  ))
-              .toList();
-          if (itens.isEmpty) {
-            return Center(child: Text("Sem entradas!"));
-          }
+    return Obx(
+      () {
+        if (_c.lista.isEmpty) {
           return Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: itens,
-            ),
+            child: LinearProgressIndicator(),
           );
-        },
-      ),
+        }
+        var itens = _c.lista
+            .map((entrada) => ItemEntrada(
+                  visaoGeral: visaoGeral,
+                  entrada: entrada,
+                  aoClicar: () {},
+                ))
+            .toList();
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: ListView.builder(itemCount: itens.length,itemBuilder: (c, i) => itens[i]),
+          ),
+        );
+      },
     );
   }
 }

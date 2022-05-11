@@ -20,6 +20,7 @@ class PagamentosC extends GetxController {
   }
   @override
   void onInit() async {
+    await pegarDados();
     super.onInit();
   }
 
@@ -44,7 +45,6 @@ class PagamentosC extends GetxController {
   Future<void> pegarDados() async {
     lista.clear();
     var res = await _manipularPagamentoI.pegarListaFormasPagamento();
-    print(res);
     for (var cada in res) {
       lista.add(cada);
     }

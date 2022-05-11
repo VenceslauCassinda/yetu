@@ -47,17 +47,10 @@ class GavetaNavegacao extends StatelessWidget {
                     }),
                 ItemDaGaveta(
                     cor: branca,
-                    icone: Icons.person,
-                    titulo: "Dinheiro a mais",
+                    icone: Icons.storefront,
+                    titulo: "Encomendas Gerais",
                     metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.DINHEIRO_SOBRA);
-                    }),
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.history,
-                    titulo: "Histórico de Vendas",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.HISTORICO_VENDAS);
+                      c.irParaPainel(PainelActual.ENCOMENDAS_GERAIS);
                     }),
                 ItemDaGaveta(
                     cor: branca,
@@ -68,18 +61,17 @@ class GavetaNavegacao extends StatelessWidget {
                     }),
                 ItemDaGaveta(
                     cor: branca,
+                    icone: Icons.history,
+                    titulo: "Histórico de Vendas",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.HISTORICO_VENDAS);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
                     icone: Icons.monetization_on,
                     titulo: "Saídas de Caixa",
                     metodoQuandoItemClicado: () async {
                       c.irParaPainel(PainelActual.SAIDA_CAIXA);
-                    }),
-                    
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.storefront,
-                    titulo: "Encomendas Gerais",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.ENCOMENDAS_GERAIS);
                     }),
                 ItemDaGaveta(
                     cor: branca,
@@ -87,6 +79,13 @@ class GavetaNavegacao extends StatelessWidget {
                     titulo: "Recepções",
                     metodoQuandoItemClicado: () async {
                       c.irParaPainel(PainelActual.RECEPCOES);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.person,
+                    titulo: "Dinheiro a mais",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.DINHEIRO_SOBRA);
                     }),
               ],
             ),

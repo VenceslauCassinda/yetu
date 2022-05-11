@@ -17,25 +17,18 @@ class LayoutFuncionarios extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Obx(
-        () => Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: _c.lista
-                .map((Funcionario element) => ItemFuncionario(
-                      usuario: element,
-                      aoClicar: () {
-                        _c.irParaPainel(PainelActual.VENDAS_FUNCIONARIOS,
-                            valor: element);
-                      },
-                    ))
-                .toList(),
-          ),
-        ),
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.all(20),
+        child: ListView.builder(itemCount: _c.lista.length,
+            itemBuilder: (c, i) => ItemFuncionario(
+              
+                  usuario: _c.lista[i],
+                  aoClicar: () {
+                    _c.irParaPainel(PainelActual.VENDAS_FUNCIONARIOS,
+                        valor: _c.lista[i]);
+                  },
+                )),
       ),
     );
   }

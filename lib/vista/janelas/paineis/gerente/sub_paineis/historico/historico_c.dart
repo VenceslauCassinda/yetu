@@ -9,6 +9,7 @@ import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
 import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_venda.dart';
 import 'package:yetu_gestor/recursos/constantes.dart';
+import 'package:yetu_gestor/solucoes_uteis/console.dart';
 import 'package:yetu_gestor/vista/aplicacao_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente_c.dart';
 
@@ -42,6 +43,7 @@ class HistoricoC extends GetxController {
   Funcionario? funcionario;
 
   RxList<DateTime> lista = RxList();
+  List<DateTime> listaCopia = [];
   HistoricoC(this.funcionario) {
     _manipularStockI = ManipularStock(ProvedorStock());
     _manipularProdutoI = ManipularProduto(
@@ -63,23 +65,36 @@ class HistoricoC extends GetxController {
 
   @override
   void onInit() async {
-    lista.clear();
     await pegarLista();
     super.onInit();
   }
 
+  void aoPesquisar(String f) {
+    lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      if ((DateTime(cada.year, cada.month, cada.day))
+          .toString()
+          .toLowerCase()
+          .contains(f.toLowerCase())) {
+        lista.add(cada);
+      }
+    }
+  }
+
   Future<List<DateTime>> pegarLista() async {
     var res = [];
-    if(funcionario != null){
+    if (funcionario != null) {
       res =
-        await _manipularVendaI.pegarListaDataVendasFuncionario(funcionario!);
-    }else{
-      res =
-        await _manipularVendaI.pegarListaDataVendas();
+          await _manipularVendaI.pegarListaDataVendasFuncionario(funcionario!);
+    } else {
+      res = await _manipularVendaI.pegarListaDataVendas();
     }
     for (var cada in res) {
       lista.add(cada);
     }
+    listaCopia.clear();
+    listaCopia.addAll(lista);
     return lista;
   }
 
@@ -133,4 +148,6 @@ class HistoricoC extends GetxController {
     lista.clear();
     voltar();
   }
+
+  
 }

@@ -39,7 +39,9 @@ class PainelSaidas extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
           child: LayoutPesquisa(
-            accaoNaInsercaoNoCampoTexto: (dado) {},
+            accaoNaInsercaoNoCampoTexto: (dado) {
+              _c.aoPesquisar(dado);
+            },
             accaoAoSair: () {
               _c.terminarSessao();
             },
@@ -81,10 +83,8 @@ class PainelSaidas extends StatelessWidget {
               child: Text(
                   "Produto: ${(_painelGerenteC.painelActual.value.valor == null ? null : (_painelGerenteC.painelActual.value.valor as Produto))?.nome ?? "Sem nome"}"),
             )),
-        Expanded(
-          child: LayoutSaidas(
-            visaoGeral: visaoGeral,
-          ),
+        LayoutSaidas(
+          visaoGeral: visaoGeral,
         ),
       ],
     );

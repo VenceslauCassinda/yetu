@@ -37,6 +37,7 @@ class HistoricoC extends GetxController {
   late Funcionario funcionario;
 
   RxList<DateTime> lista = RxList();
+  List<DateTime> listaCopia = [];
   HistoricoC(this.funcionario) {
     _manipularStockI = ManipularStock(ProvedorStock());
     _manipularProdutoI = ManipularProduto(
@@ -58,18 +59,32 @@ class HistoricoC extends GetxController {
 
   @override
   void onInit() async {
-    lista.clear();
     await pegarLista();
     super.onInit();
   }
 
-  Future<List<DateTime>> pegarLista() async {
+  Future pegarLista() async {
     var res =
         await _manipularVendaI.pegarListaDataVendasFuncionario(funcionario);
     for (var cada in res) {
       lista.add(cada);
     }
-    return lista;
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
+  }
+
+  void aoPesquisar(String f) {
+    lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      if ((DateTime(cada.year, cada.month, cada.day))
+          .toString()
+          .toLowerCase()
+          .contains(f.toLowerCase())) {
+        lista.add(cada);
+      }
+    }
   }
 
   void terminarSessao() {

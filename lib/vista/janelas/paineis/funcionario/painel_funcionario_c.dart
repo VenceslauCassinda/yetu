@@ -12,6 +12,7 @@ import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/histor
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/saida_caixa/painel_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/vendas/layouts/vendas_c.dart';
 import '../../../../dominio/entidades/painel_actual.dart';
+import 'sub_paineis/recepcoes/painel_c.dart';
 
 class PainelFuncionarioC extends GetxController {
   var painelActual =
@@ -66,6 +67,12 @@ class PainelFuncionarioC extends GetxController {
     }
     if (PainelActual.SAIDA_CAIXA == painelActual.value.indicadorPainel) {
       Get.delete<PainelSaidaCaixaC>();
+    }
+    if (PainelActual.RECEPCOES == painelActual.value.indicadorPainel) {
+      Get.delete<RecepcoesC>();
+    }
+    if (PainelActual.HISTORICO_VENDAS == painelActual.value.indicadorPainel) {
+      Get.delete<HistoricoC>();
     }
     painelActual.value = PainelActual(indicadorPainel: indice, valor: valor);
   }

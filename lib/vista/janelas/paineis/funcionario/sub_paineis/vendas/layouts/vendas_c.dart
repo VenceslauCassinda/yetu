@@ -13,6 +13,7 @@ import 'package:yetu_gestor/dominio/entidades/produto.dart';
 import 'package:yetu_gestor/dominio/entidades/venda.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_pagamento.dart';
 import 'package:yetu_gestor/recursos/constantes.dart';
+import 'package:yetu_gestor/solucoes_uteis/console.dart';
 import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/vendas/layouts/mesa_venda/mesa_venda.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/painel_funcionario_c.dart';
@@ -42,6 +43,9 @@ import 'detalhes_venda.dart';
 
 class VendasC extends GetxController {
   RxList<Venda> lista = RxList<Venda>();
+  List<Venda> listaCopia = <Venda>[];
+  RxList<Produto> produtos = RxList<Produto>();
+  List<Produto> produtosCopia = <Produto>[];
   late ManipularProdutoI _manipularProdutoI;
   late ManipularStockI _manipularStockI;
   late ManipularVendaI _manipularVendaI;
@@ -104,12 +108,66 @@ class VendasC extends GetxController {
     }
   }
 
+  void aoPesquisarVenda(String f) {
+    lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      var existe = (cada.itensVenda ?? []).firstWhereOrNull((element) =>
+          (element.produto?.nome ?? "")
+              .toLowerCase()
+              .contains(f.toLowerCase()));
+      if ((DateTime(cada.data!.year, cada.data!.month, cada.data!.day))
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (DateTime(
+                  cada.dataLevantamentoCompra!.year,
+                  cada.dataLevantamentoCompra!.month,
+                  cada.dataLevantamentoCompra!.day))
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.cliente?.nome ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.cliente?.numero ?? "").toString().contains(f.toLowerCase()) ||
+          cada.total.toString().contains(f.toLowerCase()) ||
+          cada.parcela.toString().contains(f.toLowerCase()) ||
+          existe != null) {
+        lista.add(cada);
+      }
+    }
+  }
+
+  void aoPesquisarProduto(String f) {
+    produtos.clear();
+    var res = produtosCopia;
+    for (var cada in res) {
+      if ((cada.nome ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.stock?.quantidade ?? "").toString().contains(f.toLowerCase()) ||
+          (cada.preco?.preco ?? 0).toString().contains(f.toLowerCase())) {
+        produtos.add(cada);
+      }
+    }
+  }
+
   void mostrarDialogoNovaVenda(BuildContext context) {
     mostrarDialogoDeLayou(LayoutMesaVenda(data, funcionario!));
   }
 
   Future<List<Produto>> pegarListaProdutos() async {
-    return await _manipularProdutoI.pegarLista();
+    var res = await _manipularProdutoI.pegarLista();
+    for (var cada in res) {
+      produtos.add(cada);
+    }
+
+    produtosCopia.clear();
+    produtosCopia.addAll(produtos);
+    return res;
   }
 
   Future pegarTotalDividas() async {
@@ -125,6 +183,9 @@ class VendasC extends GetxController {
     for (var cada in res) {
       lista.add(cada);
     }
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   Future pegarListaVendas() async {

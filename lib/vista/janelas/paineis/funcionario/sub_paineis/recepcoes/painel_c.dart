@@ -19,8 +19,6 @@ import 'package:yetu_gestor/fonte_dados/provedores/provedor_receccao.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_stock.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/painel_funcionario_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/produtos/layouts/produtos.dart';
-
-import '../../../../../aplicacao_c.dart';
 import '../../../../../componentes/pesquisa.dart';
 import '../../../gerente/layouts/layout_quantidade.dart';
 
@@ -28,6 +26,7 @@ class RecepcoesC extends GetxController {
   late ManipularRececcaoI _manipularRececcaoI;
   late ManipularProduto _manipularProduto;
   var lista = RxList<Receccao>();
+  var listaCopia = <Receccao>[];
   late Funcionario funcionario;
 
   RecepcoesC(this.funcionario) {
@@ -43,13 +42,44 @@ class RecepcoesC extends GetxController {
     super.onInit();
   }
 
-  Future<void> pegarDados() async {
+  void aoPesquisar(String f) {
     lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      if ((DateTime(cada.data!.year, cada.data!.month, cada.data!.day))
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.funcionario?.nomeCompelto ?? "")
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.funcionario?.nomeUsuario ?? "")
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.produto?.nome ?? "")
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.quantidade ?? "")
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase())) {
+        lista.add(cada);
+      }
+    }
+  }
+
+  Future<void> pegarDados() async {
     List<Receccao> res = [];
     res = await _manipularRececcaoI.pegarListaRececcoesFuncionario(funcionario);
     for (var cada in res) {
       lista.add(cada);
     }
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   void terminarSessao() {
@@ -108,14 +138,16 @@ class RecepcoesC extends GetxController {
 
   Future<void> _receberProduto(Produto produto, String quantidade) async {
     var motivo = Entrada.MOTIVO_ABASTECIMENTO;
-    lista.add(Receccao(
-        produto: produto,
-        funcionario: funcionario,
-        estado: Estado.ATIVADO,
-        idFuncionario: funcionario.id,
-        idProduto: produto.id,
-        quantidade: int.parse(quantidade),
-        data: DateTime.now()));
+    lista.insert(
+        0,
+        Receccao(
+            produto: produto,
+            funcionario: funcionario,
+            estado: Estado.ATIVADO,
+            idFuncionario: funcionario.id,
+            idProduto: produto.id,
+            quantidade: int.parse(quantidade),
+            data: DateTime.now()));
     await _manipularRececcaoI.receberProduto(
         produto, int.parse(quantidade), funcionario, motivo);
     voltar();

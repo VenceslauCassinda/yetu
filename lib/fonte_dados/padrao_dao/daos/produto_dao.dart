@@ -15,6 +15,7 @@ class ProdutoDao extends DatabaseAccessor<BancoDados> with _$ProdutoDaoMixin {
       var stock = linha.readTable(tabelaStock);
       var produto = linha.readTable(tabelaProduto);
       var preco = linha.readTableOrNull(tabelaPreco);
+      
       return Produto(
         idPreco: preco?.id,
         preco: preco == null

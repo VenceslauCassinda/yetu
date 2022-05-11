@@ -12,6 +12,8 @@ import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/dividas/pa
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/entradas/painel_entradas.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/investimento/painel.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/pagamentos/painel_pagamentos.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/perfil/painel.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/relatorio/painel.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/saidas/painel_saidas.dart';
 
 import '../funcionario/sub_paineis/vendas/painel_vendas.dart';
@@ -141,6 +143,17 @@ class CorpoGerente extends StatelessWidget {
                 PainelActual.INVESTIMENTO) {
               return PainelInvestimento(
                 gerenteC: _c,
+              );
+            }
+            if (_c.painelActual.value.indicadorPainel ==
+                PainelActual.RELATORIO) {
+              return PainelRelatorio(
+                gerenteC: _c,
+              );
+            }
+            if (_c.painelActual.value.indicadorPainel == PainelActual.PERFIL) {
+              return PainelPerfil(
+                _c,
               );
             }
             return PainelDireito(c: _c);

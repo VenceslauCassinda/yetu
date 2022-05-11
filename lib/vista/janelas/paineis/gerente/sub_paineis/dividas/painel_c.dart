@@ -43,6 +43,7 @@ class PainelDividasC extends GetxController {
   late PainelGerenteC gerenteC;
   late ManipularPagamentoI _manipularPagamentoI;
   RxList<Venda> lista = RxList();
+  List<Venda> listaCopia = [];
   int indiceTabActual = 0;
   var totalDividasPagas = 0.0.obs;
   var totalDividasNaoPagas = 0.0.obs;
@@ -72,6 +73,38 @@ class PainelDividasC extends GetxController {
     super.onInit();
   }
 
+  void aoPesquisar(String f) {
+    lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      var existe = (cada.itensVenda ?? []).firstWhereOrNull((element) =>
+          (element.produto?.nome ?? "")
+              .toLowerCase()
+              .contains(f.toLowerCase()));
+      if ((DateTime(cada.data!.year, cada.data!.month, cada.data!.day))
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (DateTime(
+                  cada.dataLevantamentoCompra!.year,
+                  cada.dataLevantamentoCompra!.month,
+                  cada.dataLevantamentoCompra!.day))
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.cliente?.nome ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.cliente?.numero ?? "").toString().contains(f.toLowerCase()) ||
+          cada.total.toString().contains(f.toLowerCase()) ||
+          cada.parcela.toString().contains(f.toLowerCase()) ||
+          existe != null) {
+        lista.add(cada);
+      }
+    }
+  }
+
   Future pegarTotalDividas() async {
     var hoje = DateTime.now();
     var res = await _manipularVendaI.pegarListaTodasPagamentoDividas(hoje);
@@ -81,7 +114,6 @@ class PainelDividasC extends GetxController {
   }
 
   Future pegarLista() async {
-    lista.clear();
     var res = <Venda>[];
     res = await _manipularVendaI.todasDividas();
 
@@ -90,6 +122,9 @@ class PainelDividasC extends GetxController {
       var emFalta = cada.total ?? 0 - (cada.parcela ?? 0);
       totalDividasNaoPagas.value += emFalta;
     }
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   mostraDialogoEntregarEncomenda(Venda venda) {

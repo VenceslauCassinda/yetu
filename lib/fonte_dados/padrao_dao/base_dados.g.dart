@@ -4968,6 +4968,329 @@ class $TabelaSaidaCaixaTable extends TabelaSaidaCaixa
   }
 }
 
+class TabelaEntidadeData extends DataClass
+    implements Insertable<TabelaEntidadeData> {
+  final int id;
+  final int estado;
+  final String nome;
+  final String endereco;
+  final String nif;
+  final String telefone;
+  TabelaEntidadeData(
+      {required this.id,
+      required this.estado,
+      required this.nome,
+      required this.endereco,
+      required this.nif,
+      required this.telefone});
+  factory TabelaEntidadeData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return TabelaEntidadeData(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      estado: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
+      nome: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}nome'])!,
+      endereco: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}endereco'])!,
+      nif: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}nif'])!,
+      telefone: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}telefone'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['estado'] = Variable<int>(estado);
+    map['nome'] = Variable<String>(nome);
+    map['endereco'] = Variable<String>(endereco);
+    map['nif'] = Variable<String>(nif);
+    map['telefone'] = Variable<String>(telefone);
+    return map;
+  }
+
+  TabelaEntidadeCompanion toCompanion(bool nullToAbsent) {
+    return TabelaEntidadeCompanion(
+      id: Value(id),
+      estado: Value(estado),
+      nome: Value(nome),
+      endereco: Value(endereco),
+      nif: Value(nif),
+      telefone: Value(telefone),
+    );
+  }
+
+  factory TabelaEntidadeData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TabelaEntidadeData(
+      id: serializer.fromJson<int>(json['id']),
+      estado: serializer.fromJson<int>(json['estado']),
+      nome: serializer.fromJson<String>(json['nome']),
+      endereco: serializer.fromJson<String>(json['endereco']),
+      nif: serializer.fromJson<String>(json['nif']),
+      telefone: serializer.fromJson<String>(json['telefone']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'estado': serializer.toJson<int>(estado),
+      'nome': serializer.toJson<String>(nome),
+      'endereco': serializer.toJson<String>(endereco),
+      'nif': serializer.toJson<String>(nif),
+      'telefone': serializer.toJson<String>(telefone),
+    };
+  }
+
+  TabelaEntidadeData copyWith(
+          {int? id,
+          int? estado,
+          String? nome,
+          String? endereco,
+          String? nif,
+          String? telefone}) =>
+      TabelaEntidadeData(
+        id: id ?? this.id,
+        estado: estado ?? this.estado,
+        nome: nome ?? this.nome,
+        endereco: endereco ?? this.endereco,
+        nif: nif ?? this.nif,
+        telefone: telefone ?? this.telefone,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TabelaEntidadeData(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('nome: $nome, ')
+          ..write('endereco: $endereco, ')
+          ..write('nif: $nif, ')
+          ..write('telefone: $telefone')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, estado, nome, endereco, nif, telefone);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TabelaEntidadeData &&
+          other.id == this.id &&
+          other.estado == this.estado &&
+          other.nome == this.nome &&
+          other.endereco == this.endereco &&
+          other.nif == this.nif &&
+          other.telefone == this.telefone);
+}
+
+class TabelaEntidadeCompanion extends UpdateCompanion<TabelaEntidadeData> {
+  final Value<int> id;
+  final Value<int> estado;
+  final Value<String> nome;
+  final Value<String> endereco;
+  final Value<String> nif;
+  final Value<String> telefone;
+  const TabelaEntidadeCompanion({
+    this.id = const Value.absent(),
+    this.estado = const Value.absent(),
+    this.nome = const Value.absent(),
+    this.endereco = const Value.absent(),
+    this.nif = const Value.absent(),
+    this.telefone = const Value.absent(),
+  });
+  TabelaEntidadeCompanion.insert({
+    this.id = const Value.absent(),
+    required int estado,
+    required String nome,
+    required String endereco,
+    required String nif,
+    required String telefone,
+  })  : estado = Value(estado),
+        nome = Value(nome),
+        endereco = Value(endereco),
+        nif = Value(nif),
+        telefone = Value(telefone);
+  static Insertable<TabelaEntidadeData> custom({
+    Expression<int>? id,
+    Expression<int>? estado,
+    Expression<String>? nome,
+    Expression<String>? endereco,
+    Expression<String>? nif,
+    Expression<String>? telefone,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (estado != null) 'estado': estado,
+      if (nome != null) 'nome': nome,
+      if (endereco != null) 'endereco': endereco,
+      if (nif != null) 'nif': nif,
+      if (telefone != null) 'telefone': telefone,
+    });
+  }
+
+  TabelaEntidadeCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? estado,
+      Value<String>? nome,
+      Value<String>? endereco,
+      Value<String>? nif,
+      Value<String>? telefone}) {
+    return TabelaEntidadeCompanion(
+      id: id ?? this.id,
+      estado: estado ?? this.estado,
+      nome: nome ?? this.nome,
+      endereco: endereco ?? this.endereco,
+      nif: nif ?? this.nif,
+      telefone: telefone ?? this.telefone,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (estado.present) {
+      map['estado'] = Variable<int>(estado.value);
+    }
+    if (nome.present) {
+      map['nome'] = Variable<String>(nome.value);
+    }
+    if (endereco.present) {
+      map['endereco'] = Variable<String>(endereco.value);
+    }
+    if (nif.present) {
+      map['nif'] = Variable<String>(nif.value);
+    }
+    if (telefone.present) {
+      map['telefone'] = Variable<String>(telefone.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TabelaEntidadeCompanion(')
+          ..write('id: $id, ')
+          ..write('estado: $estado, ')
+          ..write('nome: $nome, ')
+          ..write('endereco: $endereco, ')
+          ..write('nif: $nif, ')
+          ..write('telefone: $telefone')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TabelaEntidadeTable extends TabelaEntidade
+    with TableInfo<$TabelaEntidadeTable, TabelaEntidadeData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TabelaEntidadeTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _estadoMeta = const VerificationMeta('estado');
+  @override
+  late final GeneratedColumn<int?> estado = GeneratedColumn<int?>(
+      'estado', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _nomeMeta = const VerificationMeta('nome');
+  @override
+  late final GeneratedColumn<String?> nome = GeneratedColumn<String?>(
+      'nome', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _enderecoMeta = const VerificationMeta('endereco');
+  @override
+  late final GeneratedColumn<String?> endereco = GeneratedColumn<String?>(
+      'endereco', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _nifMeta = const VerificationMeta('nif');
+  @override
+  late final GeneratedColumn<String?> nif = GeneratedColumn<String?>(
+      'nif', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _telefoneMeta = const VerificationMeta('telefone');
+  @override
+  late final GeneratedColumn<String?> telefone = GeneratedColumn<String?>(
+      'telefone', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, estado, nome, endereco, nif, telefone];
+  @override
+  String get aliasedName => _alias ?? 'tabela_entidade';
+  @override
+  String get actualTableName => 'tabela_entidade';
+  @override
+  VerificationContext validateIntegrity(Insertable<TabelaEntidadeData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('estado')) {
+      context.handle(_estadoMeta,
+          estado.isAcceptableOrUnknown(data['estado']!, _estadoMeta));
+    } else if (isInserting) {
+      context.missing(_estadoMeta);
+    }
+    if (data.containsKey('nome')) {
+      context.handle(
+          _nomeMeta, nome.isAcceptableOrUnknown(data['nome']!, _nomeMeta));
+    } else if (isInserting) {
+      context.missing(_nomeMeta);
+    }
+    if (data.containsKey('endereco')) {
+      context.handle(_enderecoMeta,
+          endereco.isAcceptableOrUnknown(data['endereco']!, _enderecoMeta));
+    } else if (isInserting) {
+      context.missing(_enderecoMeta);
+    }
+    if (data.containsKey('nif')) {
+      context.handle(
+          _nifMeta, nif.isAcceptableOrUnknown(data['nif']!, _nifMeta));
+    } else if (isInserting) {
+      context.missing(_nifMeta);
+    }
+    if (data.containsKey('telefone')) {
+      context.handle(_telefoneMeta,
+          telefone.isAcceptableOrUnknown(data['telefone']!, _telefoneMeta));
+    } else if (isInserting) {
+      context.missing(_telefoneMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TabelaEntidadeData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return TabelaEntidadeData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $TabelaEntidadeTable createAlias(String alias) {
+    return $TabelaEntidadeTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TabelaUsuarioTable tabelaUsuario = $TabelaUsuarioTable(this);
@@ -4993,6 +5316,7 @@ abstract class _$BancoDados extends GeneratedDatabase {
       $TabelaPagamentoFinalTable(this);
   late final $TabelaSaidaCaixaTable tabelaSaidaCaixa =
       $TabelaSaidaCaixaTable(this);
+  late final $TabelaEntidadeTable tabelaEntidade = $TabelaEntidadeTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -5012,7 +5336,8 @@ abstract class _$BancoDados extends GeneratedDatabase {
         tabelaPagamento,
         tabelaDinheiroSobra,
         tabelaPagamentoFinal,
-        tabelaSaidaCaixa
+        tabelaSaidaCaixa,
+        tabelaEntidade
       ];
 }
 
@@ -5038,6 +5363,7 @@ mixin _$EntradaDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaRececcaoTable get tabelaRececcao => attachedDatabase.tabelaRececcao;
   $TabelaFuncionarioTable get tabelaFuncionario =>
       attachedDatabase.tabelaFuncionario;
+  $TabelaStockTable get tabelaStock => attachedDatabase.tabelaStock;
 }
 mixin _$ClienteDaoMixin on DatabaseAccessor<BancoDados> {
   $TabelaClienteTable get tabelaCliente => attachedDatabase.tabelaCliente;
@@ -5096,4 +5422,7 @@ mixin _$SaidaCaixaDaoMixin on DatabaseAccessor<BancoDados> {
       attachedDatabase.tabelaSaidaCaixa;
   $TabelaFuncionarioTable get tabelaFuncionario =>
       attachedDatabase.tabelaFuncionario;
+}
+mixin _$EntidadeDaoMixin on DatabaseAccessor<BancoDados> {
+  $TabelaEntidadeTable get tabelaEntidade => attachedDatabase.tabelaEntidade;
 }

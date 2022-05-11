@@ -22,10 +22,37 @@ class PainelSaidaCaixaC extends GetxController {
   }
 
   RxList<SaidaCaixa> lista = RxList();
+  List<SaidaCaixa> listaCopia = [];
   @override
   void onInit() {
     pegarDados();
     super.onInit();
+  }
+
+  void aoPesquisar(String f) {
+    lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      if ((DateTime(cada.data!.year, cada.data!.month, cada.data!.day))
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.funcionario?.nomeCompelto ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.funcionario?.nomeUsuario ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.valor ?? "").toString().contains(f.toLowerCase()) ||
+          (cada.motivo ?? "")
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase())) {
+        lista.add(cada);
+      }
+    }
   }
 
   void mostrarDialogoNovaValor(BuildContext context) {
@@ -41,6 +68,9 @@ class PainelSaidaCaixaC extends GetxController {
     for (var cada in res) {
       lista.add(cada);
     }
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   Future<void> adincionarSaida(String valor, String motivo) async {

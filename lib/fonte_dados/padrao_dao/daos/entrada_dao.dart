@@ -1,7 +1,12 @@
 part of '../base_dados.dart';
 
-@DriftAccessor(
-    tables: [TabelaEntrada, TabelaProduto, TabelaRececcao, TabelaFuncionario])
+@DriftAccessor(tables: [
+  TabelaEntrada,
+  TabelaProduto,
+  TabelaRececcao,
+  TabelaFuncionario,
+  TabelaStock
+])
 class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
   EntradaDao(BancoDados attachedDatabase) : super(attachedDatabase);
 
@@ -12,13 +17,18 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
           tabelaProduto, tabelaEntrada.idProduto.equalsExp(tabelaProduto.id)),
       leftOuterJoin(tabelaRececcao,
           tabelaEntrada.idRececcao.equalsExp(tabelaRececcao.id)),
-    ])..orderBy([OrderingTerm.desc(tabelaEntrada.data)])).get();
+      leftOuterJoin(
+          tabelaStock, tabelaProduto.id.equalsExp(tabelaStock.idProduto)),
+    ])
+          ..orderBy([OrderingTerm.desc(tabelaEntrada.data)]))
+        .get();
 
     for (var linhaEntradaVsProdutoVsRececcao in res) {
       var produto =
           linhaEntradaVsProdutoVsRececcao.readTableOrNull(tabelaProduto);
       var entrada = linhaEntradaVsProdutoVsRececcao.readTable(tabelaEntrada);
       var receccao = linhaEntradaVsProdutoVsRececcao.readTable(tabelaRececcao);
+      var stock = linhaEntradaVsProdutoVsRececcao.readTable(tabelaStock);
       var cadaRececcao = Receccao(
           id: receccao.id,
           estado: receccao.estado,
@@ -49,6 +59,11 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
                   nome: produto.nome,
                   precoCompra: produto.precoCompra,
                   recebivel: produto.recebivel,
+                  stock: Stock(
+                      id: stock.id,
+                      estado: stock.estado,
+                      idProduto: stock.idProduto,
+                      quantidade: stock.quantidade),
                 ),
           estado: entrada.estado,
           motivo: entrada.motivo,
@@ -65,19 +80,24 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
     List<Entrada> lista = [];
 
     var res = await ((select(tabelaEntrada)
-          ..where((tbl) => tbl.idProduto.equals(idProduto)))
-        .join([
+              ..where((tbl) => tbl.idProduto.equals(idProduto)))
+            .join([
       leftOuterJoin(
           tabelaProduto, tabelaEntrada.idProduto.equalsExp(tabelaProduto.id)),
       leftOuterJoin(tabelaRececcao,
           tabelaEntrada.idRececcao.equalsExp(tabelaRececcao.id)),
-    ])..orderBy([OrderingTerm.desc(tabelaEntrada.data)])).get();
+      leftOuterJoin(
+          tabelaStock, tabelaProduto.id.equalsExp(tabelaStock.idProduto)),
+    ])
+          ..orderBy([OrderingTerm.desc(tabelaEntrada.data)]))
+        .get();
 
     for (var linhaEntradaVsProdutoVsRececcao in res) {
       var produto =
           linhaEntradaVsProdutoVsRececcao.readTableOrNull(tabelaProduto);
       var entrada = linhaEntradaVsProdutoVsRececcao.readTable(tabelaEntrada);
       var receccao = linhaEntradaVsProdutoVsRececcao.readTable(tabelaRececcao);
+      var stock = linhaEntradaVsProdutoVsRececcao.readTable(tabelaStock);
 
       var cadaRececcao = Receccao(
           id: receccao.id,
@@ -109,6 +129,11 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
                   nome: produto.nome,
                   precoCompra: produto.precoCompra,
                   recebivel: produto.recebivel,
+                  stock: Stock(
+                      id: stock.id,
+                      estado: stock.estado,
+                      idProduto: stock.idProduto,
+                      quantidade: stock.quantidade),
                 ),
           estado: entrada.estado,
           motivo: entrada.motivo,

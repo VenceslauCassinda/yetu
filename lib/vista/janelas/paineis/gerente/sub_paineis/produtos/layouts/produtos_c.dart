@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:componentes_visuais/componentes/layout_confirmacao_accao.dart';
 import 'package:componentes_visuais/dialogo/dialogos.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_funcionario_i.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_produto_i.dart';
@@ -16,6 +19,7 @@ import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/dominio/entidades/produto.dart';
 import 'package:yetu_gestor/dominio/entidades/saida.dart';
 import 'package:yetu_gestor/dominio/entidades/stock.dart';
+import 'package:yetu_gestor/dominio/entidades/venda.dart';
 import 'package:yetu_gestor/fonte_dados/erros.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_entrada.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_funcionario.dart';
@@ -23,28 +27,43 @@ import 'package:yetu_gestor/fonte_dados/provedores/provedor_preco.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_produto.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedor_receccao.dart';
 import 'package:yetu_gestor/fonte_dados/provedores/provedores_usuario.dart';
+import 'package:yetu_gestor/solucoes_uteis/console.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/layouts/layout_quantidade.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente_c.dart';
 
+import '../../../../../../../contratos/casos_uso/manipular_entidade_I.dart';
 import '../../../../../../../contratos/casos_uso/manipular_stock_i.dart';
+import '../../../../../../../dominio/casos_uso/manipular_entidade.dart';
 import '../../../../../../../dominio/casos_uso/manipular_fincionario.dart';
 import '../../../../../../../dominio/casos_uso/manipular_usuario.dart';
+import '../../../../../../../dominio/entidades/caixa.dart';
 import '../../../../../../../dominio/entidades/estado.dart';
+import '../../../../../../../dominio/entidades/pdf_page.dart';
+import '../../../../../../../dominio/entidades/relatorio.dart';
+import '../../../../../../../fonte_dados/provedores/provedor_entidade.dart';
 import '../../../../../../../fonte_dados/provedores/provedor_saida.dart';
 import '../../../../../../../fonte_dados/provedores/provedor_stock.dart';
 import '../../../../../../../recursos/constantes.dart';
+import '../../../../../../../solucoes_uteis/formato_dado.dart';
+import '../../../../../../../solucoes_uteis/pdf_api/investimento_pdf.dart';
+import '../../../../../../../solucoes_uteis/pdf_api/pdf_api.dart';
+import '../../../../../../../solucoes_uteis/pdf_api/precos_pdf.dart';
 import '../../../../../../aplicacao_c.dart';
 import '../../../layouts/layout_produto.dart';
 
 class ProdutosC extends GetxController {
   var lista = RxList<Produto>();
+  var listaCopia = <Produto>[];
   late ManipularProdutoI _manipularProdutoI;
   late ManipularStockI _manipularStockI;
   late ManipularRececcaoI _manipularRececcaoI;
   late ManipularFuncionarioI _manipularFuncionarioI;
   late ManipularSaidaI _manipularSaidaI;
   var indiceTabActual = 1.obs;
+  late ManipularEntidadeI _manipularEntidadeI;
+  String filtro = "";
   ProdutosC() {
+    _manipularEntidadeI = ManipularEntidade(ProvedorEntidade());
     _manipularStockI = ManipularStock(ProvedorStock());
     _manipularProdutoI = ManipularProduto(
         ProvedorProduto(), _manipularStockI, ManipularPreco(ProvedorPreco()));
@@ -56,50 +75,81 @@ class ProdutosC extends GetxController {
   }
   @override
   void onInit() async {
-    // await pegarActivos();
+    navegar(0);
     super.onInit();
   }
 
-  Future<void> pegarTodos() async {
+  void aoPesquisar(String f) {
     lista.clear();
-    var res = await _manipularProdutoI.pegarLista();
+    var res = listaCopia;
     for (var cada in res) {
-      lista.add(cada);
-    }
-  }
-
-  Future<void> pegarActivos() async {
-    lista.clear();
-    var res = await _manipularProdutoI.pegarLista();
-    for (var cada in res) {
-      if (cada.estado == Estado.ATIVADO) {
+      if (cada.nome!.toLowerCase().contains(f.toLowerCase()) ||
+          cada.precoCompra!
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.stock?.quantidade ?? 0)
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.preco?.preco ?? 0)
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase())) {
         lista.add(cada);
       }
     }
   }
 
+  Future<List<Produto>> pegarTodos() async {
+    var res = await _manipularProdutoI.pegarLista();
+    lista.addAll(res);
+    listaCopia.clear();
+    listaCopia.addAll(lista);
+    lista.forEach((element) {
+      element.estado ??= Estado.ATIVADO;
+    });
+    return lista;
+  }
+
+  Future<void> pegarActivos() async {
+    var res = await _manipularProdutoI.pegarLista();
+    for (var cada in res) {
+      if (cada.estado == Estado.ATIVADO) {
+        lista.add(cada);
+        return;
+      }
+    }
+    listaCopia.clear();
+    listaCopia.addAll(lista);
+  }
+
   Future<void> pegarDesactivos() async {
-    lista.clear();
     var res = await _manipularProdutoI.pegarLista();
     for (var cada in res) {
       if (cada.estado == Estado.DESACTIVADO) {
         lista.add(cada);
       }
     }
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   Future<void> pegarElimindados() async {
-    lista.clear();
     var res = await _manipularProdutoI.pegarLista();
     for (var cada in res) {
       if (cada.estado == Estado.ELIMINADO) {
         lista.add(cada);
       }
     }
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   Future<void> navegar(int tab) async {
     indiceTabActual.value = tab;
+    // Timer.periodic(Duration(seconds: 1), (t) async {
     if (tab == 0) {
       await pegarTodos();
     }
@@ -112,14 +162,71 @@ class ProdutosC extends GetxController {
     if (tab == 3) {
       await pegarElimindados();
     }
+    //   t.cancel();
+    // });
   }
 
   void mostrarDialogoAdicionarProduto() {
     mostrarDialogoDeLayou(LayoutProduto(
       accaoAoFinalizar: (nome, precoCompra, precoVenda) async {
+        fecharDialogoCasoAberto();
         await _adicionarProduto(nome, precoCompra, precoVenda);
       },
     ));
+  }
+
+  void mostrarDialogoGerarRelatorioInvestimento(BuildContext context) async {
+    var entidades = await _manipularEntidadeI.todos();
+    if (entidades.isEmpty) {
+      mostrarDialogoDeInformacao("Por favor! Insira os dados da Entidade");
+      return;
+    }
+    List<List<String>> listaItens = [];
+    mostrarDialogoDeLayou(Container(
+        height: MediaQuery.of(context).size.height * .6,
+        width: MediaQuery.of(context).size.width * .6,
+        child: PdfPage(
+          nomeRelatorio: "Preços",
+          accaoAoCriarPdf: () async {
+            double total = 0;
+            var hoje = DateTime.now();
+            var todos = await _manipularProdutoI.pegarLista();
+            for (var cada in todos) {
+              listaItens.add([
+                (cada.nome ?? "NÃO CONSIDERADO"),
+                "${formatar(cada.preco?.preco ?? 0)} KZ",
+              ]);
+              total += (cada.precoCompra ?? 0) * (cada.stock?.quantidade ?? 0);
+            }
+
+            var realtorio = Relatorio(
+                nomeRelatorio: "Relatório de Preços",
+                listaItens: listaItens,
+                caixa: Caixa(
+                    caixaDigital: "caixaDigital",
+                    caixaFisico: "caixaFisico",
+                    caixaFisicoAcomulado: "caixaFisicoAcomulado",
+                    caixaDigitalAcomulado: "caixaDigitalAcomulado",
+                    totalDespesas: "totalDespesas"),
+                data: hoje,
+                nomeEmpresa: entidades[0].nome!,
+                enderecoEmpresa: entidades[0].endereco!,
+                nifEmpresa: entidades[0].nif!);
+
+            try {
+              var pdfFile = await PrecosPdf.generate(realtorio.toInvoice(hoje),
+                  cabecalho: [
+                    "Nome do Produto",
+                    "Preço",
+                  ]);
+              voltar();
+              PdfApi.openFile(pdfFile);
+            } catch (e) {
+              mostrarDialogoDeInformacao(
+                  "O arquivo ainda está aberto noutro programa!\nPor favor feche!");
+            }
+          },
+        )));
   }
 
   void mostrarDialogoReceber(Produto produto) {
@@ -127,6 +234,7 @@ class ProdutosC extends GetxController {
         comOpcaoRetirada: false,
         accaoAoFinalizar: (quantidade, opcaoRetiradaSelecionada) async {
           var motivo = Entrada.MOTIVO_ABASTECIMENTO;
+          fecharDialogoCasoAberto();
           await _receberProduto(produto, quantidade, motivo);
         },
         titulo: "Receber produto ${produto.nome}"));
@@ -147,6 +255,7 @@ class ProdutosC extends GetxController {
         comOpcaoRetirada: false,
         accaoAoFinalizar: (quantidade, o) async {
           var motivo = Entrada.MOTIVO_AJUSTE_STOCK;
+          fecharDialogoCasoAberto();
           await _receberProduto(produto, quantidade, motivo);
         },
         titulo: "Aumentar quantidade do produto ${produto.nome}"));
@@ -156,6 +265,7 @@ class ProdutosC extends GetxController {
     mostrarDialogoDeLayou(LayoutQuantidade(
         comOpcaoRetirada: true,
         accaoAoFinalizar: (quantidade, opcaoRetiradaSelecionada) async {
+          fecharDialogoCasoAberto();
           await _retirarProduto(produto, quantidade, opcaoRetiradaSelecionada!);
         },
         titulo: "Retirar quantidade do produto ${produto.nome}"));
@@ -167,7 +277,6 @@ class ProdutosC extends GetxController {
         produto.stock!.quantidade =
             ((lista[i].stock!.quantidade! + int.parse(quantidade)));
         lista[i] = produto;
-        fecharDialogoCasoAberto();
         break;
       }
     }
@@ -179,7 +288,6 @@ class ProdutosC extends GetxController {
         produto.stock!.quantidade =
             ((lista[i].stock!.quantidade! - int.parse(quantidade)));
         lista[i] = produto;
-        fecharDialogoCasoAberto();
         break;
       }
     }
@@ -189,7 +297,6 @@ class ProdutosC extends GetxController {
     for (var i = 0; i < lista.length; i++) {
       if (lista[i].id == produto.id) {
         lista[i] = produto;
-        fecharDialogoCasoAberto();
         break;
       }
     }
@@ -199,6 +306,7 @@ class ProdutosC extends GetxController {
     mostrarDialogoDeLayou(LayoutProduto(
       produto: produto,
       accaoAoFinalizar: (nome, precoCompra, precoVenda) async {
+        fecharDialogoCasoAberto();
         await _actualizarProduto(nome, precoCompra, precoVenda, produto);
       },
     ));
@@ -209,6 +317,7 @@ class ProdutosC extends GetxController {
         corButaoSim: primaryColor,
         pergunta: "Deseja mesmo eliminar o Produto ${produto.nome}",
         accaoAoConfirmar: () async {
+          fecharDialogoCasoAberto();
           await _manipularProdutoI.removerProduto(produto);
           await _eliminarProduto(produto);
         },
@@ -241,8 +350,10 @@ class ProdutosC extends GetxController {
     String precoVenda,
   ) async {
     try {
-      var novoProduto =
-          Produto(nome: nome, precoCompra: double.parse(precoCompra));
+      var novoProduto = Produto(
+          nome: nome,
+          precoCompra: double.parse(precoCompra),
+          estado: Estado.ATIVADO);
       var id = await _manipularProdutoI.adicionarProduto(novoProduto);
       novoProduto.id = id;
       await _manipularProdutoI.adicionarPrecoProduto(
@@ -250,7 +361,6 @@ class ProdutosC extends GetxController {
       novoProduto.listaPreco = [double.parse(precoVenda)];
       novoProduto.stock = Stock.zerado();
       lista.add(novoProduto);
-      fecharDialogoCasoAberto();
     } on Erro catch (e) {
       mostrarDialogoDeInformacao(e.sms);
     }
@@ -268,7 +378,6 @@ class ProdutosC extends GetxController {
           await _manipularProdutoI.actualizarProduto(produto);
           await _manipularProdutoI.atualizarPrecoProduto(
               produto, double.parse(precoVenda));
-          fecharDialogoCasoAberto();
           break;
         }
       }

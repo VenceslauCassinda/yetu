@@ -13,30 +13,27 @@ class LayoutSaidas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Obx(
-        () {
-          var itens = _c.lista
-              .map((saida) => ItemSaida(
-                    visaoGeral: visaoGeral,
-                    saida: saida,
-                    aoClicar: () {},
-                  ))
-              .toList();
-          if (itens.isEmpty) {
-            return Center(child: Text("Sem saídas!"));
-          }
+    return Obx(
+      () {
+        if (_c.lista.isEmpty) {
           return Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: itens,
-            ),
-          );
-        },
-      ),
+              padding: const EdgeInsets.all(20),
+              child: LinearProgressIndicator());
+        }
+        var itens = _c.lista
+            .map((saida) => ItemSaida(
+                  visaoGeral: visaoGeral,
+                  saida: saida,
+                  aoClicar: () {},
+                ))
+            .toList();
+        return Expanded(
+          child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: ListView.builder(
+                  itemCount: itens.length, itemBuilder: (c, i) => itens[i])),
+        );
+      },
     );
   }
 }

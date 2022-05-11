@@ -15,6 +15,7 @@ class SaidasC extends GetxController {
   bool visaoGeral;
 
   var lista = RxList<Saida>();
+  var listaCopia = <Saida>[];
 
   SaidasC({required this.visaoGeral}) {
     _manipularSaidaI =
@@ -26,8 +27,29 @@ class SaidasC extends GetxController {
     super.onInit();
   }
 
-  Future<void> pegarDados() async {
+  void aoPesquisar(String f) {
     lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      if ((DateTime(cada.data!.year, cada.data!.month, cada.data!.day))
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.produto?.nome ?? "")
+              .toLowerCase()
+              .toString()
+              .contains(f.toLowerCase()) ||
+          (cada.quantidade ?? "").toString().contains(f.toLowerCase()) ||
+          (cada.motivo ?? "")
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase())) {
+        lista.add(cada);
+      }
+    }
+  }
+
+  Future<void> pegarDados() async {
     List<Saida> res = [];
     if (visaoGeral == true) {
       res = await _manipularSaidaI.pegarLista();
@@ -39,6 +61,9 @@ class SaidasC extends GetxController {
     for (var cada in res) {
       lista.add(cada);
     }
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   void terminarSessao() {

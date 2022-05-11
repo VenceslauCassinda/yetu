@@ -16,28 +16,23 @@ class LayoutProdutos extends StatelessWidget {
   LayoutProdutos({required this.lista, this.c, this.accaoAoClicarCadaProduto});
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: lista
-              .map((produto) => InkWell(
-                    onTap: () {
-                      if (accaoAoClicarCadaProduto != null) {
-                        accaoAoClicarCadaProduto!(produto);
-                      }
-                    },
-                    child: ItemProduto(
-                      produto: produto,
-                      c: c,
-                    ),
-                  ))
-              .toList(),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: ListView.builder(
+          itemCount: lista.length,
+          itemBuilder: (context, indice) {
+            return InkWell(
+              onTap: () {
+                if (accaoAoClicarCadaProduto != null) {
+                  accaoAoClicarCadaProduto!(lista[indice]);
+                }
+              },
+              child: ItemProduto(
+                produto: lista[indice],
+                c: c,
+              ),
+            );
+          }),
     );
   }
 }

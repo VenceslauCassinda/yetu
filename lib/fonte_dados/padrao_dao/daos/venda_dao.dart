@@ -67,7 +67,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var item = e.readTable(tabelaItemVenda);
         var produto = e.readTable(tabelaProduto);
         var preoDao = PrecoDao(gett.Get.find());
-        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        Preco? preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
         var cada = ItemVenda(
             id: item.id,
             estado: item.estado,
@@ -82,9 +82,9 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               precoCompra: produto.precoCompra,
               recebivel: produto.recebivel,
               nome: produto.nome,
-              idPreco: preco.id,
+              idPreco: preco?.id,
               preco: preco,
-              listaPreco: [preco.preco!],
+              listaPreco: preco?.preco == null ? [] : [preco?.preco ?? 0],
             ));
         listaItensVenda.add(cada);
       }
@@ -170,7 +170,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var item = e.readTable(tabelaItemVenda);
         var produto = e.readTable(tabelaProduto);
         var preoDao = PrecoDao(gett.Get.find());
-        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        Preco? preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
         var cada = ItemVenda(
             estado: item.estado,
             idProduto: item.idProduto,
@@ -184,9 +184,9 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               precoCompra: produto.precoCompra,
               recebivel: produto.recebivel,
               nome: produto.nome,
-              idPreco: preco.id,
+              idPreco: preco?.id,
               preco: preco,
-              listaPreco: [preco.preco!],
+              listaPreco: preco?.preco == null ? [] : [preco?.preco ?? 0],
             ));
         listaItensVenda.add(cada);
       }
@@ -283,7 +283,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var item = e.readTable(tabelaItemVenda);
         var produto = e.readTable(tabelaProduto);
         var preoDao = PrecoDao(gett.Get.find());
-        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        Preco? preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
         var cada = ItemVenda(
             estado: item.estado,
             idProduto: item.idProduto,
@@ -297,9 +297,9 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               precoCompra: produto.precoCompra,
               recebivel: produto.recebivel,
               nome: produto.nome,
-              idPreco: preco.id,
+              idPreco: preco?.id,
               preco: preco,
-              listaPreco: [preco.preco!],
+              listaPreco: preco?.preco == null ? [] : [preco?.preco ?? 0],
             ));
         listaItensVenda.add(cada);
       }
@@ -395,7 +395,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var item = e.readTable(tabelaItemVenda);
         var produto = e.readTable(tabelaProduto);
         var preoDao = PrecoDao(gett.Get.find());
-        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        Preco? preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
 
         var cada = ItemVenda(
             estado: item.estado,
@@ -410,9 +410,9 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               precoCompra: produto.precoCompra,
               recebivel: produto.recebivel,
               nome: produto.nome,
-              idPreco: preco.id,
+              idPreco: preco?.id,
               preco: preco,
-              listaPreco: [preco.preco!],
+              listaPreco: preco?.preco == null ? [] : [preco?.preco ?? 0],
             ));
         listaItensVenda.add(cada);
       }
@@ -533,7 +533,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var item = e.readTable(tabelaItemVenda);
         var produto = e.readTable(tabelaProduto);
         var preoDao = PrecoDao(gett.Get.find());
-        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        Preco? preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
 
         var cada = ItemVenda(
             estado: item.estado,
@@ -548,9 +548,9 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               precoCompra: produto.precoCompra,
               recebivel: produto.recebivel,
               nome: produto.nome,
-              idPreco: preco.id,
+              idPreco: preco?.id,
               preco: preco,
-              listaPreco: [preco.preco!],
+              listaPreco: preco?.preco == null ? [] : [preco?.preco ?? 0],
             ));
         listaItensVenda.add(cada);
       }
@@ -672,7 +672,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var item = e.readTable(tabelaItemVenda);
         var produto = e.readTable(tabelaProduto);
         var preoDao = PrecoDao(gett.Get.find());
-        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        Preco? preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
 
         var cada = ItemVenda(
             estado: item.estado,
@@ -687,9 +687,9 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               precoCompra: produto.precoCompra,
               recebivel: produto.recebivel,
               nome: produto.nome,
-              idPreco: preco.id,
+              idPreco: preco?.id,
               preco: preco,
-              listaPreco: [preco.preco!],
+              listaPreco: preco?.preco == null ? [] : [preco?.preco ?? 0],
             ));
         listaItensVenda.add(cada);
       }
@@ -784,7 +784,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var item = e.readTable(tabelaItemVenda);
         var produto = e.readTable(tabelaProduto);
         var preoDao = PrecoDao(gett.Get.find());
-        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        Preco? preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
 
         var cada = ItemVenda(
             estado: item.estado,
@@ -799,9 +799,9 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               precoCompra: produto.precoCompra,
               recebivel: produto.recebivel,
               nome: produto.nome,
-              idPreco: preco.id,
+              idPreco: preco?.id,
               preco: preco,
-              listaPreco: [preco.preco!],
+              listaPreco: preco?.preco == null ? [] : [preco?.preco ?? 0],
             ));
         listaItensVenda.add(cada);
       }
@@ -873,12 +873,14 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
     ])
       ..where(tabelaFuncionario.id.equals(funcionario.id) &
           ((tabelaVenda.data.year
-                      .equalsExp(tabelaVenda.dataLevantamentoCompra.year).not() |
-                  tabelaVenda.data.month
-                      .equalsExp(tabelaVenda.dataLevantamentoCompra.month).not() |
-                  (tabelaVenda.data.day
-                      .equalsExp(tabelaVenda.dataLevantamentoCompra.day).not()))
-              ))
+                  .equalsExp(tabelaVenda.dataLevantamentoCompra.year)
+                  .not() |
+              tabelaVenda.data.month
+                  .equalsExp(tabelaVenda.dataLevantamentoCompra.month)
+                  .not() |
+              (tabelaVenda.data.day
+                  .equalsExp(tabelaVenda.dataLevantamentoCompra.day)
+                  .not()))))
       ..orderBy([OrderingTerm.desc(tabelaVenda.data)]);
 
     var resVendasFuncionariosClientes2 =
@@ -904,7 +906,7 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
         var item = e.readTable(tabelaItemVenda);
         var produto = e.readTable(tabelaProduto);
         var preoDao = PrecoDao(gett.Get.find());
-        Preco preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
+        Preco? preco = await preoDao.pegarPrecoDeIdDeProduto(produto.id);
 
         var cada = ItemVenda(
             estado: item.estado,
@@ -919,9 +921,9 @@ class VendaDao extends DatabaseAccessor<BancoDados> with _$VendaDaoMixin {
               precoCompra: produto.precoCompra,
               recebivel: produto.recebivel,
               nome: produto.nome,
-              idPreco: preco.id,
+              idPreco: preco?.id,
               preco: preco,
-              listaPreco: [preco.preco!],
+              listaPreco: preco?.preco == null ? [] : [preco?.preco ?? 0],
             ));
         listaItensVenda.add(cada);
       }

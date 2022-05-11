@@ -38,6 +38,7 @@ import '../../layouts/layout_produto.dart';
 
 class PainelInvestimentoC extends GetxController {
   var lista = RxList<Produto>();
+  var listaCopia = <Produto>[];
   late ManipularProdutoI _manipularProdutoI;
   late ManipularStockI _manipularStockI;
   late ManipularRececcaoI _manipularRececcaoI;
@@ -56,10 +57,33 @@ class PainelInvestimentoC extends GetxController {
         ManipularUsuario(ProvedorUsuario()), ProveedorFuncionario());
     _manipularSaidaI = ManipularSaida(ProvedorSaida(), _manipularStockI);
   }
+
   @override
   void onInit() async {
     await pegarActivos();
     super.onInit();
+  }
+
+  void aoPesquisar(String f) {
+    lista.clear();
+    var res = listaCopia;
+    for (var cada in res) {
+      if (cada.nome!.toLowerCase().contains(f.toLowerCase()) ||
+          cada.precoCompra!
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.stock?.quantidade ?? 0)
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.preco?.preco ?? 0)
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase())) {
+        lista.add(cada);
+      }
+    }
   }
 
   Future<void> pegarTodos() async {
@@ -71,13 +95,18 @@ class PainelInvestimentoC extends GetxController {
   }
 
   Future<void> pegarActivos() async {
-    lista.clear();
+    totalInvestido.value = 0;
     var res = await _manipularProdutoI.pegarLista();
     for (var cada in res) {
       if (cada.estado == Estado.ATIVADO) {
         lista.add(cada);
+        totalInvestido.value +=
+            (cada.stock?.quantidade ?? 0) * (cada.precoCompra ?? 0);
       }
     }
+
+    listaCopia.clear();
+    listaCopia.addAll(lista);
   }
 
   Future<void> pegarDesactivos() async {

@@ -37,24 +37,27 @@ class ItemProduto extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Nome: ${produto.nome}"),
-                Text("Quantidade: ${produto.stock?.quantidade}"),
-                Visibility(
+            child: Container(
+              width: MediaQuery.of(context).size.width * .10,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("${produto.nome}"),
+                  Text("Quantidade: ${produto.stock?.quantidade}"),
+                  Visibility(
+                      visible: c != null,
+                      child: Text(
+                          "Preço de Compra: ${formatar(produto.precoCompra ?? 0)}")),
+                  Visibility(
                     visible: c != null,
                     child: Text(
-                        "Preço de Compra: ${formatar(produto.precoCompra ?? 0)}")),
-                Visibility(
-                  visible: c != null,
-                  child: Text(
-                      "Preço de Venda: ${produto.listaPreco!.isEmpty ? "Sem Preço" : formatar(produto.listaPreco![0])}"),
-                  replacement: Text(
-                      "Preço: ${produto.listaPreco!.isEmpty ? "Sem Preço" : formatar(produto.listaPreco![0])}"),
-                ),
-              ],
+                        "Preço de Venda: ${produto.listaPreco!.isEmpty ? "Sem Preço" : formatar(produto.listaPreco![0])}"),
+                    replacement: Text(
+                        "Preço: ${produto.listaPreco!.isEmpty ? "Sem Preço" : formatar(produto.listaPreco![0])}"),
+                  ),
+                ],
+              ),
             ),
           ),
           Spacer(),

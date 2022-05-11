@@ -39,7 +39,9 @@ class PainelDividas extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
           child: LayoutPesquisa(
-            accaoNaInsercaoNoCampoTexto: (dado) {},
+            accaoNaInsercaoNoCampoTexto: (dado) {
+              _c.aoPesquisar(dado);
+            },
             accaoAoSair: () {
               _c.terminarSessao();
             },
@@ -77,29 +79,22 @@ class PainelDividas extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Obx(
-              () {
-                var itens = _c.lista
-                    .map((venda) => ItemModeloVenda(
-                          c: _c,
-                          venda: venda,
-                        ))
-                    .toList();
-                if (itens.isEmpty) {
-                  return Center(child: Text("Sem Dívidas!"));
-                }
-                return Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: itens,
-                  ),
-                );
-              },
-            ),
+          child: Obx(
+            () {
+              if (_c.lista.isEmpty) {
+                return Center(child: Text("Sem Dívidas!"));
+              }
+              var itens = _c.lista
+                  .map((venda) => ItemModeloVenda(
+                        c: _c,
+                        venda: venda,
+                      ))
+                  .toList();
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: ListView.builder(itemCount: itens.length,itemBuilder: (c, i) => itens[i]),
+              );
+            },
           ),
         ),
       ],

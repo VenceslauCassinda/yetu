@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
 import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
+import 'package:yetu_gestor/solucoes_uteis/console.dart';
 
 import '../../../../../../recursos/constantes.dart';
 import '../../../../../componentes/pesquisa.dart';
@@ -45,7 +46,9 @@ class PainelHistorico extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
           child: LayoutPesquisa(
-            accaoNaInsercaoNoCampoTexto: (dado) {},
+            accaoNaInsercaoNoCampoTexto: (dado) {
+              _c.aoPesquisar(dado);
+            },
             accaoAoSair: () {
               _c.terminarSessao();
             },
@@ -95,27 +98,19 @@ class PainelHistorico extends StatelessWidget {
         Obx((() {
           return Container(
             height: MediaQuery.of(context).size.height * .72,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _c.lista
-                    .map((element) => Container(
-                          height: 50,
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
-                          child: ModeloItemLista(
-                            itemComentado: false,
-                            metodoChamadoAoClicarItem: () {
-                              _c.seleccionarData(element,
-                                  funcionario: funcionario);
-                            },
-                            tituloItem:
-                                "${formatarMesOuDia(element.day)}/${formatarMesOuDia(element.month)}/${element.year}",
-                          ),
-                        ))
-                    .toList(),
-              ),
-            ),
+            child: ListView.builder(itemCount: _c.lista.length,itemBuilder: ((context, i) => Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ModeloItemLista(
+                          itemComentado: false,
+                          metodoChamadoAoClicarItem: () {
+                            _c.seleccionarData(_c.lista[i],
+                                funcionario: funcionario);
+                          },
+                          tituloItem:
+                              "${formatarMesOuDia(_c.lista[i].day)}/${formatarMesOuDia(_c.lista[i].month)}/${_c.lista[i].year}",
+                        ),
+                      ))),
           );
         }))
       ],

@@ -1,6 +1,7 @@
 import 'package:componentes_visuais/componentes/butoes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
 import 'package:yetu_gestor/vista/componentes/item_investimento.dart';
 import '../../../../../../dominio/entidades/painel_actual.dart';
 import '../../../../../../recursos/constantes.dart';
@@ -35,7 +36,9 @@ class PainelInvestimento extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
           child: LayoutPesquisa(
-            accaoNaInsercaoNoCampoTexto: (dado) {},
+            accaoNaInsercaoNoCampoTexto: (dado) {
+              _c.aoPesquisar(dado);
+            },
             accaoAoSair: () {
               _c.terminarSessao();
             },
@@ -49,7 +52,7 @@ class PainelInvestimento extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "INVESTIMENTO POR PRODUTOS",
+                "INVESTIMENTO",
                 style: TextStyle(color: primaryColor),
               )
             ],
@@ -60,36 +63,26 @@ class PainelInvestimento extends StatelessWidget {
           child: Row(
             children: [
               Obx(() {
-                  return Text(
-                    "TOTAL INVESTIDO: ${_c.totalInvestido.value}",
-                    style: TextStyle(color: primaryColor),
-                  );
-                }
-              )
+                return Text(
+                  "TOTAL DE INVESTIMENTO: ${formatar(_c.totalInvestido.value)} KZ",
+                  style: TextStyle(color: primaryColor),
+                );
+              })
             ],
           ),
         ),
         Expanded(
           child: Obx(() {
             _c.lista.isEmpty;
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _c.lista
-                      .map((produto) => InkWell(
-                            onTap: () {},
-                            child: ItemInvestimento(
-                              produto: produto,
-                              c: _c,
-                            ),
-                          ))
-                      .toList(),
-                ),
-              ),
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: ListView.builder(itemCount: _c.lista.length,itemBuilder: (c,i)=> InkWell(
+                          onTap: () {},
+                          child: ItemInvestimento(
+                            produto: _c.lista[i],
+                            c: _c,
+                          ),
+                        ))
             );
           }),
         ),

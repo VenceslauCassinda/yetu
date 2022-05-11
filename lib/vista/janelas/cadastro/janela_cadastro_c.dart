@@ -37,10 +37,12 @@ class JanelaCadastroC extends GetxController {
     try {
       var novoUsuario = await _manipularFuncionarioI.adicionarFuncionario(
           Funcionario(nomeCompelto: nome, palavraPasse: palavraPasse));
-      mostrarDialogoDeInformacao("""
+      mostrarDialogoDeInformacao(
+          """
       Cadastro realizado!\n
       Seu nome de Usuario é: ${novoUsuario.nomeUsuario}
-      """, accaoAoSair: () {
+      """,
+          accaoAoSair: () {
         AplicacaoC.logar(novoUsuario);
       });
     } catch (e) {

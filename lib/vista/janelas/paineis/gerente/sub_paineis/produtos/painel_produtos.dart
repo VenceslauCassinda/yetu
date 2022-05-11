@@ -32,7 +32,9 @@ class PainelProdutos extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
           child: LayoutPesquisa(
-            accaoNaInsercaoNoCampoTexto: (dado) {},
+            accaoNaInsercaoNoCampoTexto: (dado) {
+              _c.aoPesquisar(dado);
+            },
             accaoAoSair: () {
               _c.terminarSessao();
             },
@@ -42,10 +44,12 @@ class PainelProdutos extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           child: Row(
             children: [
-              Text(
-                "PRODUTOS",
-                style: TextStyle(color: primaryColor),
-              ),
+              Obx(() {
+                return Text(
+                  "PRODUTOS (${_c.lista.length})",
+                  style: TextStyle(color: primaryColor),
+                );
+              }),
               Spacer(),
               Expanded(
                   child: ModeloTabBar(
@@ -58,24 +62,48 @@ class PainelProdutos extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(
-          child: Obx(() {
-            _c.lista.isEmpty;
-            return LayoutProdutos(lista: _c.lista, c: _c);
-          }),
-        ),
-        Container(
-          // width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.all(20),
-          child: ModeloButao(
-            corButao: primaryColor,
-            corTitulo: Colors.white,
-            butaoHabilitado: true,
-            tituloButao: "Adicionar Produto",
-            metodoChamadoNoClique: () {
-              _c.mostrarDialogoAdicionarProduto();
-            },
-          ),
+        Obx(() {
+          if (_c.lista.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: LinearProgressIndicator(),
+            );
+          }
+          return Expanded(child: LayoutProdutos(lista: _c.lista, c: _c));
+        }),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              // width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(vertical: 20),
+              child: ModeloButao(
+                icone: Icons.monetization_on_outlined,
+                corButao: primaryColor,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Tabela de Preços",
+                metodoChamadoNoClique: () {
+                  _c.mostrarDialogoGerarRelatorioInvestimento(context);
+                },
+              ),
+            ),
+            Container(
+              // width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.all(20),
+              child: ModeloButao(
+                corButao: primaryColor,
+                icone: Icons.add,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Adicionar Produto",
+                metodoChamadoNoClique: () {
+                  _c.mostrarDialogoAdicionarProduto();
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );

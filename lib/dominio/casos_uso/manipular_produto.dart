@@ -17,9 +17,6 @@ class ManipularProduto implements ManipularProdutoI {
       this._provedorProdutoI, this._manipularStockI, this._manipularPrecoI) {}
   @override
   Future<void> actualizarProduto(Produto dado) async {
-    if ((await existeProdutoDiferenteDeNome(dado.id!, dado.nome!)) == true) {
-      throw ErroProdutoExistente("JÁ EXISTE UM PRODUCTO COM ESTE NOME!");
-    }
     await _provedorProdutoI.actualizarProduto(dado);
   }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_fincionario.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipular_usuario.dart';
@@ -8,12 +10,17 @@ import 'package:yetu_gestor/fonte_dados/provedores/provedores_usuario.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/dinheiro_sobra/painel_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/saida_caixa/painel_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/vendas/layouts/vendas_c.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/dividas/painel_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/entradas/layouts/entradas_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/historico/historico_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/investimento/painel_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/pagamentos/pagamentos_c.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/perfil/painel_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/produtos/layouts/produtos_c.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/relatorio/painel.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/relatorio/painel_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/saidas/layouts/saidas_c.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/saidas/painel_saidas.dart';
 import '../../../../contratos/casos_uso/manipular_funcionario_i.dart';
 import '../../../../dominio/entidades/painel_actual.dart';
 import '../../../aplicacao_c.dart';
@@ -78,51 +85,8 @@ class PainelGerenteC extends GetxController {
   void irParaPainel(int indicadorPainel, {valor}) async {
     painelActual.value =
         PainelActual(indicadorPainel: indicadorPainel, valor: valor);
-    if (indicadorPainel == PainelActual.PRODUTOS) {
-      ProdutosC c;
-      try {
-        c = Get.find();
-      } catch (e) {
-        c = Get.put(ProdutosC());
-      }
-      c.navegar(1);
-      return;
-    }
-    if (indicadorPainel == PainelActual.ENTRADAS ||
-        indicadorPainel == PainelActual.ENTRADAS_GERAL) {
-      EntradasC c;
-      try {
-        c = Get.find();
-        c.visaoGeral = indicadorPainel == PainelActual.ENTRADAS_GERAL;
-      } catch (e) {
-        c = Get.put(EntradasC(
-            visaoGeral: indicadorPainel == PainelActual.ENTRADAS_GERAL));
-      }
-      c.pegarDados();
-      return;
-    }
-    if (indicadorPainel == PainelActual.SAIDAS ||
-        indicadorPainel == PainelActual.SAIDAS_GERAL) {
-      SaidasC c;
-      try {
-        c = Get.find();
-        c.visaoGeral = indicadorPainel == PainelActual.SAIDAS_GERAL;
-      } catch (e) {
-        c = Get.put(
-            SaidasC(visaoGeral: indicadorPainel == PainelActual.SAIDAS_GERAL));
-      }
-      c.pegarDados();
-      return;
-    }
-    if (indicadorPainel == PainelActual.PAGAMENTOS) {
-      PagamentosC c;
-      try {
-        c = Get.find();
-      } catch (e) {
-        c = Get.put(PagamentosC());
-      }
-      await c.pegarDados();
-      return;
+    if (painelActual.value.indicadorPainel == PainelActual.PRODUTOS) {
+      Get.delete<ProdutosC>();
     }
     if (PainelActual.VENDAS_FUNCIONARIOS ==
             painelActual.value.indicadorPainel ||
@@ -142,6 +106,30 @@ class PainelGerenteC extends GetxController {
     }
     if (PainelActual.INVESTIMENTO == painelActual.value.indicadorPainel) {
       Get.delete<PainelInvestimentoC>();
+    }
+    if (PainelActual.RELATORIO == painelActual.value.indicadorPainel) {
+      Get.delete<PainelRelatorioC>();
+    }
+    if (PainelActual.PERFIL == painelActual.value.indicadorPainel) {
+      Get.delete<PainelPerfilC>();
+    }
+    if (PainelActual.DIVIDAS_GERAIS == painelActual.value.indicadorPainel) {
+      Get.delete<PainelDividasC>();
+    }
+    if (PainelActual.SAIDAS_GERAL == painelActual.value.indicadorPainel) {
+      Get.delete<SaidasC>();
+    }
+    if (PainelActual.SAIDAS == painelActual.value.indicadorPainel) {
+      Get.delete<SaidasC>();
+    }
+    if (PainelActual.ENTRADAS == painelActual.value.indicadorPainel) {
+      Get.delete<EntradasC>();
+    }
+    if (PainelActual.ENTRADAS_GERAL == painelActual.value.indicadorPainel) {
+      Get.delete<EntradasC>();
+    }
+    if (PainelActual.PAGAMENTOS == painelActual.value.indicadorPainel) {
+      Get.delete<PagamentosC>();
     }
   }
 
