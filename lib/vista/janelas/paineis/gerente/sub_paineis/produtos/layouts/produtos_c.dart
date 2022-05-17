@@ -325,18 +325,18 @@ class ProdutosC extends GetxController {
   }
 
   void recuperarProduto(Produto produto) async {
-    await _manipularProdutoI.recuperarProduto(produto);
     _eliminarProduto(produto);
+    await _manipularProdutoI.recuperarProduto(produto);
   }
 
   void activarProduto(Produto produto) async {
-    await _manipularProdutoI.activarProduto(produto);
     _eliminarProduto(produto);
+    await _manipularProdutoI.activarProduto(produto);
   }
 
   void desactivarProduto(Produto produto) async {
-    await _manipularProdutoI.desactivarrProduto(produto);
     _eliminarProduto(produto);
+    await _manipularProdutoI.desactivarrProduto(produto);
   }
 
   Future<void> _eliminarProduto(Produto produto) async {
@@ -354,13 +354,13 @@ class ProdutosC extends GetxController {
           nome: nome,
           precoCompra: double.parse(precoCompra),
           estado: Estado.ATIVADO);
+      lista.add(novoProduto);
       var id = await _manipularProdutoI.adicionarProduto(novoProduto);
       novoProduto.id = id;
       await _manipularProdutoI.adicionarPrecoProduto(
           novoProduto, double.parse(precoVenda));
       novoProduto.listaPreco = [double.parse(precoVenda)];
       novoProduto.stock = Stock.zerado();
-      lista.add(novoProduto);
     } on Erro catch (e) {
       mostrarDialogoDeInformacao(e.sms);
     }

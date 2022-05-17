@@ -83,17 +83,17 @@ class PainelDinheiroSobraC extends GetxController {
         idFuncionario: funcionario.id,
         valor: v,
         data: DateTime.now());
+    voltar();
     var id = await _manipularDinheiroSobraI.adicionarDinheiroSobra(dinheiro);
     total.value += v;
     dinheiro.id = id;
     lista.insert(0, dinheiro);
-    voltar();
   }
 
   void removerDinheiro(DinheiroSobra element) async {
-    await _manipularDinheiroSobraI.removerDinheiroSobraDeId(element.id!);
     lista.removeWhere((element1) => element1.id == element.id);
     voltar();
+    await _manipularDinheiroSobraI.removerDinheiroSobraDeId(element.id!);
   }
 
   void mostrarDialodoRemover(DinheiroSobra element) {

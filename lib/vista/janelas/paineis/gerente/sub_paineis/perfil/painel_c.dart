@@ -53,12 +53,12 @@ class PainelPerfilC extends GetxController {
             nome: entidade.value?.nome);
         nova.nome = novo;
         entidade.value = nova;
+        voltar();
         if ((await _manipularEntidadeI.todos()).isEmpty) {
           await _manipularEntidadeI.registarEntidade(entidade.value!);
         } else {
           await _manipularEntidadeI.actualizaEntidade(entidade.value!);
         }
-        voltar();
       },
     ));
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:componentes_visuais/componentes/item_gaveta.dart';
+import 'package:componentes_visuais/componentes/info_gaveta.dart';
+import 'package:yetu_gestor/dominio/entidades/funcionario.dart';
 import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/recursos/constantes.dart';
 import 'package:yetu_gestor/vista/componentes/logo.dart';
@@ -34,6 +36,25 @@ class GavetaNavegacao extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                FutureBuilder<Funcionario>(
+                    future: c.inicializarFuncionario(),
+                    builder: (c, s) {
+                      if (s.data == null) {
+                        return CircularProgressIndicator();
+                      }
+                      return Container(
+                        child: InfoGaveta(
+                          cor: branca,
+                          titulo: "${s.data!.nomeCompelto}",
+                        ),
+                      );
+                    }),
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Divider(
+                    color: Colors.white,
+                  ),
+                ),
                 ItemDaGaveta(
                     cor: branca,
                     icone: Icons.people,
@@ -78,7 +99,7 @@ class GavetaNavegacao extends StatelessWidget {
                     }),
                 ItemDaGaveta(
                     cor: branca,
-                    icone: Icons.person,
+                    icone: Icons.monetization_on_outlined,
                     titulo: "Dinheiro a mais",
                     metodoQuandoItemClicado: () async {
                       c.irParaPainel(PainelActual.DINHEIRO_SOBRA);

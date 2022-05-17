@@ -8,6 +8,8 @@ abstract class ProvedorVendaI {
   Future<List<Venda>> pegarListaTodasDividas(Funcionario funcionario);
   Future<List<Venda>> pegarListaTodasEncomendas(Funcionario funcionario);
   Future<List<Pagamento>> pegarListaTodasPagamentoDividas(DateTime data);
+  Future<List<Pagamento>> pegarListaTodasPagamentoDividasFuncionario(
+      Funcionario funcionario, DateTime data);
   Future<int> adicionarVenda(Venda venda);
   Future<int> removerVendaDeId(int id);
   Future<Venda?> pegarVendaDeId(int id);

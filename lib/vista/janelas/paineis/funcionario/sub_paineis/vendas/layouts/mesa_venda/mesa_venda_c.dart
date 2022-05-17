@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:componentes_visuais/dialogo/dialogos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -88,7 +90,11 @@ class MesaVendaC extends GetxController {
     eventosTeclado.startListening((keyEvent) {
       if (keyEvent.vkName == "RETURN") {
         mostrar("BUTAO ENTER CLICADO!");
-        voltar();
+        vender(Get.find());
+        Timer.periodic(Duration(seconds: 1), (t) {
+          ouvirEventsTeclado();
+          t.cancel();
+        });
         eventosTeclado.cancelListening();
       }
     });
@@ -305,6 +311,18 @@ class MesaVendaC extends GetxController {
         0, (previousValue, element) => ((element.total ?? 0) + previousValue));
     var pago = listaPagamentos.fold<double>(
         0, (previousValue, element) => ((element.valor ?? 0) + previousValue));
+    var pagoCach = listaPagamentos.fold<double>(0, (antigoP, cadaP) {
+      if (cadaP.valor == null) {
+        return 0;
+      }
+      if ((cadaP.formaPagamento?.descricao ?? "")
+              .toLowerCase()
+              .contains('CASH'.toLowerCase()) ==
+          true) {
+        return (cadaP.valor ?? 0) + antigoP;
+      }
+      return 0;
+    });
     if (aPagar == 0) {
       if (listaItensVenda.isEmpty) {
         mostrarDialogoDeInformacao("Adicione produtos!");
@@ -320,8 +338,6 @@ class MesaVendaC extends GetxController {
           estado: Estado.ATIVADO,
           nome: nomeCliente.value,
           numero: telefoneCliente.value);
-      var id = await _manipularVendaI.vender(listaItensVenda, listaPagamentos,
-          aPagar, funcionario, cliente, data, dataLevantamento.value!, pago);
       vendasC.lista.add(Venda(
           itensVenda: listaItensVenda,
           pagamentos: listaPagamentos,
@@ -333,8 +349,10 @@ class MesaVendaC extends GetxController {
           total: aPagar,
           cliente: cliente,
           parcela: pago));
-      vendasC.navegar(vendasC.indiceTabActual);
       voltar();
+      var id = await _manipularVendaI.vender(listaItensVenda, listaPagamentos,
+          aPagar, funcionario, cliente, data, dataLevantamento.value!, pago);
+      vendasC.navegar(vendasC.indiceTabActual);
     } on Erro catch (e) {
       mostrarDialogoDeInformacao(e.sms);
     }

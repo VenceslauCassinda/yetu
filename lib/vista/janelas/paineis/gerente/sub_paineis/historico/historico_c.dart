@@ -128,9 +128,9 @@ class HistoricoC extends GetxController {
   }
 
   Future<void> _removerAntesData(DateTime data) async {
-    await _manipularVendaI.removerVendasAntesData(data);
     lista.removeWhere((cada) => cada.isBefore(data));
     voltar();
+    await _manipularVendaI.removerVendasAntesData(data);
   }
 
   void mostrarDialogoApagarTudo(BuildContext context) {
@@ -144,10 +144,8 @@ class HistoricoC extends GetxController {
   }
 
   Future<void> _removerTodas() async {
-    await _manipularVendaI.removerTodasVendas();
     lista.clear();
     voltar();
+    await _manipularVendaI.removerTodasVendas();
   }
-
-  
 }

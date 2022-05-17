@@ -28,6 +28,7 @@ class PainelProdutos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),

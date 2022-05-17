@@ -31,7 +31,7 @@ class ItemItemVenda extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 200,
+                width: MediaQuery.of(context).size.width * .1,
                 margin: EdgeInsets.only(left: 10),
                 child: Text(element.produto!.nome!),
               ),

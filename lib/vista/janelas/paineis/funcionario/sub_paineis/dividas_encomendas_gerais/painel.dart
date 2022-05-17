@@ -85,6 +85,7 @@ class PainelDividasEncomendas extends StatelessWidget {
             () {
               var itens = _c.lista
                   .map((venda) => ItemModeloVenda(
+                    permissao: false,
                         c: _c,
                         venda: venda,
                       ))

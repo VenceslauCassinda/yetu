@@ -16,6 +16,7 @@ class LayoutVendas extends StatelessWidget {
       () {
         var itens = _c.lista
             .map((venda) => ItemModeloVenda(
+              permissao: visaoGeral,
                   c: _c,
                   venda: venda,
                 ))

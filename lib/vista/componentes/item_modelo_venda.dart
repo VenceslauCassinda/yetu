@@ -10,14 +10,16 @@ import '../../dominio/entidades/venda.dart';
 import '../../recursos/constantes.dart';
 
 class ItemModeloVenda extends StatelessWidget {
-  const ItemModeloVenda({
+  ItemModeloVenda({
     Key? key,
     required this.c,
+    required this.permissao,
     required this.venda,
   }) : super(key: key);
 
   final c;
   final Venda venda;
+  late bool permissao;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,8 @@ class ItemModeloVenda extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                              visible: venda.encomenda == true,
+                              visible:
+                                  venda.encomenda == true && permissao == true,
                               child: Text(
                                   "Data de Levantamento: ${formatarMesOuDia(venda.dataLevantamentoCompra?.day ?? "")}/${formatarMesOuDia(venda.dataLevantamentoCompra?.month ?? "")}/${venda.dataLevantamentoCompra?.year ?? ""} às ${formatarMesOuDia(venda.dataLevantamentoCompra?.hour ?? "")}h e ${formatarMesOuDia(venda.dataLevantamentoCompra?.minute ?? "")}min")),
                           Text(
@@ -102,7 +105,7 @@ class ItemModeloVenda extends StatelessWidget {
                       ],
                     ),
                     Visibility(
-                      visible: venda.encomenda == true,
+                      visible: venda.encomenda == true && permissao == true,
                       child: IconeItem(
                         metodoQuandoItemClicado: () {
                           c.mostraDialogoEntregarEncomenda(venda);
@@ -116,7 +119,7 @@ class ItemModeloVenda extends StatelessWidget {
                       width: 30,
                     ),
                     Visibility(
-                      visible: venda.divida == true,
+                      visible: venda.divida == true && permissao == true,
                       child: IconeItem(
                         metodoQuandoItemClicado: () {
                           c.mostrarFormasPagamento(venda, context,

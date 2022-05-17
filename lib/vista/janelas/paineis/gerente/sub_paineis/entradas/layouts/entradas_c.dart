@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/contratos/casos_uso/manipular_entrada_i.dart';
 import 'package:yetu_gestor/dominio/casos_uso/manipula_stock.dart';
@@ -51,7 +52,7 @@ class EntradasC extends GetxController {
     }
   }
 
-  Future<void> pegarDados() async {
+  Future pegarDados() async {
     List<Entrada> res = [];
     if (visaoGeral == true) {
       res = await _manipularEntradaI.pegarLista();
@@ -77,4 +78,9 @@ class EntradasC extends GetxController {
     PainelGerenteC c = Get.find();
     c.irParaPainel(indicePainel);
   }
+}
+
+te(int a) async {
+  return await ManipularEntrada(ProvedorEntrada(), ManipularStock(ProvedorStock()))
+      .pegarLista();
 }

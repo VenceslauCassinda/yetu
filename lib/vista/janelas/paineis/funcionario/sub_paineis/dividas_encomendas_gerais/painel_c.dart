@@ -132,7 +132,7 @@ class PainelDividasEncomendasC extends GetxController {
 
     for (var cada in res) {
       lista.add(cada);
-      var emFalta = cada.total ?? 0 - (cada.parcela ?? 0);
+      var emFalta = (cada.total ?? 0) - (cada.parcela ?? 0);
       totalDividasNaoPagas.value += emFalta;
     }
 
@@ -160,8 +160,8 @@ class PainelDividasEncomendasC extends GetxController {
       return;
     }
     lista.removeWhere((element) => element.id == venda.id);
-    await _manipularVendaI.entregarEncomenda(venda);
     voltar();
+    await _manipularVendaI.entregarEncomenda(venda);
   }
 
   void mostrarFormasPagamento(Venda venda, BuildContext context,
@@ -200,6 +200,7 @@ class PainelDividasEncomendasC extends GetxController {
       mostrarDialogoDeInformacao("""Valor demasiado alto!""");
       return;
     }
+    voltar();
     var forma = (await _manipularPagamentoI.pegarListaFormasPagamento())
         .firstWhere((element) => element.descricao == opcao);
     var novoPagamento = Pagamento(
@@ -236,7 +237,6 @@ class PainelDividasEncomendasC extends GetxController {
     }
 
     await _manipularVendaI.actualizarVenda(venda);
-    voltar();
   }
 
   void mostrarDialogoDetalhesVenda(Venda venda) {

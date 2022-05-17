@@ -32,11 +32,14 @@ abstract class ManipularVendaI {
   Future<List<Venda>> todasDividas();
   Future<List<Venda>> pegarListaTodasDividas(Funcionario? funcionario);
   Future<List<Pagamento>> pegarListaTodasPagamentoDividas(DateTime data);
+  Future<List<Pagamento>> pegarListaTodasPagamentoDividasFuncionario(
+      Funcionario funcionario, DateTime data);
   Future<List<Venda>> pegarListaTodasEncomendas(Funcionario? funcionario);
   Future<List<Venda>> pegarListaVendas(Funcionario? funcionario, DateTime data);
   Future<List<Venda>> pegarListaEncomendas(
       Funcionario? funcionario, DateTime data);
-  Future<List<Venda>> pegarListaDividas(Funcionario? funcionario, DateTime data);
+  Future<List<Venda>> pegarListaDividas(
+      Funcionario? funcionario, DateTime data);
   Future<void> entregarEncomenda(Venda venda);
   bool vendaEstaPaga(Venda venda);
   bool vendaOuEncomenda(Venda venda);

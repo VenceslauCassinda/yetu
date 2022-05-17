@@ -9,6 +9,7 @@ import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/painel_funcionario_c.dart';
 
 import '../../../../../../../recursos/constantes.dart';
+import '../../../../../../solucoes_uteis/utils.dart';
 import '../../../../../componentes/pesquisa.dart';
 import '../../../../../componentes/tab_bar.dart';
 import 'layouts/vendas.dart';
@@ -79,10 +80,50 @@ class PainelVendas extends StatelessWidget {
         Container(
           margin: EdgeInsets.symmetric(horizontal: 20),
           width: double.infinity,
+          child: Text(
+            "DINHEIRO FÍSICO: ${formatar(_c.lista.fold<double>(0, (antigoV, cadaV) => ((cadaV.pagamentos ?? []).fold<double>(0, (antigoP, cadaP) {
+                  if (cadaP.valor == null) {
+                    return 0;
+                  }
+                  if ((cadaP.formaPagamento?.descricao ?? "")
+                          .toLowerCase()
+                          .contains('CASH'.toLowerCase()) ==
+                      true) {
+                    return (cadaP.valor ?? 0) + antigoP;
+                  }
+                  return antigoP;
+                }) + antigoV)))} KZ",
+            style: const TextStyle(color: primaryColor, fontSize: 30),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          width: double.infinity,
+          child: Text(
+            "DINHEIRO DIGITAL: ${formatar(_c.lista.fold<double>(0, (antigoV, cadaV) => ((cadaV.pagamentos ?? []).fold<double>(0, (antigoP, cadaP) {
+                  if (cadaP.valor == null) {
+                    return 0;
+                  }
+                  if ((cadaP.formaPagamento?.descricao ?? "")
+                          .toLowerCase()
+                          .contains('CASH'.toLowerCase()) ==
+                      false) {
+                    mostrar(cadaP.formaPagamento?.descricao);
+                    mostrar(cadaP.valor);
+                    return (cadaP.valor ?? 0) + antigoP;
+                  }
+                  return antigoP;
+                }) + antigoV)))} KZ",
+            style: const TextStyle(color: primaryColor, fontSize: 30),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          width: double.infinity,
           child: Obx(
             () => Text(
               "DÍVIDAS PAGAS: ${formatar(_c.totalDividaPagas.value)} KZ",
-              style: TextStyle(color: primaryColor, fontSize: 30),
+              style: const TextStyle(color: primaryColor, fontSize: 30),
             ),
           ),
         ),
@@ -94,7 +135,7 @@ class PainelVendas extends StatelessWidget {
                 "${(data.day == DateTime.now().day && data.month == DateTime.now().month && data.year == DateTime.now().year) ? "HOJE" : "DATA"} - ${formatarMesOuDia(data.day)}/${formatarMesOuDia(data.month)}/${data.year}",
                 style: TextStyle(color: primaryColor),
               ),
-              Spacer(),
+              const Spacer(),
               Expanded(
                   child: ModeloTabBar(
                 listaItens: ["TODAS", "VENDAS", "ENCOMENDAS", "DÍVIDAS"],
@@ -111,7 +152,7 @@ class PainelVendas extends StatelessWidget {
         ),
         Container(
           // width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
           child: ModeloButao(
             corButao: primaryColor,
             corTitulo: Colors.white,

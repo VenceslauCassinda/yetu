@@ -32,8 +32,8 @@ class PainelFuncionarioC extends GetxController {
     super.onInit();
   }
 
-  Future<void> inicializarFuncionario() async {
-    funcionarioActual =
+  Future<Funcionario> inicializarFuncionario() async {
+    return funcionarioActual =
         await _manipularFuncionarioI.pegarFuncionarioDoUsuarioDeId(
             (pegarAplicacaoC().pegarUsuarioActual())!.id!);
   }

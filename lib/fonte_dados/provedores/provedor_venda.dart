@@ -85,4 +85,9 @@ class ProvedorVenda implements ProvedorVendaI {
   Future<List<Venda>> pegarListaVendas() async {
     return await _dao.pegarVendasComDatasUnicas();
   }
+
+  @override
+  Future<List<Pagamento>> pegarListaTodasPagamentoDividasFuncionario(Funcionario funcionario, DateTime data) async{
+    return await _dao.pegarListaPagamentoDaDataFuncionario(funcionario, data);
+  }
 }

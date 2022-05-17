@@ -75,6 +75,7 @@ class PainelSaidaCaixaC extends GetxController {
 
   Future<void> adincionarSaida(String valor, String motivo) async {
     var v = double.parse(valor);
+    voltar();
     var saida = SaidaCaixa(
         estado: Estado.ATIVADO,
         funcionario: funcionario,
@@ -85,13 +86,12 @@ class PainelSaidaCaixaC extends GetxController {
     var id = await _manipularSaidaCaixaI.adicionarSaidaCaixa(saida);
     saida.id = id;
     lista.insert(0, saida);
-    voltar();
   }
 
   void removerSaida(SaidaCaixa element) async {
-    await _manipularSaidaCaixaI.removerSaidaCaixaDeId(element.id!);
-    lista.removeWhere((element1) => element1.id == element.id);
     voltar();
+    lista.removeWhere((element1) => element1.id == element.id);
+    await _manipularSaidaCaixaI.removerSaidaCaixaDeId(element.id!);
   }
 
   void mostrarDialodoRemover(SaidaCaixa element) {

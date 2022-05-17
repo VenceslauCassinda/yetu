@@ -314,4 +314,9 @@ class ManipularVenda implements ManipularVendaI {
         .map((e) => e.data!)
         .toList();
   }
+
+  @override
+  Future<List<Pagamento>> pegarListaTodasPagamentoDividasFuncionario(Funcionario funcionario, DateTime data) async{
+    return await _provedorVendaI.pegarListaTodasPagamentoDividasFuncionario(funcionario, data);
+  }
 }

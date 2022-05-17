@@ -84,7 +84,7 @@ class VendasC extends GetxController {
       _painelFuncionarioC = Get.put(PainelFuncionarioC());
     }
     await pegarLista();
-    await pegarTotalDividas();
+    pegarTotalDividas();
     super.onInit();
   }
 
@@ -106,6 +106,7 @@ class VendasC extends GetxController {
     if (indice == 3) {
       await pegarListaDividas();
     }
+    await pegarTotalDividas();
   }
 
   void aoPesquisarVenda(String f) {
@@ -144,12 +145,19 @@ class VendasC extends GetxController {
     produtos.clear();
     var res = produtosCopia;
     for (var cada in res) {
-      if ((cada.nome ?? "")
-              .toLowerCase()
+      if (cada.nome!.toLowerCase().contains(f.toLowerCase()) ||
+          cada.precoCompra!
               .toString()
+              .toLowerCase()
               .contains(f.toLowerCase()) ||
-          (cada.stock?.quantidade ?? "").toString().contains(f.toLowerCase()) ||
-          (cada.preco?.preco ?? 0).toString().contains(f.toLowerCase())) {
+          (cada.stock?.quantidade ?? 0)
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase()) ||
+          (cada.preco?.preco ?? 0)
+              .toString()
+              .toLowerCase()
+              .contains(f.toLowerCase())) {
         produtos.add(cada);
       }
     }
@@ -171,7 +179,9 @@ class VendasC extends GetxController {
   }
 
   Future pegarTotalDividas() async {
-    var res = await _manipularVendaI.pegarListaTodasPagamentoDividas(data);
+    var res = await _manipularVendaI.pegarListaTodasPagamentoDividasFuncionario(
+        funcionario!, data);
+    totalDividaPagas.value = 0;
     for (var cada in res) {
       totalDividaPagas.value += cada.valor ?? 0;
     }
@@ -238,8 +248,8 @@ class VendasC extends GetxController {
       return;
     }
     lista.removeWhere((element) => element.id == venda.id);
-    await _manipularVendaI.entregarEncomenda(venda);
     voltar();
+    await _manipularVendaI.entregarEncomenda(venda);
   }
 
   void mostrarFormasPagamento(Venda venda, BuildContext context,
@@ -281,6 +291,7 @@ class VendasC extends GetxController {
       mostrarDialogoDeInformacao("""Valor demasiado alto!""");
       return;
     }
+    voltar();
     var forma = (await _manipularPagamentoI.pegarListaFormasPagamento())
         .firstWhere((element) => element.descricao == opcao);
     var novoPagamento = Pagamento(
@@ -312,7 +323,5 @@ class VendasC extends GetxController {
       }
     }
     await _manipularVendaI.actualizarVenda(venda);
-    navegar(indiceTabActual);
-    voltar();
   }
 }

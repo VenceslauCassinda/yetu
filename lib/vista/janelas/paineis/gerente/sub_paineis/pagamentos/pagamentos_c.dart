@@ -35,9 +35,9 @@ class PagamentosC extends GetxController {
           var nova =
               FormaPagamento(estado: Estado.ATIVADO, tipo: 0, descricao: valor);
 
-          nova.id = await _manipularPagamentoI.adicionarFormaPagamento(nova);
           lista.add(nova);
           voltar();
+          nova.id = await _manipularPagamentoI.adicionarFormaPagamento(nova);
         },
         titulo: "Insira a nova forma de Pagamento"));
   }
@@ -54,9 +54,9 @@ class PagamentosC extends GetxController {
     mostrarDialogoDeLayou(LayoutConfirmacaoAccao(
         pergunta: "Deseja mesmo eliminar esta forma de Pagamento?",
         accaoAoConfirmar: () async {
-          await _manipularPagamentoI.removerFormaDeId(formaPagamento.id!);
           lista.removeWhere((element) => element.id == formaPagamento.id);
           voltar();
+          await _manipularPagamentoI.removerFormaDeId(formaPagamento.id!);
         },
         accaoAoCancelar: () {},
         corButaoSim: primaryColor));

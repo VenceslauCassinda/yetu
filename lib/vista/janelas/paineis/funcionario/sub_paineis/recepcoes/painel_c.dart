@@ -98,6 +98,14 @@ class RecepcoesC extends GetxController {
     produtos.clear();
     var res = produtosCopia;
     for (var cada in res) {
+      var existe = false;
+      for (var cadaParteDado in f.split(" ")) {
+        if (cadaParteDado
+            .toLowerCase()
+            .contains((cada.nome ?? "").toLowerCase())) {
+          existe = true;
+        }
+      }
       if ((cada.nome ?? "")
               .toLowerCase()
               .toString()
@@ -165,8 +173,8 @@ class RecepcoesC extends GetxController {
             idProduto: produto.id,
             quantidade: int.parse(quantidade),
             data: DateTime.now()));
+    voltar();
     await _manipularRececcaoI.receberProduto(
         produto, int.parse(quantidade), funcionario, motivo);
-    voltar();
   }
 }

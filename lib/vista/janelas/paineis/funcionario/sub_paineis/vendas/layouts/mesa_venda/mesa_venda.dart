@@ -93,17 +93,36 @@ class LayoutMesaVenda extends StatelessWidget {
                 )
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: ModeloButao(
-                corButao: primaryColor,
-                corTitulo: Colors.white,
-                butaoHabilitado: true,
-                tituloButao: "Finalizar Venda",
-                metodoChamadoNoClique: () {
-                  _c.vender(_vendasC);
-                },
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: ModeloButao(
+                    corButao: Colors.red,
+                    corTitulo: Colors.white,
+                    butaoHabilitado: true,
+                    tituloButao: "Cancelar",
+                    metodoChamadoNoClique: () {
+                      voltar();
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: ModeloButao(
+                    corButao: primaryColor,
+                    corTitulo: Colors.white,
+                    butaoHabilitado: true,
+                    tituloButao: "Finalizar Venda",
+                    metodoChamadoNoClique: () {
+                      _c.vender(_vendasC);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ));
@@ -139,17 +158,20 @@ class _PainelDireito extends StatelessWidget {
           () => Container(
             height: MediaQuery.of(context).size.height * .3,
             padding: EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _c.listaItensVenda
-                    .map((element) => ItemItemVenda(
-                          controladores: controladores,
-                          c: _c,
-                          element: element,
-                        ))
-                    .toList(),
+            child: Scrollbar(
+              interactive: true,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _c.listaItensVenda
+                      .map((element) => ItemItemVenda(
+                            controladores: controladores,
+                            c: _c,
+                            element: element,
+                          ))
+                      .toList(),
+                ),
               ),
             ),
           ),
